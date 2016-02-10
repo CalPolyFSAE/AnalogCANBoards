@@ -47,6 +47,12 @@ endif
 LSS += \
 AnalogCANBoards.lss \
 
+FLASH_IMAGE += \
+AnalogCANBoards.hex \
+
+EEPROM_IMAGE += \
+AnalogCANBoards.eep \
+
 SIZEDUMMY += \
 sizedummy \
 
@@ -58,13 +64,25 @@ all: AnalogCANBoards.elf secondary-outputs
 AnalogCANBoards.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C++ Linker'
-	avr-g++ -Wl,-Map,AnalogCANBoards.map,--cref -mrelax -Wl,--gc-sections -L"C:\Users\Daniel Baron\AppData\Roaming\SPB_16.6\git\AVRLibrary\Debug" -mmcu=at90can128 -o "AnalogCANBoards.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-g++ -Wl,-Map,AnalogCANBoards.map,--cref -mrelax -Wl,--gc-sections -mmcu=at90can128 -o "AnalogCANBoards.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 AnalogCANBoards.lss: AnalogCANBoards.elf
 	@echo 'Invoking: AVR Create Extended Listing'
 	-avr-objdump -h -S AnalogCANBoards.elf  >"AnalogCANBoards.lss"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+AnalogCANBoards.hex: AnalogCANBoards.elf
+	@echo 'Create Flash image (ihex format)'
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex AnalogCANBoards.elf  "AnalogCANBoards.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+AnalogCANBoards.eep: AnalogCANBoards.elf
+	@echo 'Create eeprom image (ihex format)'
+	-avr-objcopy -j .eeprom --no-change-warnings --change-section-lma .eeprom=0 -O ihex AnalogCANBoards.elf  "AnalogCANBoards.eep"
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -76,10 +94,10 @@ sizedummy: AnalogCANBoards.elf
 
 # Other Targets
 clean:
-	-$(RM) $(C_UPPER_DEPS)$(S_DEPS)$(LSS)$(C_DEPS)$(CC_DEPS)$(ELFS)$(C++_DEPS)$(OBJS)$(CXX_DEPS)$(ASM_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(CPP_DEPS) AnalogCANBoards.elf
+	-$(RM) $(C_UPPER_DEPS)$(S_DEPS)$(LSS)$(C_DEPS)$(FLASH_IMAGE)$(CC_DEPS)$(ELFS)$(C++_DEPS)$(OBJS)$(CXX_DEPS)$(ASM_DEPS)$(EEPROM_IMAGE)$(SIZEDUMMY)$(S_UPPER_DEPS)$(CPP_DEPS) AnalogCANBoards.elf
 	-@echo ' '
 
-secondary-outputs: $(LSS) $(SIZEDUMMY)
+secondary-outputs: $(LSS) $(FLASH_IMAGE) $(EEPROM_IMAGE) $(SIZEDUMMY)
 
 .PHONY: all clean dependents
 .SECONDARY:

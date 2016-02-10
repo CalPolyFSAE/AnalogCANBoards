@@ -1,1 +1,4 @@
-/Release/
+Debug/*
+*.o
+.DS_Store
+/Debug/
