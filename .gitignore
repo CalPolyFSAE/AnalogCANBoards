@@ -2,3 +2,4 @@ Debug/*
 *.o
 .DS_Store
 /Debug/
+/Release/
