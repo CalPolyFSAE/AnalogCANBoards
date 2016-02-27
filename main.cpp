@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include <AVRLibrary/CPFECANLib.h>
 #include <AVRLibrary/arduino/Arduino.h>
@@ -30,9 +31,10 @@ public:
 
 	static void txCAN(uint16_t ID, uint16_t chan1, uint16_t chan2, uint16_t chan3, uint16_t chan4) {
 		uint8_t dataBuffer[8];
-		CPFECANLib::MSG msg;
+		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
+		//TODO
 		msg.data = (chan1<<48) | (chan2<<32) | (chan3<<16) | chan4; //concatenate the four channels into 64bit data for transmission
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
@@ -59,6 +61,8 @@ int main() {
 	Wire.begin(); //begin I2C comms
 
 	int i=0; //loop counter
+	double duration = 0.0; //amount by which to delay loop
+	double start; //The start time of the timer
 
 	//Declare variables for input channels
 	uint16_t SGO4, SGO3, SGO2, SGO1, SGO8,SGO7, SGO6, SGO5;
@@ -85,24 +89,58 @@ int main() {
 
 	while (1) {
 		while(i<2){
-			delay(5);
+			delay(duration);
 
-			//inner loop contains channels sampled at 200Hz
+			//RECEIVE
+			//ADC A
 			SGO4=SensorCANmod::getTWIdata(ADC_A, VIN1);
 			SGO3=SensorCANmod::getTWIdata(ADC_A, VIN3);
 			SGO2=SensorCANmod::getTWIdata(ADC_A, VIN5);
 			SGO1=SensorCANmod::getTWIdata(ADC_A, VIN7);
-			SensorCANmod::txCAN(0x0C8, SGO4, SGO3,SGO2, SGO1);
+			SGO8=SensorCANmod::getTWIdata(ADC_A, VIN8);
+			SGO7=SensorCANmod::getTWIdata(ADC_A, VIN6);
+			SGO6=SensorCANmod::getTWIdata(ADC_A, VIN4);
+			SGO5=SensorCANmod::getTWIdata(ADC_A, VIN2);
+
+			//ADC B
+			SGO12=SensorCANmod::getTWIdata(ADC_B, VIN1);
+			SGO11=SensorCANmod::getTWIdata(ADC_B, VIN3);
+			SGO10=SensorCANmod::getTWIdata(ADC_B, VIN5);
+			SGO9=SensorCANmod::getTWIdata(ADC_B, VIN7);
+			SGO14=SensorCANmod::getTWIdata(ADC_B, VIN4);
+			SGO13=SensorCANmod::getTWIdata(ADC_B, VIN2);
+
+			//ADC C
+			A1=SensorCANmod::getTWIdata(ADC_C, VIN1);
+			A2=SensorCANmod::getTWIdata(ADC_C, VIN3);
+			A3=SensorCANmod::getTWIdata(ADC_C, VIN5);
+			A4=SensorCANmod::getTWIdata(ADC_C, VIN7);
+
+			//SEND
+			//ADC A
+			SensorCANmod::txCAN(0x0C8, SGO4, SGO3, SGO2, SGO1);
+			SensorCANmod::txCAN(0x0C9, SGO8, SGO7, SGO6, SGO5);
+			//ADC B
+			SensorCANmod::txCAN(0x0CA, SGO12, SGO11, SGO10, SGO9);
+			SensorCANmod::txCAN(0x0CC, SGO14, SGO13, 0x0, 0x0);
+			//ADC C
+			SensorCANmod::txCAN(0x0CC, A1, A2, 0x0, 0x0);
+			SensorCANmod::txCAN(0x0CE, A3, A4, 0x0, 0x0);
 
 			i++;
 		}
+
 		i=0;
-		//Outer loop includes channels sampled at 100Hz
+		start = clock();
+
 		TCO2=SensorCANmod::getTWIdata(ADC_B, VIN8);
 		TCO1=SensorCANmod::getTWIdata(ADC_B, VIN6);
 		A5=SensorCANmod::getTWIdata(ADC_C, VIN8);
 		A6=SensorCANmod::getTWIdata(ADC_C, VIN6);
 		SensorCANmod::txCAN(0x0CB, TCO2, TCO1, A5, A6);
+		SensorCANmod::txCAN(0x0CD, A7, 0x0, 0x0, 0x0);
+
+		duration = clock() - start;
 	}
 }
 
