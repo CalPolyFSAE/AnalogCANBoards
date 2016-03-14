@@ -13,18 +13,12 @@
 #include <AVRLibrary/arduino/Arduino.h>
 #include <AVRLibrary/arduino/Wire.h>
 
-
 class SensorCANmod{
 public:
 	//Declare variables
 	uint16_t chan1, chan2, chan3, chan4;
 	uint16_t ID; //ID is set for the standard format. Declare ID as a unit32_t for extended format
 	uint8_t ADCaddress, reg_address;
-
-
-
-
-
 	static constexpr uint8_t sendcanMOB = 5;
 
 	//Functions:
@@ -52,6 +46,21 @@ public:
 		data = Wire.read();
 
 		return data;
+	}
+
+	static CAN getCANData(CAN can) {
+		if(can.msgId == 0x0CC || can.msgId == 0x0CE) {
+			can.chan1 = SensorCANmod::getTWIdata(can.adc, can.reg1);
+			can.chan2 = SensorCANmod::getTWIdata(can.adc, can.reg2);
+		}
+		else {
+			can.chan1 = SensorCANmod::getTWIdata(can.adc, can.reg1);
+			can.chan2 = SensorCANmod::getTWIdata(can.adc, can.reg2);
+			can.chan3 = SensorCANmod::getTWIdata(can.adc, can.reg3);
+			can.chan4 = SensorCANmod::getTWIdata(can.adc, can.reg4);
+		}
+
+		return can;
 	}
 };
 
@@ -87,60 +96,168 @@ int main() {
 	uint8_t VIN7= 0xE0;
 	uint8_t VIN8= 0xF0;
 
+	typedef struct CAN1 {
+		uint8_t adc = ADC_A;
+		uint8_t reg1 = VIN1;
+		uint8_t reg2 = VIN3;
+		uint8_t reg3 = VIN5;
+		uint8_t reg4 = VIN7;
+		uint16_t msgId = 0x0C8;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN1;
+
+	typedef struct CAN2 {
+		uint8_t adc = ADC_A;
+		uint8_t reg1 = VIN8;
+		uint8_t reg2 = VIN6;
+		uint8_t reg3 = VIN4;
+		uint8_t reg4 = VIN2;
+		uint16_t msgId = 0x0C9;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN2;
+
+	typedef struct CAN3 {
+		uint8_t adc = ADC_B;
+		uint8_t reg1 = VIN1;
+		uint8_t reg2 = VIN3;
+		uint8_t reg3 = VIN5;
+		uint8_t reg4 = VIN7;
+		uint16_t msgId = 0x0CA;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN3;
+
+	typedef struct CAN4 {
+		uint8_t adc = ADC_B;
+		uint8_t reg1 = VIN1;
+		uint8_t reg2 = VIN3;
+		uint8_t reg3 = VIN5;
+		uint8_t reg4 = VIN7;
+		uint16_t msgId = 0x0CA;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN4;
+
+	typedef struct CAN5 {
+		uint8_t adc = ADC_C;
+		uint8_t reg1 = VIN1;
+		uint8_t reg2 = VIN3;
+		uint16_t msgId = 0x0CC;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3 = 0x0;
+		uint16_t chan4 = 0x0;
+	} CAN5;
+
+	typedef struct CAN6 {
+		uint8_t adc = ADC_C;
+		uint8_t reg1 = VIN5;
+		uint8_t reg2 = VIN7;
+		uint16_t msgId = 0x0CE;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3 = 0x0;
+		uint16_t chan4 = 0x0;
+	} CAN6;
+
+	typedef struct CAN7 {
+		uint8_t adc = ADC_B;
+		uint8_t reg1 = VIN8;
+		uint8_t reg2 = VIN6;
+		uint16_t msgId = 0x0CB;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN7;
+
+	typedef struct CAN8 { //Special case
+		uint8_t adc = ADC_C;
+		uint8_t reg1 = VIN8;
+		uint8_t reg2 = VIN6;
+		uint8_t reg3 = VIN8;
+		uint8_t reg4 = VIN6;
+		uint16_t msgId = 0x0CB;
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CAN8;
+
+	uint16_t TOREADCAP = 2;
+    CAN READ100[TOREADCAP];
+    CAN READ200[TOREADCAP];
+	uint16_t canIndex100 = 0;
+	uint16_t canIndex200 = 0;
+
 	while (1) {
 		while(i<2){
-			delay(duration);
+
+			//LOOP HERE
+				//Load in 100Hz and 200Hz CANS into arrays here
+				//Condition timer statement for 100Hz
+					READ100[canIndex] = SensorCANmod::getCANData(READ100[canIndex100]);
+					SensorCANmod::txCAN(READ100[canIndex100].msgId, READ100[canIndex100].chan1, READ100[canIndex100].chan2,
+						READ100[canIndex100].chan3, READ100[canIndex100].chan4);
+				//Conditional timer statement for 200Hz
+					READ200[canIndex] = SensorCANmod::getCANData(READ200[canIndex200]);
+					SensorCANmod::txCAN(READ200[canIndex200].msgId, READ200[canIndex200].chan1, READ200[canIndex200].chan2,
+						READ200[canIndex200].chan3, READ200[canIndex200].chan4);
+
+
 
 			//RECEIVE
-			//ADC A
-			SGO4=SensorCANmod::getTWIdata(ADC_A, VIN1);
-			SGO3=SensorCANmod::getTWIdata(ADC_A, VIN3);
-			SGO2=SensorCANmod::getTWIdata(ADC_A, VIN5);
-			SGO1=SensorCANmod::getTWIdata(ADC_A, VIN7);
-			SGO8=SensorCANmod::getTWIdata(ADC_A, VIN8);
-			SGO7=SensorCANmod::getTWIdata(ADC_A, VIN6);
-			SGO6=SensorCANmod::getTWIdata(ADC_A, VIN4);
-			SGO5=SensorCANmod::getTWIdata(ADC_A, VIN2);
+			//SGO4=SensorCANmod::getTWIdata(ADC_A, VIN1);
+			//SGO3=SensorCANmod::getTWIdata(ADC_A, VIN3);
+			//SGO2=SensorCANmod::getTWIdata(ADC_A, VIN5);
+			//SGO1=SensorCANmod::getTWIdata(ADC_A, VIN7);
+			//SensorCANmod::txCAN(0x0C8, SGO4, SGO3, SGO2, SGO1);
 
-			//ADC B
-			SGO12=SensorCANmod::getTWIdata(ADC_B, VIN1);
-			SGO11=SensorCANmod::getTWIdata(ADC_B, VIN3);
-			SGO10=SensorCANmod::getTWIdata(ADC_B, VIN5);
-			SGO9=SensorCANmod::getTWIdata(ADC_B, VIN7);
-			SGO14=SensorCANmod::getTWIdata(ADC_B, VIN4);
-			SGO13=SensorCANmod::getTWIdata(ADC_B, VIN2);
+			//SGO8=SensorCANmod::getTWIdata(ADC_A, VIN8);
+			//SGO7=SensorCANmod::getTWIdata(ADC_A, VIN6);
+			//SGO6=SensorCANmod::getTWIdata(ADC_A, VIN4);
+			//SGO5=SensorCANmod::getTWIdata(ADC_A, VIN2);
+			//SensorCANmod::txCAN(0x0C9, SGO8, SGO7, SGO6, SGO5);
 
-			//ADC C
-			A1=SensorCANmod::getTWIdata(ADC_C, VIN1);
-			A2=SensorCANmod::getTWIdata(ADC_C, VIN3);
-			A3=SensorCANmod::getTWIdata(ADC_C, VIN5);
-			A4=SensorCANmod::getTWIdata(ADC_C, VIN7);
+			//SGO12=SensorCANmod::getTWIdata(ADC_B, VIN1);
+			//SGO11=SensorCANmod::getTWIdata(ADC_B, VIN3);
+			//SGO10=SensorCANmod::getTWIdata(ADC_B, VIN5);
+			//SGO9=SensorCANmod::getTWIdata(ADC_B, VIN7);
+			//SensorCANmod::txCAN(0x0CA, SGO12, SGO11, SGO10, SGO9);
 
-			//SEND
-			//ADC A
-			SensorCANmod::txCAN(0x0C8, SGO4, SGO3, SGO2, SGO1);
-			SensorCANmod::txCAN(0x0C9, SGO8, SGO7, SGO6, SGO5);
-			//ADC B
-			SensorCANmod::txCAN(0x0CA, SGO12, SGO11, SGO10, SGO9);
-			SensorCANmod::txCAN(0x0CC, SGO14, SGO13, 0x0, 0x0);
-			//ADC C
-			SensorCANmod::txCAN(0x0CC, A1, A2, 0x0, 0x0);
-			SensorCANmod::txCAN(0x0CE, A3, A4, 0x0, 0x0);
+			//SGO14=SensorCANmod::getTWIdata(ADC_B, VIN4);
+			//SGO13=SensorCANmod::getTWIdata(ADC_B, VIN2);
+			//SensorCANmod::txCAN(0x0CC, SGO14, SGO13, 0x0, 0x0);
+
+			//A1=SensorCANmod::getTWIdata(ADC_C, VIN1);
+			//A2=SensorCANmod::getTWIdata(ADC_C, VIN3);
+			//SensorCANmod::txCAN(0x0CC, A1, A2, 0x0, 0x0);
+
+			//A3=SensorCANmod::getTWIdata(ADC_C, VIN5);
+			//A4=SensorCANmod::getTWIdata(ADC_C, VIN7);
+			//SensorCANmod::txCAN(0x0CE, A3, A4, 0x0, 0x0);
 
 			i++;
 		}
 
 		i=0;
-		start = clock();
 
-		TCO2=SensorCANmod::getTWIdata(ADC_B, VIN8);
-		TCO1=SensorCANmod::getTWIdata(ADC_B, VIN6);
-		A5=SensorCANmod::getTWIdata(ADC_C, VIN8);
-		A6=SensorCANmod::getTWIdata(ADC_C, VIN6);
-		SensorCANmod::txCAN(0x0CB, TCO2, TCO1, A5, A6);
-		SensorCANmod::txCAN(0x0CD, A7, 0x0, 0x0, 0x0);
-
-		duration = clock() - start;
+		//TCO2=SensorCANmod::getTWIdata(ADC_B, VIN8);
+		//TCO1=SensorCANmod::getTWIdata(ADC_B, VIN6);
+		//A5=SensorCANmod::getTWIdata(ADC_C, VIN8);
+		///A6=SensorCANmod::getTWIdata(ADC_C, VIN6);
+		//SensorCANmod::txCAN(0x0CB, TCO2, TCO1, A5, A6);
+		//SensorCANmod::txCAN(0x0CD, A7, 0x0, 0x0, 0x0); //What to do for this one?
 	}
 }
 
