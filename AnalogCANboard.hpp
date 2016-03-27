@@ -54,6 +54,13 @@ public:
 		uint8_t MOB;
 	} CANMessage;
 
+	typedef struct {
+		uint16_t chan1;
+		uint16_t chan2;
+		uint16_t chan3;
+		uint16_t chan4;
+	} CANMessageData;
+
 	//Define CAN Messages
 	static constexpr CANMessage CAN1 = { ADC_A, VIN1, VIN3, VIN5, VIN7, 0x0C8, sendcanMOB0 };
 	static constexpr CANMessage CAN2 = { ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1 };
@@ -70,13 +77,12 @@ public:
 	static constexpr uint8_t Message100length = 2; //length of message100[]
 
 	//Functions:
-	static void txCAN(uint16_t ID, uint16_t chan1, uint16_t chan2, uint16_t chan3, uint16_t chan4, uint8_t MOB) {
-		uint8_t dataBuffer[8];
+	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
 		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
 		//TODO: Do what? Always say what otherwise it's not very helpful :)
-		msg.data = (chan1 << 48) | (chan2 << 32) | (chan3 << 16) | chan4; //concatenate the four channels into 64bit data for transmission
+		msg.data = (uint8_t *)data;
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
@@ -96,32 +102,22 @@ public:
 	}
 
 	static void RxTxCANdata(CANMessage CAN) {
-		uint16_t chan1, chan2, chan3, chan4;
+		CANMessageData messageData = {0, 0, 0, 0};
 
 		if (CAN.reg1 != VINund) {
-			chan1 = getTWIdata(CAN.adc, CAN.reg1);
-		} else {
-			chan1 = 0;
+			messageData.chan1 = getTWIdata(CAN.adc, CAN.reg1);
 		}
-
 		if (CAN.reg2 != VINund) {
-			chan2 = getTWIdata(CAN.adc, CAN.reg2);
-		} else {
-			chan2 = 0;
+			messageData.chan2 = getTWIdata(CAN.adc, CAN.reg2);
 		}
-
 		if (CAN.reg3 != VINund) {
-			chan3 = getTWIdata(CAN.adc, CAN.reg3);
-		} else {
-			chan3 = 0;
+			messageData.chan3 = getTWIdata(CAN.adc, CAN.reg3);
 		}
 		if (CAN.reg4 != VINund) {
-			chan4 = getTWIdata(CAN.adc, CAN.reg4);
-		} else {
-			chan4 = 0;
+			messageData.chan4 = getTWIdata(CAN.adc, CAN.reg4);
 		}
-		//Send CAN Message
-		txCAN(CAN.msgId, chan1, chan2, chan3, chan4, CAN.MOB);
+
+		txCAN(CAN.msgId, &messageData, CAN.MOB);
 	}
 
 	static void updateCAN200() { //ISR for 200Hz Sampling
