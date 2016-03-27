@@ -82,7 +82,7 @@ public:
 		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
-		//TODO
+		//TODO: Do what? Always say what otherwise it's not very helpful :)
 		msg.data = (chan1 << 48) | (chan2 << 32) | (chan3 << 16) | chan4; //concatenate the four channels into 64bit data for transmission
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
