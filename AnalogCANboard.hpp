@@ -15,11 +15,7 @@
 
 class SensorCANmod {
 public:
-	//Declare variables
-	uint16_t chan1, chan2, chan3, chan4;
-	uint16_t ID; //ID is set for the standard format. Declare ID as a unit32_t for extended format
-	uint8_t ADCaddress, reg_address;
-
+	//MOB Numbers
 	static constexpr uint8_t sendcanMOB0 = 0;
 	static constexpr uint8_t sendcanMOB1 = 1;
 	static constexpr uint8_t sendcanMOB2 = 2;
@@ -27,14 +23,14 @@ public:
 	static constexpr uint8_t sendcanMOB4 = 4;
 	static constexpr uint8_t sendcanMOB5 = 5;
 
-	//Define ADC addresses
+	//ADC addresses
 	static constexpr uint8_t ADC_A = 0x21;
 	static constexpr uint8_t ADC_B = 0x22;
 	static constexpr uint8_t ADC_C = 0x20;
 	static constexpr uint8_t ADC_D = 0x23;
 	static constexpr uint8_t ADC_E = 0x24;
 
-	//Define ADC Registers
+	//ADC Registers
 	static constexpr uint8_t VINund = 0x00;
 	static constexpr uint8_t VIN1 = 0x80;
 	static constexpr uint8_t VIN2 = 0x90;
@@ -100,7 +96,7 @@ public:
 	}
 
 	static void RxTxCANdata(CANMessage CAN) {
-		//Get TWI data
+		uint16_t chan1, chan2, chan3, chan4;
 
 		if (CAN.reg1 != VINund) {
 			chan1 = getTWIdata(CAN.adc, CAN.reg1);
