@@ -51,7 +51,10 @@ public:
 		uint16_t msgId;
 		uint8_t MOB;
 
-		constexpr CANMessage(uint8_t adc, uint8_t reg1, uint8_t reg2, uint8_t reg3, uint8_t reg4, uint16_t msgId, uint8_t MOB) : adc(adc), reg1(reg1), reg2(reg2), reg3(reg3), reg4(reg4), msgId(msgId), MOB(MOB) {};
+		constexpr CANMessage(uint8_t adc, uint8_t reg1, uint8_t reg2, uint8_t reg3, uint8_t reg4, uint16_t msgId, uint8_t MOB) :
+				adc(adc), reg1(reg1), reg2(reg2), reg3(reg3), reg4(reg4), msgId(msgId), MOB(MOB) {
+		}
+		;
 	} CANMessage;
 
 	//Define CAN Messages
@@ -125,13 +128,13 @@ public:
 	}
 
 	static void updateCAN200() { //ISR for 200Hz Sampling
-		for (int i=0; i < Message200length; ++i) {
+		for (int i = 0; i < Message200length; ++i) {
 			RxTxCANdata(message200[i]);
 		}
 	}
 
 	static void updateCAN100() { //ISR for 100Hz Sampling
-		for (int i=0; i < Message100length; ++i) {
+		for (int i = 0; i < Message100length; ++i) {
 			RxTxCANdata(message100[i]);
 		}
 	}
