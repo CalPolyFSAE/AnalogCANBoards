@@ -106,42 +106,29 @@ public:
 		//Get TWI data
 
 		if (CAN.reg1 != VINund) {
-			Wire.beginTransmission(CAN.adc); //transmit data to device
-			Wire.write(CAN.reg1); //set the register pointer to correct address
-			Wire.endTransmission(); //stop transmitting
-			chan1 = Wire.read();
+			chan1 = getTWIdata(CAN.adc, CAN.reg1);
 		} else {
-			chan1 = 0x0000;
+			chan1 = 0;
 		}
 
 		if (CAN.reg2 != VINund) {
-			Wire.beginTransmission(CAN.adc); //transmit data to device
-			Wire.write(CAN.reg2); //set the register pointer to correct address
-			Wire.endTransmission(); //stop transmitting
-			chan2 = Wire.read();
+			chan2 = getTWIdata(CAN.adc, CAN.reg2);
 		} else {
-			chan2 = 0x0000;
+			chan2 = 0;
 		}
 
 		if (CAN.reg3 != VINund) {
-			Wire.beginTransmission(CAN.adc); //transmit data to device
-			Wire.write(CAN.reg3); //set the register pointer to correct address
-			Wire.endTransmission(); //stop transmitting
-			chan3 = Wire.read();
+			chan3 = getTWIdata(CAN.adc, CAN.reg3);
 		} else {
-			chan3 = 0x0000;
+			chan3 = 0;
 		}
 		if (CAN.reg4 != VINund) {
-			Wire.beginTransmission(CAN.adc); //transmit data to device
-			Wire.write(CAN.reg4); //set the register pointer to correct address
-			Wire.endTransmission(); //stop transmitting
-			chan4 = Wire.read();
+			chan4 = getTWIdata(CAN.adc, CAN.reg4);
 		} else {
-			chan4 = 0x0000;
+			chan4 = 0;
 		}
 		//Send CAN Message
 		txCAN(CAN.msgId, chan1, chan2, chan3, chan4, CAN.MOB);
-
 	}
 
 	static void updateCAN200() { //ISR for 200Hz Sampling
