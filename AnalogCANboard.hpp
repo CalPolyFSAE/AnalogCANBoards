@@ -20,9 +20,6 @@ public:
 	uint16_t ID; //ID is set for the standard format. Declare ID as a unit32_t for extended format
 	uint8_t ADCaddress, reg_address;
 
-	uint8_t count = 0;
-	uint8_t loop_counter; //Not sure what this was for?
-
 	static constexpr uint8_t sendcanMOB0 = 0;
 	static constexpr uint8_t sendcanMOB1 = 1;
 	static constexpr uint8_t sendcanMOB2 = 2;
@@ -132,19 +129,15 @@ public:
 	}
 
 	static void updateCAN200() { //ISR for 200Hz Sampling
-		while (count < Message200length) {
-			RxTxCANdata(message200[count]);
-			count++;
+		for (int i=0; i < Message200length; ++i) {
+			RxTxCANdata(message200[i]);
 		}
-		count = 0; //reset count
 	}
 
 	static void updateCAN100() { //ISR for 100Hz Sampling
-		while (count < Message100length) {
-			RxTxCANdata(message100[count]);
-			count++;
+		for (int i=0; i < Message100length; ++i) {
+			RxTxCANdata(message100[i]);
 		}
-		count = 0; //reset count
 	}
 
 };
