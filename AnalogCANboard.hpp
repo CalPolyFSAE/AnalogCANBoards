@@ -5,6 +5,8 @@
  *      Author: daniel
  */
 
+#pragma once
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,7 +44,7 @@ public:
 	static constexpr uint8_t VIN8 = 0xF0;
 
 	//Define CAN Message Struct
-	typedef struct CANMessage {
+	typedef struct {
 		uint8_t adc;
 		uint8_t reg1;
 		uint8_t reg2;
@@ -50,21 +52,16 @@ public:
 		uint8_t reg4;
 		uint16_t msgId;
 		uint8_t MOB;
-
-		constexpr CANMessage(uint8_t adc, uint8_t reg1, uint8_t reg2, uint8_t reg3, uint8_t reg4, uint16_t msgId, uint8_t MOB) :
-				adc(adc), reg1(reg1), reg2(reg2), reg3(reg3), reg4(reg4), msgId(msgId), MOB(MOB) {
-		}
-		;
 	} CANMessage;
 
 	//Define CAN Messages
-	static constexpr CANMessage CAN1 = CANMessage(ADC_A, VIN1, VIN3, VIN5, VIN7, 0x0C8, sendcanMOB0);
-	static constexpr CANMessage CAN2 = CANMessage(ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1);
-	static constexpr CANMessage CAN3 = CANMessage(ADC_B, VIN1, VIN3, VIN5, VIN7, 0x0CA, sendcanMOB2);
-	static constexpr CANMessage CAN4 = CANMessage(ADC_B, VIN4, VIN2, VINund, VINund, 0x0CC, sendcanMOB3);
-	static constexpr CANMessage CAN5 = CANMessage(ADC_C, VIN1, VIN3, VIN5, VIN7, 0x0CE, sendcanMOB4);
-	static constexpr CANMessage CAN6 = CANMessage(ADC_B, VIN8, VIN6, VINund, VINund, 0x0CB, sendcanMOB5);
-	static constexpr CANMessage CAN7 = CANMessage(ADC_C, VIN8, VIN6, VIN4, VINund, 0x0CF, sendcanMOB0);
+	static constexpr CANMessage CAN1 = { ADC_A, VIN1, VIN3, VIN5, VIN7, 0x0C8, sendcanMOB0 };
+	static constexpr CANMessage CAN2 = { ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1 };
+	static constexpr CANMessage CAN3 = { ADC_B, VIN1, VIN3, VIN5, VIN7, 0x0CA, sendcanMOB2 };
+	static constexpr CANMessage CAN4 = { ADC_B, VIN4, VIN2, VINund, VINund, 0x0CC, sendcanMOB3 };
+	static constexpr CANMessage CAN5 = { ADC_C, VIN1, VIN3, VIN5, VIN7, 0x0CE, sendcanMOB4 };
+	static constexpr CANMessage CAN6 = { ADC_B, VIN8, VIN6, VINund, VINund, 0x0CB, sendcanMOB5 };
+	static constexpr CANMessage CAN7 = { ADC_C, VIN8, VIN6, VIN4, VINund, 0x0CF, sendcanMOB0 };
 
 	//Define Sample rates
 	static constexpr CANMessage message200[] = { CAN1, CAN2, CAN3, CAN4, CAN5 };
@@ -138,6 +135,5 @@ public:
 			RxTxCANdata(message100[i]);
 		}
 	}
-
 };
 
