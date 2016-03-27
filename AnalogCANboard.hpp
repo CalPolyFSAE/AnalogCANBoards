@@ -102,68 +102,6 @@ public:
 		return data;
 	}
 
-	/*static CAN getCANData(CAN can) {
-	 if(can.msgId == 0x0CC || can.msgId == 0x0CE) {
-	 can.chan1 = SensorCANmod::getTWIdata(can.adc, can.reg1);
-	 can.chan2 = SensorCANmod::getTWIdata(can.adc, can.reg2);
-	 }
-	 else {
-	 can.chan1 = SensorCANmod::getTWIdata(can.adc, can.reg1);
-	 can.chan2 = SensorCANmod::getTWIdata(can.adc, can.reg2);
-	 can.chan3 = SensorCANmod::getTWIdata(can.adc, can.reg3);
-	 can.chan4 = SensorCANmod::getTWIdata(can.adc, can.reg4);
-	 }
-
-	 return can;
-	 }/*
-
-
-
-	 /*void updateCAN() {
-	 init(); //Arduino Timer Initialization, uses Timer 0 for millis() and other timing functions.
-	 Wire.begin(); //begin I2C comms
-
-	 int i=0; //loop counter
-
-
-
-
-
-
-	 uint16_t TOREADCAP = 2;
-	 CAN READ100[TOREADCAP];
-	 CAN READ200[TOREADCAP];
-	 uint16_t canIndex100 = 0;
-	 uint16_t canIndex200 = 0;
-
-	 while (1) {
-	 while(i<2){
-
-	 //LOOP HERE
-	 //Load in 100Hz and 200Hz CANS into arrays here
-	 //Condition timer statement for 100Hz
-	 READ100[canIndex] = SensorCANmod::getCANData(READ100[canIndex100]);
-	 SensorCANmod::txCAN(READ100[canIndex100].msgId, READ100[canIndex100].chan1, READ100[canIndex100].chan2,
-	 READ100[canIndex100].chan3, READ100[canIndex100].chan4);
-	 //Conditional timer statement for 200Hz
-	 READ200[canIndex] = SensorCANmod::getCANData(READ200[canIndex200]);
-	 SensorCANmod::txCAN(READ200[canIndex200].msgId, READ200[canIndex200].chan1, READ200[canIndex200].chan2,
-	 READ200[canIndex200].chan3, READ200[canIndex200].chan4);
-
-	 i++;
-	 }
-
-	 i=0;
-
-	 //TCO2=SensorCANmod::getTWIdata(ADC_B, VIN8);
-	 //TCO1=SensorCANmod::getTWIdata(ADC_B, VIN6);
-	 //A5=SensorCANmod::getTWIdata(ADC_C, VIN8);
-	 ///A6=SensorCANmod::getTWIdata(ADC_C, VIN6);
-	 //SensorCANmod::txCAN(0x0CB, TCO2, TCO1, A5, A6);
-	 //SensorCANmod::txCAN(0x0CD, A7, 0x0, 0x0, 0x0); //What to do for this one?
-	 }
-	 }*/
-
 	static void RxTxCANdata(CANMessage CAN) {
 		//Get TWI data
 
