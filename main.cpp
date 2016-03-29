@@ -20,7 +20,7 @@
 
 volatile bool run200 = false;
 volatile bool run100 = false;
-volatile bool ran100 = false;
+volatile bool run100Next = false;
 
 void timer1_init(){
 	TCCR1B |= (1 << WGM12)|(1 << CS11)|(1 << CS10); //set timer 1 to CTC mode and prescaler 64 TODO:Set prescaler to 1
@@ -34,9 +34,12 @@ void timer1_init(){
 
 void ISR_200() {
     run200 = true;
-    if (ran100) {
-        ran100 = false;
-        run100 = true;
+    if (run100Next) {
+    	run100Next = false;
+        run100 = false;
+    }
+    else {
+    	run100Next=true;
     }
 }
 
