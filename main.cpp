@@ -23,7 +23,7 @@ volatile bool run100 = false;
 volatile bool ran100 = false;
 
 void timer1_init(){
-	TCCR1B |= (1 << WGM12)|(1 << CS11)|(1 << CS10); //set timer 1 to CTC mode and prescaler 64 TODO:Set prescaler to 1
+	TCCR1B |= (1 << WGM12)|(1 << CS10); //set timer 1 to CTC mode and prescaler 1
 	TCNT1 = 0; //initialize counter
 	OCR1A = 65535;//This sets interrupt to 244.14Hz
 	TIMSK1 |= (1<<OCIE1A);//enable compare interrupt
@@ -40,7 +40,8 @@ void ISR_200() {
     }
 }
 
-void main() {
+int main() {
+	timer1_init(); //initialize timer 1 and interrupts
 
     while (1) {
         if (run100) {
