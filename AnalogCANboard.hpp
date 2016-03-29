@@ -81,7 +81,6 @@ public:
 		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
-		//TODO: Do what? Always say what otherwise it's not very helpful :)
 		msg.data = (uint8_t *)data;
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
