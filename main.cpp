@@ -51,6 +51,8 @@ SIGNAL(TIMER1_COMPA_vect) {
 int main() {
 	timer1_init(); //initialize timer 1 and interrupts
 	Serial.begin(115200);
+	Wire.begin();
+	Wire.setClock(100000);
 	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B1M, nullptr);
 
     while (1) {

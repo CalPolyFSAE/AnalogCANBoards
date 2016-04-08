@@ -83,21 +83,28 @@ public:
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
 		msg.data = (uint8_t *)data;
 		msg.dlc = 8; //Number of bytes of data
-		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
+		msg.ide = 1; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
 
-		Serial.printf("%x %x %x %x %x %x %x %x\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
+		//Serial.printf("%x %x %x %x %x %x %x %x\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
 
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
 
 	static uint16_t getTWIdata(uint8_t ADCaddress, uint8_t reg_address) {
+		//Serial.printf("%x\n", ADCaddress);
+		//Serial.printf("%x\n", reg_address);
+
+
 		uint16_t data;
 
 		Wire.beginTransmission(ADCaddress); //transmit data to device
 		Wire.write(reg_address); //set the register pointer to correct address
-		Wire.endTransmission(); //stop transmitting
+		Wire.endTransmission(); //transmit
+		Wire.requestFrom(ADCaddress, (uint8_t)2, true);
 		data = Wire.read();
+
+		//Serial.printf("%x\n", data);
 
 		return data;
 	}
@@ -107,6 +114,7 @@ public:
 
 		if (CAN.reg1 != VINund) {
 			messageData.chan1 = getTWIdata(CAN.adc, CAN.reg1);
+			Serial.printf("%x",messageData.chan1);
 		}
 		if (CAN.reg2 != VINund) {
 			messageData.chan2 = getTWIdata(CAN.adc, CAN.reg2);
@@ -118,7 +126,10 @@ public:
 			messageData.chan4 = getTWIdata(CAN.adc, CAN.reg4);
 		}
 
+		Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
+		//Serial.printf("%x%x%x%x%x%x%x%x\n",messageData);
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
+
 	}
 
 	static void updateCAN200() { //ISR for 200Hz Sampling
