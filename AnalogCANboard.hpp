@@ -71,10 +71,10 @@ public:
 	static constexpr CANMessage CAN7 = { ADC_C, VIN8, VIN6, VIN4, VINund, 0x0CF, sendcanMOB0 };
 
 	//Define Sample rates
-	static constexpr CANMessage message200[] = { CAN1, CAN2, CAN3, CAN4, CAN5 };
-	static constexpr CANMessage message100[] = { CAN6, CAN7 };
-	static constexpr uint8_t Message200length = 5; //length of message200[]
-	static constexpr uint8_t Message100length = 2; //length of message100[]
+	static constexpr CANMessage message200[] = { CAN5 };
+	static constexpr CANMessage message100[] = {  };
+	static constexpr uint8_t Message200length = 1; //length of message200[]
+	static constexpr uint8_t Message100length = 0; //length of message100[]
 
 	//Functions:
 	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
@@ -85,6 +85,8 @@ public:
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
+
+		Serial.printf("%x %x %x %x %x %x %x %x\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
 
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}

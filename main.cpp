@@ -8,6 +8,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
+
+#include <AVRLibrary/arduino/Arduino.h>
+#include <AVRLibrary/CPFECANLib.h>
+
 #include "AnalogCANboard.hpp"
 
 
@@ -32,7 +36,8 @@ void timer1_init(){
 }
 
 
-void ISR_200() {
+
+SIGNAL(TIMER1_COMPA_vect) {
     run200 = true;
     if (run100Next) {
     	run100Next = false;
@@ -45,6 +50,8 @@ void ISR_200() {
 
 int main() {
 	timer1_init(); //initialize timer 1 and interrupts
+	Serial.begin(115200);
+	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B1M, nullptr);
 
     while (1) {
         if (run100) {
