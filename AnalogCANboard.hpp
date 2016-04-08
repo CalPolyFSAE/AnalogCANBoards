@@ -66,7 +66,7 @@ public:
 	static constexpr CANMessage CAN2 = { ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1 };
 	static constexpr CANMessage CAN3 = { ADC_B, VIN1, VIN3, VIN5, VIN7, 0x0CA, sendcanMOB2 };
 	static constexpr CANMessage CAN4 = { ADC_B, VIN4, VIN2, VINund, VINund, 0x0CC, sendcanMOB3 };
-	static constexpr CANMessage CAN5 = { ADC_C, VIN1, VIN3, VIN5, VIN7, 0x0CE, sendcanMOB4 };
+	static constexpr CANMessage CAN5 = { ADC_C, VIN1, VIN3, VIN5, VIN7, 0x001, sendcanMOB5 }; //0x0CE, MOB4
 	static constexpr CANMessage CAN6 = { ADC_B, VIN8, VIN6, VINund, VINund, 0x0CB, sendcanMOB5 };
 	static constexpr CANMessage CAN7 = { ADC_C, VIN8, VIN6, VIN4, VINund, 0x0CF, sendcanMOB0 };
 
@@ -80,7 +80,7 @@ public:
 	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
 		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
-		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
+		msg.identifier.extended = ID; //set for standard.  for extended use identifier.extended
 		msg.data = (uint8_t *)data;
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 1; //Set to 0 for standard identifier.  Set to 1 for extended address
@@ -126,7 +126,7 @@ public:
 			messageData.chan4 = getTWIdata(CAN.adc, CAN.reg4);
 		}
 
-		Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
+		//Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
 		//Serial.printf("%x%x%x%x%x%x%x%x\n",messageData);
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
 
