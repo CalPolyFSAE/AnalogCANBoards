@@ -114,17 +114,17 @@ public:
 		CANMessageData messageData = {0, 0, 0, 0};
 
 		if (CAN.reg1 != VINund) {
-			messageData.chan1 = getTWIdata(CAN.adc, CAN.reg1);
+			messageData.chan1 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg1));
 			//Serial.printf("%x",messageData.chan1);
 		}
 		if (CAN.reg2 != VINund) {
-			messageData.chan2 = getTWIdata(CAN.adc, CAN.reg2);
+			messageData.chan2 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg2));
 		}
 		if (CAN.reg3 != VINund) {
-			messageData.chan3 = getTWIdata(CAN.adc, CAN.reg3);
+			messageData.chan3 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg3));
 		}
 		if (CAN.reg4 != VINund) {
-			messageData.chan4 = getTWIdata(CAN.adc, CAN.reg4);
+			messageData.chan4 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg4));
 		}
 
 		//Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
