@@ -41,7 +41,7 @@ SIGNAL(TIMER1_COMPA_vect) {
     run200 = true;
     if (run100Next) {
     	run100Next = false;
-        run100 = false;
+        run100 = true;
     }
     else {
     	run100Next=true;
