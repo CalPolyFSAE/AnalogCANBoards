@@ -102,11 +102,8 @@ public:
 		Wire.write(reg_address); //set the register pointer to correct address
 		Wire.endTransmission(); //transmit
 		Wire.requestFrom(ADCaddress, 2, true);
-
-		while (Wire.available()) {
-			data = (uint16_t)(Wire.read() & 0x03) << 8;
-			data |= Wire.read();
-		}
+		data = (uint16_t)(Wire.read() & 0x0F) << 8;
+		data |= Wire.read();
 
 		//Serial.printf("%x\n", data);
 
