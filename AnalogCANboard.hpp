@@ -107,7 +107,7 @@ public:
 
 		//Serial.printf("%x\n", data);
 
-		return data & 0x3FF; //And data with a 12 bitmask
+		return data; //And data with a 12 bitmask
 	}
 
 	static void RxTxCANdata(CANMessage CAN) {
