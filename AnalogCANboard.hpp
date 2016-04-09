@@ -80,13 +80,13 @@ public:
 	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
 		CPFECANLib::MSG msg; //comes from CPECANLib.h
 
-		msg.identifier.extended = ID; //set for standard.  for extended use identifier.extended
+		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
 		msg.data = (uint8_t *)data;
 		msg.dlc = 8; //Number of bytes of data
-		msg.ide = 1; //Set to 0 for standard identifier.  Set to 1 for extended address
+		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
 
-		//Serial.printf("%x %x %x %x %x %x %x %x\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
+		Serial.printf("%x %x %x %x %x %x %x %x end\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
 
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
@@ -106,7 +106,7 @@ public:
 
 		//Serial.printf("%x\n", data);
 
-		return data;
+		return data & 0x3FF; //And data with a 12 bitmask
 	}
 
 	static void RxTxCANdata(CANMessage CAN) {
@@ -114,7 +114,7 @@ public:
 
 		if (CAN.reg1 != VINund) {
 			messageData.chan1 = getTWIdata(CAN.adc, CAN.reg1);
-			Serial.printf("%x",messageData.chan1);
+			//Serial.printf("%x",messageData.chan1);
 		}
 		if (CAN.reg2 != VINund) {
 			messageData.chan2 = getTWIdata(CAN.adc, CAN.reg2);

@@ -53,7 +53,7 @@ int main() {
 	Serial.begin(115200);
 	Wire.begin();
 	Wire.setClock(100000);
-	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B125K, nullptr); //Adjust back to B1M
+	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B1M, nullptr); //Adjust back to B1M
 
     while (1) {
         if (run100) {
