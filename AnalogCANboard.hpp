@@ -66,14 +66,14 @@ public:
 	static constexpr CANMessage CAN2 = { ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1 };
 	static constexpr CANMessage CAN3 = { ADC_B, VIN1, VIN3, VIN5, VIN7, 0x0CA, sendcanMOB2 };
 	static constexpr CANMessage CAN4 = { ADC_B, VIN4, VIN2, VINund, VINund, 0x0CC, sendcanMOB3 };
-	static constexpr CANMessage CAN5 = { ADC_C, VIN1, VIN3, VIN5, VIN7, 0x001, sendcanMOB5 }; //0x0CE, MOB4
+	static constexpr CANMessage CAN5 = { ADC_C, VIN1, VIN3, VIN5, VIN7, 0x0CE, sendcanMOB5 }; //0x0CE, MOB4
 	static constexpr CANMessage CAN6 = { ADC_B, VIN8, VIN6, VINund, VINund, 0x0CB, sendcanMOB5 };
 	static constexpr CANMessage CAN7 = { ADC_C, VIN8, VIN6, VIN4, VINund, 0x0CF, sendcanMOB0 };
 
 	//Define Sample rates
-	static constexpr CANMessage message200[] = { CAN5 };
+	static constexpr CANMessage message200[] = { CAN5, CAN7 };
 	static constexpr CANMessage message100[] = {  };
-	static constexpr uint8_t Message200length = 1; //length of message200[]
+	static constexpr uint8_t Message200length = 2; //length of message200[]
 	static constexpr uint8_t Message100length = 0; //length of message100[]
 
 	//Functions:
@@ -86,7 +86,7 @@ public:
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
 
-		Serial.printf("%x %x %x %x %x %x %x %x end\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
+		//Serial.printf("%x %x %x %x %x %x %x %x end\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
 
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
@@ -125,6 +125,7 @@ public:
 		}
 		if (CAN.reg4 != VINund) {
 			messageData.chan4 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg4));
+			Serial.printf("%x\n", messageData.chan4);
 		}
 
 		//Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
