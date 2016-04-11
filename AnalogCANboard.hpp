@@ -103,7 +103,6 @@ public:
 		}
 		if (CAN.reg4 != VINund) {
 			messageData.chan4 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg4));
-			Serial.printf("%x\n", messageData.chan4);
 		}
 
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
