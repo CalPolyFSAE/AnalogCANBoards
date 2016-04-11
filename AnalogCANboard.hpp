@@ -86,16 +86,10 @@ public:
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
 
-		//Serial.printf("%x %x %x %x %x %x %x %x end\n", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], msg.data[6], msg.data[7]);
-
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
 
 	static uint16_t getTWIdata(uint8_t ADCaddress, uint8_t reg_address) {
-		//Serial.printf("%x\n", ADCaddress);
-		//Serial.printf("%x\n", reg_address);
-
-
 		uint16_t data;
 
 		Wire.beginTransmission(ADCaddress); //transmit data to device
@@ -105,8 +99,6 @@ public:
 		data = (uint16_t)(Wire.read() & 0x0F) << 8;
 		data |= Wire.read();
 
-		//Serial.printf("%x\n", data);
-
 		return data; //And data with a 12 bitmask
 	}
 
@@ -115,7 +107,6 @@ public:
 
 		if (CAN.reg1 != VINund) {
 			messageData.chan1 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg1));
-			//Serial.printf("%x",messageData.chan1);
 		}
 		if (CAN.reg2 != VINund) {
 			messageData.chan2 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg2));
@@ -128,8 +119,6 @@ public:
 			Serial.printf("%x\n", messageData.chan4);
 		}
 
-		//Serial.printf("%x, %x, %x, %x \n",messageData.chan1, messageData.chan2, messageData.chan3, messageData.chan4);
-		//Serial.printf("%x%x%x%x%x%x%x%x\n",messageData);
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
 
 	}
