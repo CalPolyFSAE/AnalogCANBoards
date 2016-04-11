@@ -1,13 +1,3 @@
-/*
- * Combustion-Front.hpp
- *
- *  Created on: Apr 10, 2016
- *      Author: thomaswillson
- */
-
-#ifndef COMBUSTION_FRONT_HPP_
-#define COMBUSTION_FRONT_HPP_
-
 //Define CAN Messages
 static constexpr CANMessage CAN1 = { ADC_A, VIN1, VIN3, VIN5, VIN7, 0x0C8, sendcanMOB0 };
 static constexpr CANMessage CAN2 = { ADC_A, VIN8, VIN6, VIN4, VIN2, 0x0C9, sendcanMOB1 };
@@ -22,6 +12,3 @@ static constexpr CANMessage message200[] = { CAN5, CAN7 };
 static constexpr CANMessage message100[] = {  };
 static constexpr uint8_t Message200length = 2; //length of message200[]
 static constexpr uint8_t Message100length = 0; //length of message100[]
-
-
-#endif /* COMBUSTION_FRONT_HPP_ */
