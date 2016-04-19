@@ -56,6 +56,7 @@ int main() {
 	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B1M, nullptr); //Adjust back to B1M
 
     while (1) {
+    	Serial.printf("working\n");
         if (run100) {
             run100 = false;
             SensorCANmod::updateCAN100();

@@ -72,7 +72,6 @@ public:
 		msg.dlc = 8; //Number of bytes of data
 		msg.ide = 0; //Set to 0 for standard identifier.  Set to 1 for extended address
 		msg.rtr = 0;
-
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
 
@@ -86,6 +85,7 @@ public:
 		data = (uint16_t)(Wire.read() & 0x0F) << 8;
 		data |= Wire.read();
 
+		Serial.printf("working\n");
 		return data; //And data with a 12 bitmask
 	}
 
