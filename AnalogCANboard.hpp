@@ -61,7 +61,7 @@ public:
 		uint16_t chan4;
 	} CANMessageData;
 
-#include "BoardConfigurations/Combustion-Front.hpp" //include the proper CAN board configuration
+#include "BoardConfigurations/Combustion-Rear.hpp" //include the proper CAN board configuration
 
 	//Functions:
 	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
