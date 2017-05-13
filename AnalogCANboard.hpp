@@ -85,24 +85,40 @@ public:
 		data = (uint16_t)(Wire.read() & 0x0F) << 8;
 		data |= Wire.read();
 
-		Serial.printf("working\n");
+
 		return data; //And data with a 12 bitmask
 	}
 
 	static void RxTxCANdata(CANMessage CAN) {
+		float volts;
+		uint16_t printdata;
 		CANMessageData messageData = {0, 0, 0, 0};
+
+
 
 		if (CAN.reg1 != VINund) {
 			messageData.chan1 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg1));
+
+
 		}
 		if (CAN.reg2 != VINund) {
 			messageData.chan2 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg2));
+
+
 		}
 		if (CAN.reg3 != VINund) {
 			messageData.chan3 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg3));
+			printdata = getTWIdata(CAN.adc, CAN.reg3);
+
 		}
 		if (CAN.reg4 != VINund) {
 			messageData.chan4 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg4));
+
+		}
+
+		volts = printdata * 0.00122;
+		if(CAN.msgId == 208){
+			Serial.printf("%f\n", volts);
 		}
 
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
