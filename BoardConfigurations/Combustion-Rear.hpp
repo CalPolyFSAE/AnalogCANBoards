@@ -1,5 +1,5 @@
 //Define CAN Messages
-static constexpr CANMessage CAN1 = { ADC_D, VIN1, VIN7, VIN8, VINund, 0x0D0, sendcanMOB0 };
+static constexpr CANMessage CAN1 = { ADC_D, VIN1, VIN7, VIN8, VINund, 0x003, sendcanMOB0 };//0x0db
 static constexpr CANMessage CAN2 = { ADC_E, VIN4, VIN2, VINund, VINund, 0x0D1, sendcanMOB1 };
 //static constexpr CANMessage CAN3 = { ADC_A, VIN1, VIN3, VIN5, VIN7, 0x0D2, sendcanMOB2 }; //Strain Gauges
 //static constexpr CANMessage CAN4 = { ADC_B, VIN4, VIN2, VINund, VINund, 0x0CC, sendcanMOB3 };

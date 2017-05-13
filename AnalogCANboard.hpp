@@ -108,17 +108,11 @@ public:
 		}
 		if (CAN.reg3 != VINund) {
 			messageData.chan3 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg3));
-			printdata = getTWIdata(CAN.adc, CAN.reg3);
+
 
 		}
 		if (CAN.reg4 != VINund) {
 			messageData.chan4 = CPFECANLib::hton_uint16_t(getTWIdata(CAN.adc, CAN.reg4));
-
-		}
-
-		volts = printdata * 0.00122;
-		if(CAN.msgId == 208){
-			Serial.printf("%f\n", volts);
 		}
 
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
