@@ -54,17 +54,22 @@ int main() {
 	CPFECANLib::init(CPFECANLib::CAN_BAUDRATE::B1M, nullptr); //Adjust back to B1M
 
     while (1) {
-      if(run250) {
-         run250 = false;
-         SensorCANmod::updateCAN250();
-      }
-      if(run50) {
-         run50 = false;
-         SensorCANmod::updateCAN50();
-      }
       if(run1000) {
          run1000 = false;
          SensorCANmod::updateCAN1000();
       }
-    }
+      /*
+      if(run250) {
+         run250 = false;
+         SensorCANmod::updateCAN250();
+      }
+      */
+      /*
+      if(run50) {
+         run50 = false;
+         SensorCANmod::updateCAN50();
+      }
+      */
+      
+   }
 }
