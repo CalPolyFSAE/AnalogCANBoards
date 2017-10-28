@@ -50,7 +50,7 @@ public:
       uint8_t sensNum;
    } CANMessage;
 
-   #include "flConfig2.hpp" //include the proper CAN board config
+   #include "BoardConfigurations/flConfig.hpp" //include the proper CAN board config
    //#include "frConfig.hpp"
    //#include "rlConfig.hpp"
    //#include "rrConfig.hpp"
@@ -153,6 +153,7 @@ public:
    static void updateCAN250() {
       txCANdata(CAN1);
    }
+
    static void updateCAN50() {
      txCANdata(CAN2);
    }
