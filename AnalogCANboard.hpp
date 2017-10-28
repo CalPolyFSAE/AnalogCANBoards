@@ -149,11 +149,11 @@ public:
    static void updateCAN1000() {
      txCANdata(CAN0);
    }
-   /*
+   
    static void updateCAN250() {
-      txCANdata();
+      txCANdata(CAN1);
    }
-   static void updateCAN500() {
-     txCANdata();
+   static void updateCAN50() {
+     txCANdata(CAN2);
    }
-   */
+   
