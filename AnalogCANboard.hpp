@@ -119,17 +119,18 @@ public:
       messageData.chan4 = CPFECANLib::hton_uint16_t(read(index+3));
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
 	}
-
-   static void updateCAN250() {
-      for(int i=0; i<message250length; i++)
-         txCANdata(message250[i], i);
-   }
-   static void updateCAN500() {
-      for(int i=0; i<message500length; i++)
-        txCANdata(message500[i], i);
-   }
-
    static void updateCAN1000() {
       for(int i=0; i<message1000length; i++)
         txCANdata(message1000[i], i);
    }
+	
+   static void updateCAN250() {
+      for(int i=0; i<message250length; i++)
+         txCANdata(message250[i], i);
+   }
+   static void updateCAN50() {
+      for(int i=0; i<message50length; i++)
+        txCANdata(message500[i], i);
+   }
+
+ 
