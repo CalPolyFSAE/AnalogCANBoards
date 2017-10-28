@@ -1,0 +1,17 @@
+/***********************************
+Front left CAN board configuration
+Created by: Mitchell Myjak
+Date created: 10/23/17
+Date last edited: 10/23/17
+
+Strain gauges (quantity = 6) - 1000 Hz
+Shock Pot LF - 1000 Hz
+**************************************/
+
+//defining CAN messages
+//need to change CAN identifier to proper can msgID
+static constexpr CANmessage CAN1 = { CAN identifier, sendcanMOB0 }; //sg2:0 
+static constexpr CANmessage CAN2 = { CAN identifier, sendcanMOB1 }; //sg5:3, shock pot
+static constexpr CANMessage message1000[] = { CAN1, CAN2 };
+static constexpr uint8_t message1000length = 2; 
+
