@@ -12,9 +12,9 @@ Steering Position Pot - 50 Hz
 **************************************/
 
 //defining CAN messages
-static constexpr CANmessage CAN1 = { CAN identifier, sendcanMOB0 }; //sp 
-static constexpr CANmessage CAN2 = { CAN identifier, sendcanMOB1 }; //fbp, rbp, fa
-static constexpr CANmessage CAN3 = { CAN identifier, sendcanMOB2 }; //spp
+static constexpr CANmessage CAN1 = { CAN identifier, sendcanMOB0, 1}; //sp 
+static constexpr CANmessage CAN2 = { CAN identifier, sendcanMOB1, 3}; //fbp, rbp, fa
+static constexpr CANmessage CAN3 = { CAN identifier, sendcanMOB2, 1}; //spp
 static constexpr CANMessage message1000[] = { CAN1 };
 static constexpr CANMessage message250[] = { CAN2 };
 static constexpr CANMessage message50[]= { CAN3 };
