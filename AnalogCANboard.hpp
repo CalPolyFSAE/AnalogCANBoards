@@ -14,6 +14,11 @@
 #include <AVRLibrary/arduino/Arduino.h>
 #include <AVRLibrary/arduino/Wire.h>
 
+#define FLCONFIG
+//#define FRCONFIG
+//#define RLCONFIG
+//#define RRCONFIG
+
 class SensorCANmod {
 public:
 
@@ -22,6 +27,9 @@ public:
    static constexpr uint16_t CAN0id = 0x0A0;
    static constexpr uint16_t CAN1id = 0x0A1;
    static constexpr uint16_t CAN2id = 0x0A2;
+   static constexpr uint16_t CAN3id = 0x0A3;
+   static constexpr uint16_t CAN4id = 0x0A4;
+
 	//MOB Numbers
   
 	static constexpr uint8_t sendcanMOB0 = 0;
@@ -46,14 +54,65 @@ public:
       uint8_t sensNum;
    } CANMessage;
 
-   //#include "BoardConfigurations/flConfig.hpp" //include the proper CAN board config
-   //front right config
-   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 4};
-   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3};
+
+/**************************************
+Front left config(FLCONFIG)
+Strain gauges (quantity = 6) - 1000 Hz
+Shock Pot LF - 1000 Hz
+**************************************/
+#ifdef FLCONFIG
+   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 4}; //4x sg
+   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3}; //3x sg, sp
    static constexpr CANMessage message1000[] = { CAN0, CAN1 };
    static constexpr uint8_t Message1000length = 2;
-   //static constexpr CANMessage CAN2 = { CAN2id, sendcanMOB2, 2};
+#endif
 
+/**************************************
+Front right config(FRCONFIG)
+Shock Pot RF - 1000 Hz
+Front Brake Pressure - 250 Hz
+Rear Brake Pressure - 250 Hz
+Front accelerometer - 250 Hz
+Steering Position Pot - 50 Hz
+**************************************/
+#ifdef FRCONFIG
+static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 1}; //sp
+static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3}; //fbp, rbp, fa
+static constexpr CANMessage CAN2 = { CAN2id, sendcanMOB2, 1}; //spp
+static constexpr CANMessage message1000[] = { CAN0 };
+static constexpr CANMessage message250[] = { CAN1 };
+static constexpr CANMessage message50[] = { CAN2 };
+static constexpr uint8_t Message1000length = 1;
+static constexpr uint8_t Message250length = 1;
+static constexpr uint8_t Message50length = 1;
+#endif
+   
+
+/**************************************
+Rear left config(RLCONFIG)
+Strain gauges (qauntity = 6) - 1000 Hz
+Shock Pot LF - 1000 Hz
+**************************************/
+#ifdef RLCONFIG
+   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 4}; //4x sg
+   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3}; //3x sg, sp
+   static constexpr CANMessage message1000[] = { CAN0, CAN1 };
+   static constexpr uint8_t Message1000length = 2;
+#endif
+
+/**************************************
+Rear right config(RRCONFIG)
+Shock Pot RF - 1000 Hz
+Rear accelerometer - 250 Hz
+**************************************/
+#ifdef RRCONFIG
+   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 1}; //sp
+   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 1}; //ra
+   static constexpr CANMessage message1000[] = { CAN0 };
+   static constexpr CANMessage message250[] = { CAN1 };
+   static constexpr uint8_t Message1000length = 1;
+   static constexpr uint8_t Message250length = 1;
+#endif
 
    static void initADC(){
       ADCSRA = 0x87; //Turn On ADC and set prescaler (CLK/128)
@@ -131,25 +190,29 @@ public:
       if(CAN.sensNum > num+3)
          messageData.chan4 = CPFECANLib::hton_uint16_t(read(num+3));
    }
-	static void txCANdata(CANMessage CAN, uint8_t messageNum) {
-		CANMessageData messageData = {0,0,0,0};
-		setChanData(messageData, CAN, messageNum);
-		txCAN(CAN.msgId, &messageData, CAN.MOB);
-	}
+
+   static void txCANdata(CANMessage CAN, uint8_t messageNum) {
+      CANMessageData messageData = {0,0,0,0};
+      setChanData(messageData, CAN, messageNum);
+      txCAN(CAN.msgId, &messageData, CAN.MOB);
+   }
 
 	static void updateCAN1000() {
 		for (int i = 0; i < Message1000length; ++i)
 			txCANdata(message1000[i], i);
    }
-   /*
+#if defined(FRCONFIG) || defined(RRCONFIG)
    static void updateCAN250() {
 		for (int i = 0; i < Message250length; ++i)
          txCANdata(message250[i], i);
    }
+#endif
 
+#ifdef FRCONFIG
    static void updateCAN50() {
       for (int i = 0; i < Message50length; ++i)
-         txCANdata(message[50], i);
+         txCANdata(message50[i], i);
    }
-   */
+#endif
+   
 };
