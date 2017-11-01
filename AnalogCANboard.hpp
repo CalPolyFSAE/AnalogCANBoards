@@ -37,10 +37,6 @@ public:
 		uint16_t chan2;
 		uint16_t chan3;
 		uint16_t chan4;
-		uint16_t chan5;
-		uint16_t chan6;
-		uint16_t chan7;
-		uint16_t chan8;
 	} CANMessageData;
    
 
@@ -50,18 +46,22 @@ public:
       uint8_t sensNum;
    } CANMessage;
 
-   #include "BoardConfigurations/flConfig.hpp" //include the proper CAN board config
-   //#include "frConfig.hpp"
-   //#include "rlConfig.hpp"
-   //#include "rrConfig.hpp"
+   //#include "BoardConfigurations/flConfig.hpp" //include the proper CAN board config
+   //front right config
+   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 4};
+   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3};
+   static constexpr CANMessage message1000[] = { CAN0, CAN1 };
+   static constexpr uint8_t Message1000length = 2;
+   //static constexpr CANMessage CAN2 = { CAN2id, sendcanMOB2, 2};
 
-   void initADC(){
+
+   static void initADC(){
       ADCSRA = 0x87; //Turn On ADC and set prescaler (CLK/128)
       ADCSRB = 0x00; //turn off autotrigger
       ADMUX = 0x00;     //Set ADC channel ADC0
    }
 
-   uint16_t read(uint8_t ADCnum) {
+   static uint16_t read(uint8_t ADCnum) {
       setADMUX(ADCnum);
       int voltage;
       int calibratedVoltage;
@@ -72,8 +72,8 @@ public:
       return calibratedVoltage;
    }
 
-   void setADMUX(uint8_t ADCnum) {
-      switch ADCnum {
+   static void setADMUX(uint8_t ADCnum) {
+      switch (ADCnum) {
          case 0:
             ADMUX &= ~((MUX2<<1)|(MUX1<<1)|(MUX0<<1));
             break;
@@ -107,7 +107,7 @@ public:
       }
    }
 
-	static void txCAN(uint16_t ID, CANMessageData *data, uint8_t MOB) {
+	static void txCAN(uint16_t ID, void *data, uint8_t MOB) {
 		CPFECANLib::MSG msg; //comes from CPFECANLib.h in AVR library
 		msg.identifier.standard = ID; //set for standard.  for extended use identifier.extended
 		msg.data = (uint8_t *)data;
@@ -116,45 +116,40 @@ public:
 		msg.rtr = 0;
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
-  
-   /**********************************
-   Note: we are doing 8 bit conversion in txCAN
-   msg.data = (unit8_t)data, so then all 7 (or 8 for that matter) 
-   sensor readings can be sent in one CAN message
-   So I wouldn't need to split the sensors up
-   and I wouldn't need for messageData to be an array
-   I could just have up to 8 channels
-   **********************************/
-	static void TxCANdata(CANMessage CAN) {
-		CANMessageData messageData = {0, 0, 0, 0, 0, 0, 0, 0};
-      uint8_t numChan = CAN.sensNum;
-      messageData.chan1 = CPFECANLib::hton_uint16_t(read(0));
-      if(numChan > 1)
-         messageData.chan2 = CPFECANLib::hton_uint16_t(read(1));
-      if(numChan > 2)
-         messageData.chan3 = CPFECANLib::hton_uint16_t(read(2));
-      if(numChan > 3)
-         messageData.chan4 = CPFECANLib::hton_uint16_t(read(3));
-      if(numChan > 4)
-         messageData.chan5 = CPFECANLib::hton_uint16_t(read(4));
-      if(numChan > 5)
-         messageData.chan6 = CPFECANLib::hton_uint16_t(read(5));
-      if(numChan > 6)
-         messageData.chan7 = CPFECANLib::hton_uint16_t(read(6));
-      if(numChan > 7)
-         messageData.chan2 = CPFECANLib::hton_uint16_t(read(7));
+   
+   static void setChanData(CANMessageData messageData, CANMessage CAN, uint8_t messageNum) {
+      uint8_t num = messageNum*4;
+      messageData.chan1 = CPFECANLib::hton_uint16_t(read(num));
+      if(CAN.sensNum > num+1)
+         messageData.chan2 = CPFECANLib::hton_uint16_t(read(num+1));
+      else
+         return;
+      if(CAN.sensNum > num+2)
+         messageData.chan3 = CPFECANLib::hton_uint16_t(read(num+2));
+      else
+         return;
+      if(CAN.sensNum > num+3)
+         messageData.chan4 = CPFECANLib::hton_uint16_t(read(num+3));
+   }
+	static void txCANdata(CANMessage CAN, uint8_t messageNum) {
+		CANMessageData messageData = {0,0,0,0};
+		setChanData(messageData, CAN, messageNum);
 		txCAN(CAN.msgId, &messageData, CAN.MOB);
 	}
 
-   static void updateCAN1000() {
-     txCANdata(CAN0);
+	static void updateCAN1000() {
+		for (int i = 0; i < Message1000length; ++i)
+			txCANdata(message1000[i], i);
    }
-   
+   /*
    static void updateCAN250() {
-      txCANdata(CAN1);
+		for (int i = 0; i < Message250length; ++i)
+         txCANdata(message250[i], i);
    }
 
    static void updateCAN50() {
-     txCANdata(CAN2);
+      for (int i = 0; i < Message50length; ++i)
+         txCANdata(message[50], i);
    }
-   
+   */
+};
