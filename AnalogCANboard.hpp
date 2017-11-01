@@ -14,7 +14,7 @@
 #include <AVRLibrary/arduino/Arduino.h>
 #include <AVRLibrary/arduino/Wire.h>
 
-#define FLCONFIG
+//#define FLCONFIG
 //#define FRCONFIG
 //#define RLCONFIG
 //#define RRCONFIG
@@ -41,17 +41,25 @@ public:
    
    
 	typedef struct {
-		uint16_t chan1;
-		uint16_t chan2;
-		uint16_t chan3;
-		uint16_t chan4;
+		uint16_t a;
+		uint16_t b;
+		uint16_t c;
+		uint16_t d;
 	} CANMessageData;
    
+	enum class ADC_chan : uint8_t {
+		ADC0, ADC1, ADC2, ADC3, ADC4
+		,ADC5, ADC6, ADC7, ADCNULL
+	};
 
    typedef struct {
-      uint8_t msgId;
+      uint16_t msgId;
       uint8_t MOB;
-      uint8_t sensNum;
+      ADC_chan a;
+      ADC_chan b;
+      ADC_chan c;
+      ADC_chan d;
+      //uint8_t sensNum;
    } CANMessage;
 
 
@@ -61,10 +69,18 @@ Strain gauges (quantity = 6) - 1000 Hz
 Shock Pot LF - 1000 Hz
 **************************************/
 #ifdef FLCONFIG
-   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, 4}; //4x sg
-   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3}; //3x sg, sp
+   static constexpr CANMessage CAN0 = { CAN0id, sendcanMOB0, ADC_chan::ADCNULL, ADC_chan::ADCNULL,
+		   ADC_chan::ADCNULL, ADC_chan::ADCNULL}; //4x sg
+   static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, ADC_chan::ADCNULL, ADC_chan::ADCNULL,
+   		   ADC_chan::ADCNULL, ADC_chan::ADCNULL}; //4x sg
+  // static constexpr CANMessage CAN1 = { CAN1id, sendcanMOB1, 3}; //3x sg, sp
    static constexpr CANMessage message1000[] = { CAN0, CAN1 };
+   static constexpr CANMessage message250[] = {};
+   static constexpr CANMessage message50[] = {};
    static constexpr uint8_t Message1000length = 2;
+   static constexpr uint8_t Message250length = 0;
+   static constexpr uint8_t Message50length = 0;
+
 #endif
 
 /**************************************
@@ -175,8 +191,9 @@ Rear accelerometer - 250 Hz
 		msg.rtr = 0;
 		CPFECANLib::sendMsgUsingMOB(MOB, &msg);
 	}
-   
-   static void setChanData(CANMessageData messageData, CANMessage CAN, uint8_t messageNum) {
+   //need to pass by ref
+   /*
+   static void setChanData(CANMessageData &messageData, CANMessage CAN, uint8_t messageNum) {
       uint8_t num = messageNum*4;
       messageData.chan1 = CPFECANLib::hton_uint16_t(read(num));
       if(CAN.sensNum > num+1)
@@ -190,10 +207,12 @@ Rear accelerometer - 250 Hz
       if(CAN.sensNum > num+3)
          messageData.chan4 = CPFECANLib::hton_uint16_t(read(num+3));
    }
+   */
 
    static void txCANdata(CANMessage CAN, uint8_t messageNum) {
       CANMessageData messageData = {0,0,0,0};
-      setChanData(messageData, CAN, messageNum);
+      //setChanData(messageData, CAN, messageNum);
+
       txCAN(CAN.msgId, &messageData, CAN.MOB);
    }
 
@@ -201,18 +220,14 @@ Rear accelerometer - 250 Hz
 		for (int i = 0; i < Message1000length; ++i)
 			txCANdata(message1000[i], i);
    }
-#if defined(FRCONFIG) || defined(RRCONFIG)
    static void updateCAN250() {
 		for (int i = 0; i < Message250length; ++i)
          txCANdata(message250[i], i);
    }
-#endif
 
-#ifdef FRCONFIG
    static void updateCAN50() {
       for (int i = 0; i < Message50length; ++i)
          txCANdata(message50[i], i);
    }
-#endif
    
 };
