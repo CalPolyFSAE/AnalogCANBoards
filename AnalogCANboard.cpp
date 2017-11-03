@@ -75,7 +75,7 @@ void SensorCANmod::update()
     }
 }
 
-void SensorCANmod::updateCAN( const CANMessage* const Messages[], uint8_t CANMessagesLength ) {
+void SensorCANmod::updateCAN( const CANMessage* const Messages[], uint8_t MessagesLength ) {
     CANMessageData messageData =
         { 0, 0, 0, 0 };
 
@@ -84,7 +84,7 @@ void SensorCANmod::updateCAN( const CANMessage* const Messages[], uint8_t CANMes
     uint8_t* channelLengths = &(CANChannelLen.CAN0ChannelsLength);
 
     //send CAN messages
-    for (uint8_t i = 0; i < CANMessagesLength; ++i)
+    for (uint8_t i = 0; i < MessagesLength; ++i)
     {
         for (uint8_t dataCount = 0; dataCount < channelLengths[i]; ++dataCount)
         {
