@@ -91,7 +91,7 @@ void SensorCANmod::updateCAN( const CANMessage* const Messages[], uint8_t Messag
             if (Messages[i]->channels[dataCount] != ADC_chan::ADCNULL)
                 data[dataCount] = read ((uint8_t) (Messages[i]->channels[dataCount]));
         }
-        txCAN (Messages[i]->msgId, &messageData, channelLengths[i], Messages[i]->MOB);
+        txCAN (Messages[i]->msgId, &messageData, channelLengths[i] * 2, Messages[i]->MOB);
     }
 }
 
