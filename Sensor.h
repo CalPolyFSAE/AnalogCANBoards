@@ -27,20 +27,11 @@ public:
     //get corrected value to send over CAN
     int16_t getValue();
 
-    //check if update is needed
-    bool getADCNeedsUpdate() {
-        return ADCNeedsUpdate;
-    }
-
     //Called by ADCManager when read is finished
     void INT_Call_ADCReadFinished(uint16_t value, uint8_t channel);
 
 private:
     Sensor();
-
-    //set true by
-    //set false after CAN message is sent
-    volatile bool ADCNeedsUpdate;
 
     //raw ADC output from most recent read
     volatile uint16_t rawADC;

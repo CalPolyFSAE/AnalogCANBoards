@@ -20,7 +20,11 @@ Sensor::Sensor( SensorData setup ) :
 
 //get corrected value to send over CAN
 int16_t Sensor::getValue() {
-    int16_t value = conversionFunction(rawADC);
+    int16_t value = 0;
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        value = conversionFunction(rawADC);
+    }
     if(value > MaxExpectedVal){
         value = MaxExpectedVal;
     }else if(value < MinExpectedVal)
@@ -31,7 +35,7 @@ int16_t Sensor::getValue() {
 }
 
 //Called by ADCManager when read is finished
-//TODO: make an interface for ADCManager?
+//TODO: This seems like a rough method of doing a callback
 void Sensor::INT_Call_ADCReadFinished( uint16_t value, uint8_t channel ) {
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
