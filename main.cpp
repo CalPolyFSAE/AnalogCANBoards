@@ -38,4 +38,8 @@ int main() {
     ADCManager::Init();
     SensorManager::Init();
     sei();
+    while(1)
+    {
+
+    }
 }

@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 ADCManager::INT_Call_ADC_Finished ADCManager::currentReadCallback = nullptr;
 uint8_t ADCManager::channel = 0;
@@ -49,8 +50,12 @@ void ADCManager::INT_ADCFinished()
     if(!ADCAvailable())
     {
         uint16_t result;
-        result = ADCL;
-        result |= ADCH << 8;
+        //this should be unnecessary
+        ATOMIC_BLOCK(ATOMIC_FORCEON)
+        {
+            result = ADCL;
+            result |= ADCH << 8;
+        }
 
         currentReadCallback (result, channel);
         currentReadCallback = nullptr;
