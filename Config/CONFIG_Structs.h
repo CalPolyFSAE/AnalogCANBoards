@@ -10,6 +10,7 @@
 
 
 #include <stdint.h>
+#include "../CAN/CANRXTX.h"
 
 /*
  * Usage of CANDATAChannel
@@ -38,10 +39,10 @@ namespace CANCONFIG
 
     typedef struct CANChannel
     {
-        //ID used for this CAN Message
-        const uint16_t CANID;
+        //MOB settings for this CAN channel
+        CANRXTX::MOB_SETTINGS CANMOB;
         //milliseconds between Message sending
-        const uint16_t TimingInterval;
+        uint16_t TimingInterval;
     } CANChannel;
 
 }

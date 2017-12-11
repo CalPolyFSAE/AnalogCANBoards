@@ -13,17 +13,62 @@
 
 #include <stdint.h>
 #include "CONFIG_Structs.h"
+#include "../CAN/CANRXTX.h"
 
 namespace CANCONFIG
 {
+    /*
+     *  CANRXTX::MOB_SETTINGS
+     *  //MOB mode of operation
+        MOB_MODE mode;
+
+        //CAN Message settings
+        uint32_t id;            //CANID
+        uint8_t dlc;            //data Length code
+        uint8_t rtr;            //return request
+        uint8_t ide;            //identifier extension
+
+        //Masks. bit 1 = filter, bit 0 = ignore
+        uint32_t idMask;        //CANID Mask
+        uint8_t dlcMask;        //
+        uint8_t rtrMask;        //
+        uint8_t ideMask;        //
+     */
+    constexpr CANRXTX::MOB_SETTINGS CAN0
+    {
+        CANRXTX::MOB_MODE::RX,  //mode
+        0x01,                   //CANID
+        0,                      //dlc determined at runtime
+        0,                      //no rtr flag
+        0,                      //no identifier extension
+
+        0,                      //no filtering for CAN RX
+        0,                      //
+        0,                      //
+        0                       //
+    };
+
+    constexpr CANRXTX::MOB_SETTINGS CAN2
+    {
+        CANRXTX::MOB_MODE::RX,  //mode
+        0x02,                   //CANID
+        0,                      //dlc determined at runtime
+        0,                      //no rtr flag
+        0,                      //no identifier extension
+
+        0,                      //no filtering for CAN RX
+        0,                      //
+        0,                      //
+        0                       //
+    };
 
     constexpr CANChannel CANChannel0 = {
-                0x01,           // CAN Message ID for this channel
+                CAN0,           // CAN Message ID for this channel
                 50              // milliseconds between updates
             };
 
     constexpr CANChannel CANChannel1 = {
-                0x02,           // CAN Message ID for this channel
+                CAN2,           // CAN Message ID for this channel
                 100             // milliseconds between updates
             };
 
