@@ -13,7 +13,7 @@
 #include "Config/CONFIG.h"
 #include "ADCManager.h"
 
-class Sensor
+class Sensor : public ADCManagerCallbackInterface
 {
 public:
     //min and max expected values from processed data
@@ -22,13 +22,18 @@ public:
     //ADC Channel read
     const uint8_t ADCChannel;
 
-    Sensor(SensorData setup);
+    Sensor(SENSORCONFIG::SensorData setup);
+
+    virtual ~Sensor();
+
+    //request an ADC read for this sensor
+    bool requestADCRead();
+
+    //Called by ADCManager when read is finished
+    virtual void INT_Call_ADC_Finished(uint16_t value, uint8_t channel);
 
     //get corrected value to send over CAN
     int16_t getValue();
-
-    //Called by ADCManager when read is finished
-    void INT_Call_ADCReadFinished(uint16_t value, uint8_t channel);
 
 private:
     Sensor();
@@ -37,7 +42,7 @@ private:
     volatile uint16_t rawADC;
 
     //conversion function
-    SensorData::DataConversion conversionFunction;
+    SENSORCONFIG::SensorData::DataConversion conversionFunction;
 };
 
 

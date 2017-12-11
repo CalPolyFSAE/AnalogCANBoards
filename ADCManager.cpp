@@ -12,7 +12,15 @@
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
-ADCManager::INT_Call_ADC_Finished ADCManager::currentReadCallback = nullptr;
+ADCManagerCallbackInterface::~ADCManagerCallbackInterface()
+{
+    //this is just required for pure virtual destructors
+    //and thats the way it is for some reason
+}
+
+
+
+ADCManagerCallbackInterface* ADCManager::currentReadCallback = nullptr;
 uint8_t ADCManager::channel = 0;
 
 void ADCManager::Init() {
@@ -22,11 +30,11 @@ void ADCManager::Init() {
     ADCSRA |= (1 << ADEN) | (1 << ADIE); // Enable ADC, ADC Interrupt Enable
 }
 
-bool ADCManager::StartRead(INT_Call_ADC_Finished func, uint8_t channel)
+bool ADCManager::StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t channel)
 {
     if (ADCAvailable())
     {
-        currentReadCallback = func;
+        currentReadCallback = resultHandler;
         ADCManager::channel = channel;
 
         ADMUX = (1 << REFS0) | (channel & 0xF); // Set ADC reference to AVCC and channel
@@ -57,7 +65,9 @@ void ADCManager::INT_ADCFinished()
             result |= ADCH << 8;
         }
 
-        currentReadCallback (result, channel);
+        //TODO: add gain error adjustment
+
+        currentReadCallback->INT_Call_ADC_Finished(result, channel);
         currentReadCallback = nullptr;
         channel = 0;
     }

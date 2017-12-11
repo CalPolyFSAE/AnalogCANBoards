@@ -10,23 +10,31 @@
 
 #include <stdint.h>
 
+//this allows ADCManager to have a common interface for callbacks
+//implement this whenever you want to use ADCManager
+class ADCManagerCallbackInterface
+{
+public:
+    virtual ~ADCManagerCallbackInterface() = 0;
+    virtual void INT_Call_ADC_Finished(uint16_t value, uint8_t channel) = 0;
+};
+
 class ADCManager
 {
 public:
-    typedef void (*INT_Call_ADC_Finished)(uint16_t value, uint8_t channel);
 
     //setup registers for ADC
     static void Init();
 
     //start an ADC read
-    static bool StartRead(INT_Call_ADC_Finished func, uint8_t channel);
+    static bool StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t channel);
 
     static bool ADCAvailable();
 
     static void INT_ADCFinished();
 private:
     //pointer to the current adc read Callback function
-    static INT_Call_ADC_Finished currentReadCallback;
+    static ADCManagerCallbackInterface* currentReadCallback;
     static uint8_t channel;
 };
 
