@@ -25,40 +25,48 @@
  * 16 bits: CAN Data Channel 2
  * 16 bits: CAN Data Channel 3
  * */
-
-enum class CANDATAChannel : uint8_t
+namespace CANCONFIG
 {
-    CANC0 = 0, CANC1, CANC2, CANC3
-};
 
-constexpr uint8_t CANMAXDATACHANNELS = 4;
+    enum class CANDATAChannel
+        : uint8_t
+        {
+            CANCHANNEL0 = 0, CANCHANNEL1, CANCHANNEL2, CANCHANNEL3
+    };
 
-typedef struct CANChannel
+    constexpr uint8_t CANMAXDATACHANNELS = 4;
+
+    typedef struct CANChannel
+    {
+        //ID used for this CAN Message
+        const uint16_t CANID;
+        //milliseconds between Message sending
+        const uint16_t TimingInterval;
+    } CANChannel;
+
+}
+
+namespace SENSORCONFIG
 {
-    //ID used for this CAN Message
-    const uint16_t CANID;
-    //milliseconds between Message sending
-    const uint16_t TimingInterval;
-} CANChannel;
+    typedef struct SensorData
+    {
+        typedef int16_t (*DataConversion)( uint16_t );
 
-typedef struct SensorData
-{
-    typedef int16_t (*DataConversion)(uint16_t);
+        //min and max expected values from processed data
+        const int16_t MinExpectedVal, MaxExpectedVal;
 
-    //min and max expected values from processed data
-    const int16_t MinExpectedVal, MaxExpectedVal;
+        //CAN ID used for this data
+        const CANCONFIG::CANChannel CANChan;
+        //slot in CAN Message used for this data
+        const CANCONFIG::CANDATAChannel CANDataChannel;
 
-    //CAN ID used for this data
-    const CANChannel CANChan;
-    //slot in CAN Message used for this data
-    const CANDATAChannel CANDataChannel;
+        //ADC Channel to read
+        const uint8_t ADCChannel;
 
-    //ADC Channel to read
-    const uint8_t ADCChannel;
-
-    //function for performing the data conversions
-    const DataConversion ConversionFunction;
-} SensorData;
+        //function for performing the data conversions
+        const DataConversion ConversionFunction;
+    } SensorData;
+}
 
 
 #endif /* CONFIG_CONFIG_STRUCTS_H_ */
