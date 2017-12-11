@@ -10,11 +10,11 @@
 
 #include "CONFIG00.h"
 
-int16_t conversion00(uint16_t)
+int16_t SENSORCONFIG::conversion00(uint16_t)
 {
     return 0;
 }
-int16_t conversion01(uint16_t)
+int16_t SENSORCONFIG::conversion01(uint16_t)
 {
     return 0;
 }
