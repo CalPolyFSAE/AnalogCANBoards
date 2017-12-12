@@ -13,16 +13,12 @@
 Sensor::Sensor(const SENSOR_SETTINGS& setup ) :
         MinExpectedVal (setup.MinExpectedVal),
         MaxExpectedVal (setup.MaxExpectedVal),
-        ADCChannel (setup.ADCChannel)
+        ADCChannel (setup.ADCChannel),
+        //make sure that useMinMax can be used
+        UseMinMax(EvalMinMax(setup.MinExpectedVal, setup.MaxExpectedVal))
 {
     conversionFunction = setup.ConversionFunction;
     isReady = false;
-
-    //make sure that the min/max can be used
-    if(MinExpectedVal >= MaxExpectedVal)
-        useMinMax = false;
-    else
-        useMinMax = true;
 }
 
 Sensor::~Sensor()
@@ -44,7 +40,7 @@ bool Sensor::requestADCRead()
 }
 
 //Called by ADCManager when read is finished
-void Sensor::INT_Call_ADC_Finished( uint16_t value, uint8_t channel ) {
+void Sensor::INT_Call_ADC_Finished( const uint16_t& value, uint8_t channel ) {
         rawADC = value;
         isReady = true;
 }
@@ -60,7 +56,7 @@ int16_t Sensor::getValue() {
     }
 
     //check if min/max functionality should be used
-    if (useMinMax)
+    if (UseMinMax)
     {
         if (value > MaxExpectedVal)
         {

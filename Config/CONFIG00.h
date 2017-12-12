@@ -13,6 +13,7 @@
 
 #include "CONFIG_Structs.h"
 
+//TODO: make the sensors a list on CANChannel, not a value in SensorConfig
 namespace CANCONFIG
 {
     /*
@@ -93,7 +94,7 @@ namespace SENSORCONFIG
             0,                                          // Min expected value (converted)
             0,                                          // Max expected value (converted)
 
-            7,                                          // ADC Channel to read
+            0,                                          // ADC Channel to read
             conversion00                                // Function to convert data
     };
 
@@ -102,7 +103,7 @@ namespace SENSORCONFIG
             5,                                          // Min expected value (converted)
             16,                                         // Max expected value (converted)
 
-            7,                                          // ADC Channel to read
+            1,                                          // ADC Channel to read
             conversion00                                // Function to convert data
     };
 
@@ -111,8 +112,8 @@ namespace SENSORCONFIG
             5,                                          // Min expected value (converted)
             16,                                         // Max expected value (converted)
 
-            7,                                          // ADC Channel to read
-            conversion01                                // Function to convert data
+            3,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
     };
 
     //number of sensors

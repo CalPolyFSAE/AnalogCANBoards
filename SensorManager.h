@@ -21,18 +21,22 @@ class SensorManager
 {
 public:
 
-    //sets up channels array
+    //sets up sensors and CAN timers
     static void Init();
+
+    //main program loop calls this
+    static void Update();
 
     //1000Hz interrupt calls this
     static void INT_UpdateTiming();
 
 private:
-    //all Sensors
-    static Sensor* channels[SENSORCONFIG::SENSORS];
 
-    //CAN Message Timers
-    static CANSensorTimer* CANMessageTimers[CANCONFIG::CANCHANNELS];
+    //all Sensors (used for diagnostics) TODO: implement
+    //static Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
+
+    //all CAN Message Timers (used for update loop)
+    static CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];
 
 };
 

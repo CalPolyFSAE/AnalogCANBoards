@@ -6,42 +6,62 @@
  */
 
 #include "SensorManager.h"
-
+#include "CAN/CANRXTX.h"
 #include "Config/CONFIG.h"
 
 //static memory initialization
-Sensor* SensorManager::channels[] = {};
+//Sensor* SensorManager::AllSensors[] = {};
 CANSensorTimer* SensorManager::CANMessageTimers[] = {};
 
 //TODO: put configuration data into progmem
 void SensorManager::Init()
 {
-    // create timers for CAN message timing
-    for (uint8_t i = 0; i < CANCONFIG::CANCHANNELS; ++i)
+    // create timers for CAN message timing and register sensors
+    for (uint8_t channelIndex = 0; channelIndex < CANCONFIG::NUMCANCHANNELS; ++channelIndex)
     {
-        CANMessageTimers[i] = new CANSensorTimer (
-                CANCONFIG::CANChannels[i].TimingInterval, CANCONFIG::CANChannels[i].CANID );
-    }
-
-    //create sensors
-    //sensors could be part of static memory, but this would require restructuring
-    //the config headers
-    for (uint8_t i = 0; i < SENSORCONFIG::SENSORS; ++i)
-    {
-        Sensor* sens = new Sensor (SENSORCONFIG::SensorDatas[i]);//create sensor
-        channels[i] = sens;
-        //figure out which sensors go on which CAN messages
-        for (uint8_t canc = 0; canc < CANCONFIG::CANCHANNELS; ++canc)
+        CANRXTX::MOB_SETTINGS tmpMOB = CANCONFIG::CANChannels[channelIndex].CANMOB;
+        //get next MOB to configure
+        uint8_t mobNum = CANRXTX::GetNextDisabledMOB ();
+        if (CANRXTX::ConfigureMOB (mobNum, tmpMOB, false) != 0)
         {
-            if (CANMessageTimers[canc]->CANID == SENSORCONFIG::SensorDatas[i].CANChan.CANID)
+            //failed to configure this MOB
+            //TODO: some other terrible thing happened
+        }
+
+        //create timer
+        CANMessageTimers[channelIndex] = new CANSensorTimer (
+                CANCONFIG::CANChannels[channelIndex].TimingInterval,
+                mobNum);
+
+        //find the sensors that go on this CAN timer
+        for (uint8_t sensorIndex = 0; sensorIndex < SENSORCONFIG::NUMSENSORS; ++sensorIndex)
+        {
+            SENSORCONFIG::SensorChannel tmpSensorChannel = SENSORCONFIG::SensorChannels[sensorIndex];
+            if(tmpSensorChannel.CANChannel.CANMOB.id == tmpMOB.id)
             {
-                if(!CANMessageTimers[canc]->registerSensor(sens, SENSORCONFIG::SensorDatas[i].CANDataChannel))
+                Sensor* sens = new Sensor(tmpSensorChannel.SensorData);
+
+                //register sensor with timer
+                if (!CANMessageTimers[channelIndex]->registerSensor (
+                        sens, tmpSensorChannel.CANDATAChannel))
                 {
                     //TODO: Error message CAN / SERIAL
                     //or error is triggered in register sensor?
                 }
             }
         }
+
+    }
+
+
+}
+
+void SensorManager::Update()
+{
+    //update the CANSensorTimers
+    for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
+    {
+        CANMessageTimers[i]->Update ();
     }
 }
 
@@ -49,9 +69,9 @@ void SensorManager::Init()
 void SensorManager::INT_UpdateTiming()
 {
     //update the CANSensorTimers
-    for(uint8_t i = 0; i < CANCONFIG::CANCHANNELS; ++i)
+    for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
     {
-        CANMessageTimers[i]->Update();
+        CANMessageTimers[i]->INT_Call_Tick ();
     }
 }
 

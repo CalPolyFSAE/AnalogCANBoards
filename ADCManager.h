@@ -16,7 +16,7 @@ class ADCManagerCallbackInterface
 {
 public:
     virtual ~ADCManagerCallbackInterface() = 0;
-    virtual void INT_Call_ADC_Finished(uint16_t value, uint8_t channel) = 0;
+    virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) = 0;
 };
 
 class ADCManager

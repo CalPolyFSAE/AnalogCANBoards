@@ -45,13 +45,15 @@ public:
     bool requestADCRead();
 
     //Called by ADCManager when read is finished
-    virtual void INT_Call_ADC_Finished(uint16_t value, uint8_t channel);
+    virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel);
 
     //get corrected value to send over CAN
     int16_t getValue();
 
     //is the rawADC value ready
-    inline bool getIsReady(){return isReady;};
+    inline bool getIsReady() const {
+        return isReady;
+    }
 
 private:
     //no default initializer
@@ -64,10 +66,16 @@ private:
     volatile bool isReady;
 
     //Is the min/max functionality being used?
-    bool useMinMax;
+    const bool UseMinMax;
 
     //conversion function
     SENSOR_SETTINGS::DataConversion conversionFunction;
+
+    //function to figure out value of UseMinMax
+    static inline constexpr bool EvalMinMax (const int16_t& min, const int16_t& max)
+    {
+        return (min >= max)? false : true;
+    }
 };
 
 
