@@ -7,28 +7,31 @@
 
 #include "CANSensorTimer.h"
 
-CANSensorTimer::CANSensorTimer(uint16_t interval, uint16_t CANId) :
-    TimingInterval(interval), CANID(CANId)
+CANSensorTimer::CANSensorTimer(uint16_t interval, uint8_t MOBnum) :
+    TimingInterval(interval), MOBn(MOBnum)
 {
     ticksToSend = interval;
     activeSensors = 0;
 }
 
-bool CANSensorTimer::registerSensor(Sensor* sensor, CANCONFIG::CANDATAChannel dataChannel)
+//registers a sensor on this CANChannel at dataChannel position
+bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 {
     uint8_t index = (uint8_t) dataChannel;
-    if (index > CANCONFIG::CANMAXDATACHANNELS)          // check array bounds
+    if (index > CANMAXDATACHANNELS)          // check array bounds
         return false;
     if (sensors[index] != nullptr) // make sure another sensor is not here
         return false; // if there is TODO: ADD critical error functionality
 
-    //sort out CAN message size
+    //sort out CAN message size (for dlc)
     if (index >= activeSensors)
         activeSensors = index + 1;
+    //register the sensor
     sensors[index] = sensor;
     return true;
 }
 
+//do not call. this is used for interrupt timing
 void CANSensorTimer::INT_Call_Tick()
 {
     --ticksToSend;
@@ -56,14 +59,40 @@ void CANSensorTimer::Update()
                 ++i;
             }
         }
+
+        //wait for all Sensors to get value from ADC
+        /*
+        for(uint8_t i = 0; i < activeSensors;)
+        {
+            if(sensors[i]->getIsReady())
+            {
+                ++i;
+            }
+        }
+        */
+        while(!sensors[activeSensors]->getIsReady())
+            ;
+
         //package CAN message using sensor values
         //TODO: CAN Message sending
+        CANRXTX::CAN_DATA CANData = {};
+
+        for (uint8_t i = 0; i < activeSensors; ++i)
+        {
+            CANData.data[i * CANBYTESPERDATACHANNEL] = sensors[i]->getValue();
+        }
+
+        CANRXTX::TX_UsingMOB(MOBn, &CANData, activeSensors * CANBYTESPERDATACHANNEL);
+
         /////////////////
         /////////////////
         ////////////////
+        needToSend = false;
     }
 }
 
+//returns ticks until the CAN message needs to be sent
+//time value dependent on how the interrupt timer is configured
 uint16_t CANSensorTimer::timeUntilSend()
 {
     //need to copy this atomically because of INT_Call_Tick changing value
@@ -73,6 +102,11 @@ uint16_t CANSensorTimer::timeUntilSend()
         time = ticksToSend;
     }
     return time;
+}
+
+uint8_t CANSensorTimer::getNumActiveSensors()
+{
+    return activeSensors;
 }
 
 

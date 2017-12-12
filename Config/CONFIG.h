@@ -10,6 +10,8 @@
 
 #define CONF00
 
+#include "CONFIG_ControlInterface.h"
+
 #ifdef CONF00
 #include "CONFIG00.h"
 #endif

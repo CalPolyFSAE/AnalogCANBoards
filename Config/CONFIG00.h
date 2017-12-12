@@ -1,8 +1,8 @@
 /*
- * CONFIG01.h
+ * CONFIG00.h
  *
  * Example Configuration File.
- * This is constructed this way to allow for compile time settings
+ * This is constructed this way to allow for compile time per board settings
  *
  *  Created on: Nov 13, 2017
  *      Author: root
@@ -11,9 +11,7 @@
 #ifndef CONFIG00_H_
 #define CONFIG00_H_
 
-#include <stdint.h>
 #include "CONFIG_Structs.h"
-#include "../CAN/CANRXTX.h"
 
 namespace CANCONFIG
 {
@@ -36,7 +34,7 @@ namespace CANCONFIG
      */
     constexpr CANRXTX::MOB_SETTINGS CAN0
     {
-        CANRXTX::MOB_MODE::RX,  //mode
+        CANRXTX::MOB_MODE::TX,  //mode
         0x01,                   //CANID
         0,                      //dlc determined at runtime
         0,                      //no rtr flag
@@ -50,7 +48,7 @@ namespace CANCONFIG
 
     constexpr CANRXTX::MOB_SETTINGS CAN2
     {
-        CANRXTX::MOB_MODE::RX,  //mode
+        CANRXTX::MOB_MODE::TX,  //mode
         0x02,                   //CANID
         0,                      //dlc determined at runtime
         0,                      //no rtr flag
@@ -75,53 +73,92 @@ namespace CANCONFIG
     //list in order of increasing CANID
     constexpr CANChannel CANChannels[] =
         { CANChannel0, CANChannel1 };
+    //number of CAN Channels
+    constexpr uint8_t NUMCANCHANNELS = 2;
 
-    constexpr uint8_t CANCHANNELS = 2;
+    //Device id for commands over CAN
+    constexpr uint8_t CANCMDDEVID = 0x00;
 }
 
 
 namespace SENSORCONFIG
 {
+
     int16_t conversion00(uint16_t);
     int16_t conversion01(uint16_t);
 
     // Sensor 0 Name
-    constexpr SensorData Sensor00 = {
-            5,                                          // Min expected value (converted)
-            16,                                         // Max expected value (converted)
-            CANCONFIG::CANChannel0,                     // CAN Channel to use for this sensor
-            CANCONFIG::CANDATAChannel::CANCHANNEL0,     // CAN Data Channel to use for this sensor
+    constexpr Sensor::SENSOR_SETTINGS Sensor00 = {
+            //set min/max to 0 to not use min/max value clamping
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
             7,                                          // ADC Channel to read
             conversion00                                // Function to convert data
     };
 
     // Sensor 1 Name
-    constexpr SensorData Sensor01 = {
+    constexpr Sensor::SENSOR_SETTINGS Sensor01 = {
             5,                                          // Min expected value (converted)
             16,                                         // Max expected value (converted)
-            CANCONFIG::CANChannel0,                     // CAN Channel to use for this sensor
-            CANCONFIG::CANDATAChannel::CANCHANNEL1,     // CAN Data Channel to use for this sensor
+
             7,                                          // ADC Channel to read
             conversion00                                // Function to convert data
     };
 
     // Sensor 2 Name
-    constexpr SensorData Sensor02 = {
+    constexpr Sensor::SENSOR_SETTINGS Sensor02 = {
             5,                                          // Min expected value (converted)
             16,                                         // Max expected value (converted)
-            CANCONFIG::CANChannel1,                     // CAN Channel to use for this sensor
-            CANCONFIG::CANDATAChannel::CANCHANNEL0,     // CAN Data Channel to use for this sensor
+
             7,                                          // ADC Channel to read
-            conversion00                                // Function to convert data
+            conversion01                                // Function to convert data
     };
 
-    constexpr SensorData SensorDatas[] = {
-            Sensor00,
-            Sensor01,
-            Sensor02
+    //number of sensors
+    //there should not be more sensors than ADC inputs
+    constexpr uint8_t NUMSENSORS = 3;
+
+    //SensorChannel
+    //this ties sensors to CAN Channels
+    //one sensor should not be on two different CAN Channels
+
+    /*
+     * typedef struct SensorChannel
+     * {
+     * Sensor::SENSOR_SETTINGS Sensor;                 // Sensor
+     * CANCONFIG::CANChannel CANChannel;               // CAN Channel to use for this sensor
+     * CANSensorTimer::CANDATAChannel CANDATAChannel;  // CAN Data Channel to use for this sensor
+     * };
+     */
+    constexpr SensorChannel SensorChannel00 =
+    {
+        Sensor00,
+        CANCONFIG::CANChannel0,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL0
     };
 
-    constexpr uint8_t SENSORS = 3;
+    constexpr SensorChannel SensorChannel01 =
+    {
+        Sensor01,
+        CANCONFIG::CANChannel0,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL1
+    };
+
+    constexpr SensorChannel SensorChannel02 =
+    {
+        Sensor02,
+        CANCONFIG::CANChannel1,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL0
+    };
+
+    constexpr uint8_t NUMSENSORCHANNELS = 3;
+
+    constexpr SensorChannel SensorChannels[] = {
+            SensorChannel00,
+            SensorChannel01,
+            SensorChannel02
+    };
 }
 
 
