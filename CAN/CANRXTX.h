@@ -14,6 +14,14 @@ class CANRXTX
 {
 public:
 
+    //number of available MObs
+    //TODO: move to a config file eventually?
+    static constexpr uint8_t MAXMOBS = 15;
+
+    //max number of bytes per CAN
+    //
+    static constexpr uint8_t MAXCANDLC = 8;
+
     //CAN Bus Baudrate
     enum class BAUDRATE
         : uint8_t
@@ -49,27 +57,58 @@ public:
         uint8_t ideMask;        //
     } MOB_SETTINGS;
 
-    //number of available MObs
-    constexpr uint8_t MAXMOBS = 15;
+    //structure to hold CAN data
+    typedef struct CAN_DATA
+    {
+        uint8_t dlc;
+        uint8_t data[MAXCANDLC];
+    } CAN_DATA;
 
 
+    //get next disabled MOB number
+    static uint8_t GetNextDisabledMOB();
 
     //setup data in MOBSettings array
-    //will return false if MOB has already been configured
     //need to call InitWithCurrentSettings for changes to
     //take effect
-    static bool ConfigureMOB(uint8_t mobNum, MOB_SETTINGS& settings);
+    ///Error Codes:
+    // 1: Invalid MOb number
+    // 2: MOB is already configured
+    // 3: invalid MOB settings
+    static uint8_t ConfigureMOB(uint8_t mobNum, const MOB_SETTINGS& settings, bool overwrite);
+
+    //set the CAN Bus baudrate
+    //this setting only takes effect after InitWithCurrentSettings is called
+    static void SetBaudrate(BAUDRATE baud);
 
     //this function pushes all settings to hardware and enables CAN controller
     //call it only after everything has been set up
     //or to update hardware
     static void InitWithCurrentSettings();
 
+    //send a message using MOB number mobn
+    //dlc is used to verify that message is same
+    //length as the one configured
+    static void TX_UsingMOB(uint8_t mobn, void* data, uint8_t dlc);
+
 private:
     CANRXTX();
 
+    //selected Baudrate
+    static BAUDRATE baud;
+
     //MOB settings
     static MOB_SETTINGS MOBSettings[MAXMOBS];
+
+    //set active MOB
+    static void setActiveMOB(uint8_t n);
+
+    //set the ID of the active MOB
+    static void setID(uint32_t id, bool ide);
+
+    //TODO: implement function
+    //set the RX ID mask
+    static void setIDMask(uint32_t id, bool ide);
 };
 
 #endif /* CAN_CANRXTX_H_ */
