@@ -29,12 +29,15 @@ public:
     //start an ADC read
     static bool StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t channel);
 
+    //if the ADC is available for a read request
     static bool ADCAvailable();
 
+    //do not call. used to handle the ADC read result
     static void INT_ADCFinished();
 private:
     //pointer to the current adc read Callback function
     static ADCManagerCallbackInterface* currentReadCallback;
+    //channel of the current read
     static uint8_t channel;
 };
 
