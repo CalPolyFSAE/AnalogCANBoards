@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
+#include "Config/CONFIG.h"
 #include "SensorManager.h"
 
 //#include <AVRLibrary/arduino/Arduino.h>
@@ -34,12 +35,41 @@ ISR(ADC_vect)
 
 int main() {
     cli();
-    timer1_init();
-    ADCManager::Init();
-    SensorManager::Init();
-    sei();
-    while(1)
-    {
 
+    //some configuration checks
+    //check that we aren't gonna run out of MOBs for CAN Channels
+    if(CANCONFIG::NUMCANCHANNELS > (CANRXTX::MAXMOBS - CFG_CI::NUMCANRESERVEDMOBS))
+    {
+        //there are more CAN Channels defined than MOBs to handle them
+        //TODO:error report
+    }
+    if(SENSORCONFIG::NUMSENSORCHANNELS > 8)
+    {
+        //there shouldn't be more than one CAN Channel per sensor
+        //this means that there is either too many sensors,
+        //or one sensor has been assigned multiple times
+        //
+    }
+
+    //setup 1000Hz interrupt
+    timer1_init();
+
+    //setup ADC sample rate
+    ADCManager::Init();
+
+    //setup message timing
+    SensorManager::Init();
+
+    //CMD init to initilize cmd MOBs
+
+    //setup MOB and CAN Controller hardware
+    CANRXTX::InitWithCurrentSettings();
+
+    sei();
+
+    //TODO: add pause state (for CMDs)
+    while(true)
+    {
+        SensorManager::Update();
     }
 }
