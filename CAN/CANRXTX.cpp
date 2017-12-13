@@ -180,6 +180,8 @@ void CANRXTX::TX_UsingMOB( uint8_t mobn, void* data, uint8_t dlc )
         //TODO: warn, wrong message size sending anyways
     }
 
+    CANSTMOB = 0x00;//reset status registers
+
     for (uint8_t i = 0; i < MOBSettings[mobn].dlc; i++)
     {
         CANMSG = ((uint8_t*)data)[i];

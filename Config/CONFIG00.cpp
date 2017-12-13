@@ -10,13 +10,13 @@
 
 #include "CONFIG00.h"
 
-int16_t SENSORCONFIG::conversion00(uint16_t value)
+int16_t SENSORCONFIG::conversion00(const float& voltage)
 {
-    return value;
+    return (int16_t)voltage;
 }
-int16_t SENSORCONFIG::conversion01(uint16_t value)
+int16_t SENSORCONFIG::conversion01(const float& voltage)
 {
-    return value;
+    return (int16_t)voltage;
 }
 
 

@@ -9,10 +9,11 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
+
 #include "Config/CONFIG.h"
 #include "SensorManager.h"
 
-//#include <AVRLibrary/arduino/Arduino.h>
+#include <AVRLibrary/arduino/Arduino.h>//for serial stuff
 //#include <AVRLibrary/CPFECANLib.h>
 
 void timer1_init() {
@@ -36,12 +37,19 @@ ISR(ADC_vect)
 int main() {
     cli();
 
+    //////////////////////////////////////
+    //TODO: THIS IS FOR TESTING OVER SERIAL ONLY, REMOVE!
+    Serial.begin(9600);
+    Serial.println("TEST2");
+    //////////////////////////////////////
+
+
     //some configuration checks
     //check that we aren't gonna run out of MOBs for CAN Channels
     if(CANCONFIG::NUMCANCHANNELS > (CANRXTX::MAXMOBS - CFG_CI::NUMCANRESERVEDMOBS))
     {
         //there are more CAN Channels defined than MOBs to handle them
-        //TODO:error report
+        //TODO:error report or add assertion functions
     }
     if(SENSORCONFIG::NUMSENSORCHANNELS > 8)
     {
@@ -63,6 +71,7 @@ int main() {
     //CMD init to initilize cmd MOBs
 
     //setup MOB and CAN Controller hardware
+    CANRXTX::SetBaudrate(CANRXTX::BAUDRATE::B1M);
     CANRXTX::InitWithCurrentSettings();
 
     sei();
@@ -70,6 +79,13 @@ int main() {
     //TODO: add pause state (for CMDs)
     while(true)
     {
+        Serial.flush();
+        //Serial.println("MAIN LOOP");//FOR TESTING ONLY
+        uint32_t c = 0;
+        while(c < 150000)
+        {
+            ++c;
+        }
         SensorManager::Update();
     }
 }

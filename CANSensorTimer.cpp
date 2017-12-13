@@ -7,6 +7,8 @@
 
 #include "CANSensorTimer.h"
 
+#include <AVRLibrary/arduino/Arduino.h>//FOR TESTING ONLY
+
 CANSensorTimer::CANSensorTimer(uint16_t interval, uint8_t MOBnum) :
     TimingInterval(interval), MOBn(MOBnum)
 {
@@ -26,6 +28,10 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
     //sort out CAN message size (for dlc)
     if (index >= activeSensors)
         activeSensors = index + 1;
+
+    Serial.print("CANSensorTimer::registerSensor() activeSensors: ");//TESTING ONLY
+    Serial.println(activeSensors);
+
     //register the sensor
     sensors[index] = sensor;
     return true;
@@ -54,7 +60,11 @@ void CANSensorTimer::Update()
             //only go to next sensor after the request is successful
             //this should only take multiple requests if ADC clock speed is
             //very slow
-            if(sensors[i]->requestADCRead())
+            if(sensors[i] == nullptr)
+            {
+                ++i;
+            }
+            else if(sensors[i]->requestADCRead())
             {
                 ++i;
             }
@@ -70,8 +80,9 @@ void CANSensorTimer::Update()
             }
         }
         */
-        while(!sensors[activeSensors]->getIsReady())
+        while(!sensors[activeSensors - 1]->getIsReady())
             ;
+
 
         //package CAN message using sensor values
         //TODO: CAN Message sending
@@ -79,7 +90,25 @@ void CANSensorTimer::Update()
 
         for (uint8_t i = 0; i < activeSensors; ++i)
         {
+            if(sensors[i] == nullptr)
+            {
+                continue;
+            }
             CANData.data[i * CANBYTESPERDATACHANNEL] = sensors[i]->getValue();
+
+            if(sensors[i]->ADCChannel == 5)//TESTING ONLY
+            {
+                Serial.println (sensors[i]->getVoltage (), 4);
+            }
+            /*
+            Serial.print(" SEN: ");
+            Serial.print(i);
+            Serial.print(" CH: ");
+            Serial.print(sensors[i]->ADCChannel);
+            Serial.print(" V: ");
+            Serial.print(sensors[i]->getVoltage(), 4);
+            Serial.println("");
+            */
         }
 
         CANRXTX::TX_UsingMOB(MOBn, &CANData, activeSensors * CANBYTESPERDATACHANNEL);

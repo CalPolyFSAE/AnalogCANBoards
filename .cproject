@@ -41,6 +41,8 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.2017351369" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" useByScannerDiscovery="false"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.1501410416" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AVRLibrary}&quot;"/>
+									<listOptionValue builtIn="false" value="/root/share/Code/lib_mcu/can"/>
+									<listOptionValue builtIn="false" value="/root/share/Code/lib_mcu"/>
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.std.918187525" name="Language Standard" superClass="de.innot.avreclipse.cppcompiler.option.std" useByScannerDiscovery="false" value="de.innot.avreclipse.cppcompiler.option.std.default" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.otherflags.1758401564" name="Other flags" superClass="de.innot.avreclipse.cppcompiler.option.otherflags" useByScannerDiscovery="false" value="-Wl,-u,vfprintf -lprintf_flt -lm" valueType="string"/>

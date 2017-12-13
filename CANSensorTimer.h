@@ -68,7 +68,7 @@ public:
 private:
     volatile bool needToSend;                          // CAN message needs to be sent
     volatile uint16_t ticksToSend;                     // ticks until next message sent
-    Sensor* sensors[CANMAXDATACHANNELS];               // Sensors sent on this CAN Message
+    Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
     uint8_t activeSensors;                             // Number of sensors on this CAN Channel (used for dlc)
 };
 

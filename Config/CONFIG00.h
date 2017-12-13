@@ -85,8 +85,8 @@ namespace CANCONFIG
 namespace SENSORCONFIG
 {
 
-    int16_t conversion00(uint16_t);
-    int16_t conversion01(uint16_t);
+    int16_t conversion00( const float& voltage );
+    int16_t conversion01( const float& voltage );
 
     // Sensor 0 Name
     constexpr Sensor::SENSOR_SETTINGS Sensor00 = {
@@ -100,8 +100,8 @@ namespace SENSORCONFIG
 
     // Sensor 1 Name
     constexpr Sensor::SENSOR_SETTINGS Sensor01 = {
-            5,                                          // Min expected value (converted)
-            16,                                         // Max expected value (converted)
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
 
             1,                                          // ADC Channel to read
             conversion00                                // Function to convert data
@@ -109,16 +109,61 @@ namespace SENSORCONFIG
 
     // Sensor 2 Name
     constexpr Sensor::SENSOR_SETTINGS Sensor02 = {
-            5,                                          // Min expected value (converted)
-            16,                                         // Max expected value (converted)
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
+            2,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
+    };
+
+    // Sensor 3 Name
+    constexpr Sensor::SENSOR_SETTINGS Sensor03 = {
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
 
             3,                                          // ADC Channel to read
             conversion00                                // Function to convert data
     };
 
+    // Sensor 4 Name
+    constexpr Sensor::SENSOR_SETTINGS Sensor04 = {
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
+            4,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
+    };
+
+    // Sensor 5 Name
+    constexpr Sensor::SENSOR_SETTINGS Sensor05 = {
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
+            5,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
+    };
+
+    // Sensor 6 Name
+    constexpr Sensor::SENSOR_SETTINGS Sensor06 = {
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
+            6,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
+    };
+
+    // Sensor 7 Name
+    constexpr Sensor::SENSOR_SETTINGS Sensor07 = {
+            0,                                          // Min expected value (converted)
+            0,                                          // Max expected value (converted)
+
+            7,                                          // ADC Channel to read
+            conversion00                                // Function to convert data
+    };
+
     //number of sensors
     //there should not be more sensors than ADC inputs
-    constexpr uint8_t NUMSENSORS = 3;
+    constexpr uint8_t NUMSENSORS = 8;
 
     //SensorChannel
     //this ties sensors to CAN Channels
@@ -149,16 +194,56 @@ namespace SENSORCONFIG
     constexpr SensorChannel SensorChannel02 =
     {
         Sensor02,
+        CANCONFIG::CANChannel0,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL2
+    };
+
+    constexpr SensorChannel SensorChannel03 =
+    {
+        Sensor03,
+        CANCONFIG::CANChannel0,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL3
+    };
+
+    constexpr SensorChannel SensorChannel04 =
+    {
+        Sensor04,
         CANCONFIG::CANChannel1,
         CANSensorTimer::CANDATAChannel::CANCHANNEL0
     };
 
-    constexpr uint8_t NUMSENSORCHANNELS = 3;
+    constexpr SensorChannel SensorChannel05 =
+    {
+        Sensor05,
+        CANCONFIG::CANChannel1,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL1
+    };
+
+    constexpr SensorChannel SensorChannel06 =
+    {
+        Sensor06,
+        CANCONFIG::CANChannel1,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL2
+    };
+
+    constexpr SensorChannel SensorChannel07 =
+    {
+        Sensor07,
+        CANCONFIG::CANChannel1,
+        CANSensorTimer::CANDATAChannel::CANCHANNEL3
+    };
+
+    constexpr uint8_t NUMSENSORCHANNELS = 8;
 
     constexpr SensorChannel SensorChannels[] = {
             SensorChannel00,
             SensorChannel01,
-            SensorChannel02
+            SensorChannel02,
+            SensorChannel03,
+            SensorChannel04,
+            SensorChannel05,
+            SensorChannel06,
+            SensorChannel07
     };
 }
 

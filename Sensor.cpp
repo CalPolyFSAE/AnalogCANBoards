@@ -10,6 +10,18 @@
 #include <stdint.h>
 #include <util/atomic.h>
 
+Sensor::Sensor() :
+        MinExpectedVal (0),
+        MaxExpectedVal (0),
+        ADCChannel (0),
+        //make sure that useMinMax can be used
+        UseMinMax(false)
+{
+    conversionFunction = nullptr;
+    isReady = false;
+}
+
+
 Sensor::Sensor(const SENSOR_SETTINGS& setup ) :
         MinExpectedVal (setup.MinExpectedVal),
         MaxExpectedVal (setup.MaxExpectedVal),
@@ -48,11 +60,14 @@ void Sensor::INT_Call_ADC_Finished( const uint16_t& value, uint8_t channel ) {
 //get corrected value to send over CAN
 int16_t Sensor::getValue() {
     int16_t value = 0;
+
+    float voltage = getVoltage();
+
     //make sure nothing changes rawADC value
     //although this should never be able to happen
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        value = conversionFunction(rawADC);
+        value = conversionFunction(voltage);
     }
 
     //check if min/max functionality should be used
@@ -72,5 +87,13 @@ int16_t Sensor::getValue() {
         value = 0;
 
     return value;
+}
+
+float Sensor::getVoltage()
+{
+    //gain error calculation for ADC
+    float voltage = rawADC * VSCALE;
+    voltage = voltage - (VERRORSCALE * voltage + VERROR);
+    return voltage;
 }
 
