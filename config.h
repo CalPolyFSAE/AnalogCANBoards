@@ -22,21 +22,18 @@
 #define _CONFIG_H_
 
 //_____ I N C L U D E S ________________________________________________________
-#include "compiler.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "at90can_drv.h"
 
 //_____ M A C R O S ____________________________________________________________
 
 //_____ D E F I N I T I O N S __________________________________________________
 
     // -------------- MCU LIB CONFIGURATION
-#define FOSC           16000        // 8 MHz External cristal
+#define FOSC           16000        // 16 MHz External crystal
 
     // -------------- CAN LIB CONFIGURATION
 #define CAN_BAUDRATE   1000        // in kBit
-//#define CAN_BAUDRATE   CAN_AUTOBAUD
 
     // -------------- MISCELLANEOUS
     // Using TIMER_2 as RTC

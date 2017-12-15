@@ -16,7 +16,7 @@ class Sensor : public ADCManagerCallbackInterface
 {
 public:
 
-    typedef struct SENSOR_SETTINGS
+    struct SENSOR_SETTINGS
     {
         // void pointer function pointer (cant point to a member of an object)
         typedef int16_t (*DataConversion)( const float& voltage );
@@ -29,7 +29,7 @@ public:
 
         //function for performing the data conversions
         DataConversion ConversionFunction;
-    } SENSOR_SETTINGS;
+    };
 
     //gain error constants
     static constexpr float VREF = 5.0;

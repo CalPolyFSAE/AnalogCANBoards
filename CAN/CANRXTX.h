@@ -14,101 +14,99 @@ class CANRXTX
 {
 public:
 
-    //number of available MObs
-    //TODO: move to a config file eventually?
-    static constexpr uint8_t MAXMOBS = 15;
+    // ----------
+    // @brief This constant is used as return value for "can_cmd" function.
+    enum class CAN_CMD_STATUS : uint8_t
+    {
+        REFUSED = 0xFF,
+        ACCEPTED = 0x00
+    };
 
-    //max number of bytes per CAN
-    //
-    static constexpr uint8_t MAXCANDLC = 8;
+    // ----------
+    // @brief This constant is used as return value for "can_get_status" function.
+    enum class CAN_MOB_STATUS : uint8_t
+    {
+        COMPLETED = 0x00,
+        NOT_COMPLETED = 0x01,
+        ERROR = 0x02
+    };
 
-    //CAN Bus Baudrate
-    enum class BAUDRATE
+    // ----------
+    // @brief This enumeration is used to select an action for a specific message
+    // declared in st_cmd_t structure.
+    enum class CAN_CMD : uint8_t
+    {
+        CMD_NONE,
+        CMD_TX,
+        CMD_TX_DATA,
+        CMD_TX_REMOTE,
+        CMD_RX,
+        CMD_RX_DATA,
+        CMD_RX_REMOTE,
+        CMD_RX_MASKED,
+        CMD_RX_DATA_MASKED,
+        CMD_RX_REMOTE_MASKED,
+        CMD_REPLY,
+        CMD_REPLY_MASKED,
+        CMD_ABORT
+    };
+
+    // ----------
+    // @brief This union defines a CAN identifier and allows to access it in mode
+    // Standard, extended or thought a table.
+    union CAN_ID
+    {
+        uint32_t ext;
+        uint16_t std;
+        uint8_t tab[4];
+    };
+
+    // ----------
+    // @brief This structure defines some specific information as RTR bit and
+    // IDE bit
+    struct CAN_CTRL
+    {
+        bool rtr;
+        bool ide;
+    };
+
+    // ----------
+    // @brief This structure allows to define a specific action on CAN network.
+    // 1) handle:  managed by the library.
+    // 2) cmd   :  initialized by the application to select the operation.
+    // 3) id    :  initialized by the application. Identifier for the CAN message
+    // 4) dlc   :  initialized by the application to give the size of CAN data
+    // 5) pt_data: pointer to memory with send or receive data
+    // 6) status:  managed by the library. Status of MOB
+    // 7) ctrl  :  CAN ide field for extended frame
+    struct CMD
+    {
+        uint8_t handle;
+        CAN_CMD cmd;
+        CAN_ID id;
+        uint8_t dlc;
+        uint8_t* pt_data;
+        uint8_t status;
+        CAN_CTRL ctrl;
+    };
+
+
+    // ----------
+    // @brief CAN Bus baud rate setting used for initialization
+    enum class BAUD_RATE
         : uint8_t
         {
             B1M, B500K, B250K, B125K
     };
 
-    //MOB mode
-    //Framebuffer and automatic reply not currently supported
-    enum class MOB_MODE
-        : uint8_t
-        {
-            DISABLED, TX, RX, AUTOMATIC_REPLY, FRAME_BUFFER_RX
-    };
 
-    //Settings for type of message to be used with MOB
-    //Can also be used for the MOB mask
-    typedef struct MOB_SETTINGS
-    {
-        //MOB mode of operation
-        MOB_MODE mode;
+    static uint8_t Init(uint8_t mode);
 
-        //CAN Message settings
-        uint32_t id;            //CANID
-        uint8_t dlc;            //data Length code
-        uint8_t rtr;            //return request
-        uint8_t ide;            //identifier extension
-
-        //Masks. bit 1 = filter, bit 0 = ignore
-        uint32_t idMask;        //CANID Mask
-        uint8_t dlcMask;        //
-        uint8_t rtrMask;        //
-        uint8_t ideMask;        //
-    } MOB_SETTINGS;
-
-    //structure to hold CAN data
-    typedef struct CAN_DATA
-    {
-        uint8_t dlc;
-        uint8_t data[MAXCANDLC];
-    } CAN_DATA;
-
-
-    //get next disabled MOB number
-    static uint8_t GetNextDisabledMOB();
-
-    //setup data in MOBSettings array
-    //need to call InitWithCurrentSettings for changes to
-    //take effect
-    ///Error Codes:
-    // 1: Invalid MOb number
-    // 2: MOB is already configured
-    // 3: invalid MOB settings
-    static uint8_t ConfigureMOB(uint8_t mobNum, const MOB_SETTINGS& settings, bool overwrite);
-
-    //set the CAN Bus baudrate
-    //this setting only takes effect after InitWithCurrentSettings is called
-    static void SetBaudrate(BAUDRATE baud);
-
-    //this function pushes all settings to hardware and enables CAN controller
-    //call it only after everything has been set up
-    //or to update hardware
-    static void InitWithCurrentSettings();
-
-    //send a message using MOB number mobn
-    //dlc is used to verify that message is same
-    //length as the one configured
-    static void TX_UsingMOB(uint8_t mobn, void* data, uint8_t dlc);
 
 private:
     CANRXTX();
 
-    //selected Baudrate
-    static BAUDRATE baud;
 
-    //MOB settings
-    static MOB_SETTINGS MOBSettings[MAXMOBS];
-
-    //set active MOB
-    static void setActiveMOB(uint8_t n);
-
-    //set the ID of the active MOB
-    static void setID(uint32_t id, bool ide);
-
-    //TODO: implement function
-    //set the RX ID mask
-    static void setIDMask(uint32_t id, bool ide);
 };
 
 #endif /* CAN_CANRXTX_H_ */
