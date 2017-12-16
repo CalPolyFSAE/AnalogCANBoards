@@ -1,3 +1,0 @@
-CAN/CANRXTX.o: ../CAN/CANRXTX.cpp ../CAN/CANRXTX.h
-
-../CAN/CANRXTX.h:

@@ -7,10 +7,10 @@
 
 #include "CANSensorTimer.h"
 
-#include <AVRLibrary/arduino/Arduino.h>//FOR TESTING ONLY
+#include <AVRLibrary/arduino/Arduino.h>
 
-CANSensorTimer::CANSensorTimer(uint16_t interval, uint8_t MOBnum) :
-    TimingInterval(interval), MOBn(MOBnum)
+CANSensorTimer::CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t can_ide) :
+    TimingInterval(interval), id(*can_id), ide(can_ide)
 {
     ticksToSend = interval;
     activeSensors = 0;
@@ -28,9 +28,6 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
     //sort out CAN message size (for dlc)
     if (index >= activeSensors)
         activeSensors = index + 1;
-
-    Serial.print("CANSensorTimer::registerSensor() activeSensors: ");//TESTING ONLY
-    Serial.println(activeSensors);
 
     //register the sensor
     sensors[index] = sensor;
@@ -85,8 +82,7 @@ void CANSensorTimer::Update()
 
 
         //package CAN message using sensor values
-        //TODO: CAN Message sending
-        CANRXTX::CAN_DATA CANData = {};
+		CAN_Data canData = {};
 
         for (uint8_t i = 0; i < activeSensors; ++i)
         {
@@ -94,24 +90,36 @@ void CANSensorTimer::Update()
             {
                 continue;
             }
-            CANData.data[i * CANBYTESPERDATACHANNEL] = sensors[i]->getValue();
-
-            if(sensors[i]->ADCChannel == 5)//TESTING ONLY
-            {
-                Serial.println (sensors[i]->getVoltage (), 4);
-            }
-            /*
-            Serial.print(" SEN: ");
-            Serial.print(i);
+			//TODO: Need to add variable data sizes for CAN messages
+            //CANData.data16[i] = sensors[i]->getValue();
+			canData.data16[i] = 0x0102;
+			
+            
             Serial.print(" CH: ");
             Serial.print(sensors[i]->ADCChannel);
             Serial.print(" V: ");
             Serial.print(sensors[i]->getVoltage(), 4);
             Serial.println("");
-            */
+            
         }
 
-        CANRXTX::TX_UsingMOB(MOBn, &CANData, activeSensors * CANBYTESPERDATACHANNEL);
+		//send CAN message
+		st_cmd_t CMD = {};
+		// set up command for lib
+		CMD.cmd = can_cmd_t::CMD_TX_DATA;
+		CMD.dlc = activeSensors * CANBYTESPERDATACHANNEL;
+		if(ide)
+		{
+			CMD.id.ext = id.ext;
+		}else
+		{
+			CMD.id.std = id.std;
+		}
+		CMD.ctrl.ide = ide;
+		
+		CMD.pt_data = canData.data;
+
+        CAN.cmd(&CMD);
 
         /////////////////
         /////////////////

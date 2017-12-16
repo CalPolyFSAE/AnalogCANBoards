@@ -9,12 +9,11 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
-
+#include "ADCManager.h"
 #include "Config/CONFIG.h"
 #include "SensorManager.h"
 
 #include <AVRLibrary/arduino/Arduino.h>//for serial stuff
-//#include <AVRLibrary/CPFECANLib.h>
 
 void timer1_init() {
     TCCR1B |= (1 << WGM12) | (1 << CS11); //set timer 1 to CTC mode and prescaler 8
@@ -42,16 +41,10 @@ int main() {
     Serial.begin(9600);
     Serial.println("TEST2");
     //////////////////////////////////////
-
+	
 
     //some configuration checks
-    //check that we aren't gonna run out of MOBs for CAN Channels
-    if(CANCONFIG::NUMCANCHANNELS > (CANRXTX::MAXMOBS - CFG_CI::NUMCANRESERVEDMOBS))
-    {
-        //there are more CAN Channels defined than MOBs to handle them
-        //TODO:error report or add assertion functions
-    }
-    if(SENSORCONFIG::NUMSENSORCHANNELS > 8)
+    if(SENSORCONFIG::NUMSENSORS > 8)
     {
         //there shouldn't be more than one CAN Channel per sensor
         //this means that there is either too many sensors,
@@ -68,11 +61,9 @@ int main() {
     //setup message timing
     SensorManager::Init();
 
-    //CMD init to initilize cmd MOBs
-
-    //setup MOB and CAN Controller hardware
-    CANRXTX::SetBaudrate(CANRXTX::BAUDRATE::B1M);
-    CANRXTX::InitWithCurrentSettings();
+    //setup CAN Controller hardware
+	CAN.set_baudrate(1000);
+    CAN.init(1);
 
     sei();
 

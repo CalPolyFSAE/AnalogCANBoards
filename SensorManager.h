@@ -33,7 +33,7 @@ public:
 private:
 
     //all Sensors (used for diagnostics) TODO: implement
-    //static Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
+    static Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
 
     //all CAN Message Timers (used for update loop)
     static CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];

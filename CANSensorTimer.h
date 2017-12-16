@@ -11,7 +11,6 @@
 #include <stdint.h>
 #include <util/atomic.h>
 #include "Sensor.h"
-#include "CAN/CANRXTX.h"
 
 //timing objects for tracking when a message needs to be sent and what
 //is sent with it and fetching the data to be sent
@@ -41,13 +40,26 @@ public:
     enum class CANDATAChannel
         : uint8_t
         {
-            CANCHANNEL0 = 0, CANCHANNEL1, CANCHANNEL2, CANCHANNEL3
+            CANCHANNEL0 = 0,
+			CANCHANNEL1 = 1,
+			CANCHANNEL2 = 2, 
+			CANCHANNEL3 = 3
     };
+	
+	// info that the class uses when sending CAN messages
+	union CAN_ID
+	{
+		uint16_t std;
+		uint32_t ext;
+	};
 
-    const uint16_t TimingInterval;          // milliseconds between messages
-    const uint8_t MOBn;                     // MOB number to use for this channel
+	const uint16_t TimingInterval;          // milliseconds between messages
 
-    CANSensorTimer(uint16_t interval, uint8_t MOBnum);
+	const CAN_ID id;						//CAN ID for this info
+	const uint8_t ide;						//request return message flag and identifier extension
+    
+
+    CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t can_ide);
 
     //registers a sensor on this CANID
     bool registerSensor(Sensor* sensor, CANDATAChannel dataChannel);
@@ -66,6 +78,14 @@ public:
     uint8_t getNumActiveSensors();
 
 private:
+	
+	union CAN_Data
+	{
+		uint8_t data[8];
+		uint16_t data16[4];
+		uint32_t data32[2];
+	};
+
     volatile bool needToSend;                          // CAN message needs to be sent
     volatile uint16_t ticksToSend;                     // ticks until next message sent
     Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message

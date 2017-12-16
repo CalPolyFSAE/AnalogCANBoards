@@ -10,36 +10,39 @@
 
 
 #include <stdint.h>
-#include "../CAN/CANRXTX.h"
 #include "../Sensor.h"
 #include "../CANSensorTimer.h"
 
 //this contains struct definitions that allow for specific configuration only
 //functionality.
 
-//these are needed to tie MOBs to Timing intervals and Sensors
-
-namespace CANCONFIG
-{
-
-    typedef struct CANChannel
-    {
-        //MOB settings for this CAN channel
-        CANRXTX::MOB_SETTINGS CANMOB;
-        //milliseconds between Message sending
-        uint16_t TimingInterval;
-    } CANChannel;
-
-}
-
 namespace SENSORCONFIG
 {
-    typedef struct SensorChannel
+	
+}
+
+//these are needed to tie CANIDs to Timing intervals and Sensors
+namespace CANCONFIG
+{	
+	struct CAN_SETTINGS
+	{
+		//use for this CANMSG
+		//MOB settings for this CAN channel
+		CANSensorTimer::CAN_ID CANId;
+		uint8_t ide;
+		uint8_t rtr;
+	};
+
+    struct CANSensorChannel
     {
-        Sensor::SENSOR_SETTINGS SensorData;                 // Sensor
-        CANCONFIG::CANChannel CANChannel;               // CAN Channel to use for this sensor
-        CANSensorTimer::CANDATAChannel CANDATAChannel;  // CAN Data Channel to use for this sensor
-    } SensorChannel;
+		CAN_SETTINGS CANSettings;
+        //milliseconds between Message sending
+        uint16_t TimingInterval;
+		//sensors on channel in data channel positions
+		Sensor::SENSOR_SETTINGS SensDATA[CANSensorTimer::CANMAXDATACHANNELS];
+		uint8_t NumSensors;
+    };
+
 }
 
 
