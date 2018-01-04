@@ -10,7 +10,12 @@
 
 #define CONF00
 
-//#include "CONFIG_ControlInterface.h"
+#define MAXSENSORS 8
+
+#define SERIAL_BAUD 9600
+#define CAN_BAUD 1000
+
+#include "CONFIG_Commands.h"
 
 #ifdef CONF00
 #include "CONFIG00.h"

@@ -6,6 +6,7 @@
 */
 
 #include "CANSensorTimer.h"
+#include "Sensor.h"
 
 #include <AVRLibrary/arduino/Arduino.h>
 
@@ -47,6 +48,7 @@ void CANSensorTimer::INT_Call_Tick()
 
 //make sensors request data if a CAN message needs to be sent
 //then send data over CAN
+// TODO: make static?
 void CANSensorTimer::Update()
 {
     if(needToSend)
@@ -82,44 +84,46 @@ void CANSensorTimer::Update()
 
 
         //package CAN message using sensor values
-		CAN_Data canData = {};
+        CAN_Data canData = {};
 
         for (uint8_t i = 0; i < activeSensors; ++i)
         {
-            if(sensors[i] == nullptr)
+            if (sensors[i] == nullptr)
             {
                 continue;
             }
-			//TODO: Need to add variable data sizes for CAN messages
+            //TODO: Need to add variable data sizes for CAN messages
             //CANData.data16[i] = sensors[i]->getValue();
-			canData.data16[i] = 0x0102;
-			
-            
-            Serial.print(" CH: ");
-            Serial.print(sensors[i]->ADCChannel);
-            Serial.print(" V: ");
-            Serial.print(sensors[i]->getVoltage(), 4);
-            Serial.println("");
+            canData.data16[i] = 0x0102;
+
+            Serial.print (" CH: ");
+            Serial.print (sensors[i]->ADCChannel);
+            Serial.print (" V: ");
+            Serial.print (sensors[i]->getVoltage (), 4);
+            Serial.println ("");
             
         }
 
-		//send CAN message
-		st_cmd_t CMD = {};
-		// set up command for lib
-		CMD.cmd = can_cmd_t::CMD_TX_DATA;
-		CMD.dlc = activeSensors * CANBYTESPERDATACHANNEL;
-		if(ide)
-		{
-			CMD.id.ext = id.ext;
-		}else
-		{
-			CMD.id.std = id.std;
-		}
-		CMD.ctrl.ide = ide;
-		
-		CMD.pt_data = canData.data;
+        //send CAN message
+        st_cmd_t CMD =
+            { };
+        // set up command for can lib
+        CMD.cmd = can_cmd_t::CMD_TX_DATA;
+        CMD.dlc = activeSensors * CANBYTESPERDATACHANNEL;// figure out data size
+        if (ide)
+        {
+            CMD.id.ext = id.ext;
+        }
+        else
+        {
+            CMD.id.std = id.std;
+        }
+        CMD.ctrl.ide = ide;
 
-        CAN.cmd(&CMD);
+        CMD.pt_data = canData.data;
+
+        // send command to CAN lib
+        CAN.cmd (&CMD);
 
         /////////////////
         /////////////////

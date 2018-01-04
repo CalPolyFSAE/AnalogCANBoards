@@ -12,8 +12,9 @@
 #include "ADCManager.h"
 #include "Config/CONFIG.h"
 #include "SensorManager.h"
+#include "Commands/CommandManager.h"
 
-#include <AVRLibrary/arduino/Arduino.h>//for serial stuff
+#include <AVRLibrary/arduino/Arduino.h>//for serial and CAN stuff
 
 void timer1_init() {
     TCCR1B |= (1 << WGM12) | (1 << CS11); //set timer 1 to CTC mode and prescaler 8
@@ -35,21 +36,18 @@ ISR(ADC_vect)
 
 int main() {
     cli();
-
-    //////////////////////////////////////
-    //TODO: THIS IS FOR TESTING OVER SERIAL ONLY, REMOVE!
-    Serial.begin(9600);
-    Serial.println("TEST2");
-    //////////////////////////////////////
 	
+    //setup commands first for error reporting
+    CommandManager::Init();
 
     //some configuration checks
-    if(SENSORCONFIG::NUMSENSORS > 8)
+    if(SENSORCONFIG::NUMSENSORS > MAXSENSORS)
     {
         //there shouldn't be more than one CAN Channel per sensor
         //this means that there is either too many sensors,
         //or one sensor has been assigned multiple times
         //
+        CommandManager::LogWarning(CommandManager::WarningMessage::ConfigError);
     }
 
     //setup 1000Hz interrupt
@@ -61,22 +59,30 @@ int main() {
     //setup message timing
     SensorManager::Init();
 
-    //setup CAN Controller hardware
-	CAN.set_baudrate(1000);
-    CAN.init(1);
-
     sei();
+
+    //CommandManager::FlagCommandToExe(2, 123);
 
     //TODO: add pause state (for CMDs)
     while(true)
     {
         Serial.flush();
-        //Serial.println("MAIN LOOP");//FOR TESTING ONLY
+		
+        //FOR TESTING ONLY
         uint32_t c = 0;
         while(c < 150000)
         {
             ++c;
         }
+
+        //for testing Serial input
+        int16_t input = Serial.read();
+        if(input != -1)
+        {
+            Serial.println(input);
+        }
+
         SensorManager::Update();
+        CommandManager::Update();
     }
 }

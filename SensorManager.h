@@ -14,8 +14,6 @@
 #include <stdint.h>
 #include <util/atomic.h>
 #include "Config/CONFIG.h"
-#include "Sensor.h"
-#include "CANSensorTimer.h"
 
 class SensorManager
 {
@@ -33,10 +31,10 @@ public:
 private:
 
     //all Sensors (used for diagnostics) TODO: implement
-    static Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
+    static class Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
 
     //all CAN Message Timers (used for update loop)
-    static CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];
+    static class CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];
 
 };
 

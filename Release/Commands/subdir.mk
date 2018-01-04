@@ -4,20 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../Config/CONFIG00.cpp 
+../Commands/Command.cpp \
+../Commands/CommandManager.cpp \
+../Commands/Command_Test.cpp 
 
 OBJS += \
-./Config/CONFIG00.o 
+./Commands/Command.o \
+./Commands/CommandManager.o \
+./Commands/Command_Test.o 
 
 CPP_DEPS += \
-./Config/CONFIG00.d 
+./Commands/Command.d \
+./Commands/CommandManager.d \
+./Commands/Command_Test.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Config/%.o: ../Config/%.cpp
+Commands/%.o: ../Commands/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: AVR C++ Compiler'
-	avr-g++ -std=gnu++11 -fpermissive -I"/root/share/Code/AVRLibrary" -I/root/share/Code/lib_mcu/can -I/root/share/Code/lib_mcu -DDEBUG -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fno-exceptions -Wl,-u,vfprintf -lprintf_flt -lm -mmcu=at90can128 -DF_CPU=16000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	avr-g++ -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=at90can128 -DF_CPU=16000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

@@ -10,7 +10,6 @@
 
 #include <stdint.h>
 #include <util/atomic.h>
-#include "Sensor.h"
 
 //timing objects for tracking when a message needs to be sent and what
 //is sent with it and fetching the data to be sent
@@ -41,28 +40,28 @@ public:
         : uint8_t
         {
             CANCHANNEL0 = 0,
-			CANCHANNEL1 = 1,
-			CANCHANNEL2 = 2, 
-			CANCHANNEL3 = 3
+            CANCHANNEL1 = 1,
+            ANCHANNEL2 = 2,
+            CANCHANNEL3 = 3
     };
-	
-	// info that the class uses when sending CAN messages
-	union CAN_ID
-	{
-		uint16_t std;
-		uint32_t ext;
-	};
 
-	const uint16_t TimingInterval;          // milliseconds between messages
+    // info that the class uses when sending CAN messages
+    union CAN_ID
+    {
+        uint16_t std;
+        uint32_t ext;
+    };
 
-	const CAN_ID id;						//CAN ID for this info
-	const uint8_t ide;						//request return message flag and identifier extension
+    const uint16_t TimingInterval;          // milliseconds between messages
+
+    const CAN_ID id;						//CAN ID for this info
+    const uint8_t ide;						//request return message flag and identifier extension
     
 
     CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t can_ide);
 
     //registers a sensor on this CANID
-    bool registerSensor(Sensor* sensor, CANDATAChannel dataChannel);
+    bool registerSensor(class Sensor* sensor, CANDATAChannel dataChannel);
 
     //1000Hz interrupt to keep track of timing
     void INT_Call_Tick();
@@ -79,16 +78,16 @@ public:
 
 private:
 	
-	union CAN_Data
-	{
-		uint8_t data[8];
-		uint16_t data16[4];
-		uint32_t data32[2];
-	};
+    union CAN_Data
+    {
+            uint8_t data[8];
+            uint16_t data16[4];
+            uint32_t data32[2];
+    };
 
     volatile bool needToSend;                          // CAN message needs to be sent
     volatile uint16_t ticksToSend;                     // ticks until next message sent
-    Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
+    class Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
     uint8_t activeSensors;                             // Number of sensors on this CAN Channel (used for dlc)
 };
 

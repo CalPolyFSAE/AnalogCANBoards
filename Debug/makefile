@@ -8,9 +8,8 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include ControlInterface/subdir.mk
 -include Config/subdir.mk
--include CAN/subdir.mk
+-include Commands/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -62,7 +61,7 @@ all: AnalogCANBoards.elf secondary-outputs
 
 dependents:
 	-cd /root/share/Code/AVRLibrary/Debug && $(MAKE) all
-	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) clean all
+	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) all
 
 # Tool invocations
 AnalogCANBoards.elf: $(OBJS) $(USER_OBJS) /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a /root/share/Code/AnalogCANBoards/Release/AnalogCANBoards.elf

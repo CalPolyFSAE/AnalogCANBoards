@@ -16,6 +16,7 @@ class Sensor : public ADCManagerCallbackInterface
 {
 public:
 
+    // data used to initialize Sensor
     struct SENSOR_SETTINGS
     {
         // void pointer function pointer (cant point to a member of an object)

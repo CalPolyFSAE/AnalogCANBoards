@@ -97,7 +97,6 @@ namespace SENSORCONFIG
     constexpr uint8_t NUMSENSORS = 8;
 }
 
-//TODO: make the sensors a list on CANChannel, not a value in SensorConfig
 namespace CANCONFIG
 {
     constexpr CAN_SETTINGS CAN0 = {
@@ -108,42 +107,42 @@ namespace CANCONFIG
 
     constexpr CAN_SETTINGS CAN1 = {
 		0x01,		//message id
-		0,			//identifier extension
-		0			//rtr
+		0,              //identifier extension
+		0               //rtr
     };
 
     constexpr CANSensorChannel CANChannel0 = {
                 CAN0,           // CAN Message ID for this channel
                 50,             // milliseconds between updates
-				{
-					SENSORCONFIG::Sensor00,		//sensors in data channel positions
-					SENSORCONFIG::Sensor01,
-					SENSORCONFIG::Sensor02,
-					SENSORCONFIG::Sensor03
-				},
-				4				//number of sensors on CANChannel
+                {
+                    SENSORCONFIG::Sensor00,		//sensors in data channel positions
+                    SENSORCONFIG::Sensor01,
+                    SENSORCONFIG::Sensor02,
+                    SENSORCONFIG::Sensor03
+                },
+                4				//number of sensors on CANChannel
 	};
 
     constexpr CANSensorChannel CANChannel1 = {
                 CAN1,           // CAN Message ID for this channel
                 100,            // milliseconds between updates
-				{
-					SENSORCONFIG::Sensor04,
-					SENSORCONFIG::Sensor05,
-					SENSORCONFIG::Sensor06,
-					SENSORCONFIG::Sensor07
-				},
-				4
+                {
+                    SENSORCONFIG::Sensor04,
+                    SENSORCONFIG::Sensor05,
+                    SENSORCONFIG::Sensor06,
+                    SENSORCONFIG::Sensor07
+                },
+                4
 	};
 
-    //list in order of increasing CANID
+    // all can channels
     constexpr CANSensorChannel CANChannels[] =
         { CANChannel0, CANChannel1 };
     //number of CAN Channels
     constexpr uint8_t NUMCANCHANNELS = 2;
 
     //Device id for commands over CAN
-    constexpr uint8_t CANCMDDEVID = 0x00;
+    constexpr uint8_t CANCMD_DEVID = 0x00;
 }
 
 
