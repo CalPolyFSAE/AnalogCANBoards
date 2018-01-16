@@ -10,6 +10,7 @@
 #define COMMAND_TEST_H_
 
 #include "Command.h"
+#include <stdint.h>
 
 class Command_Test : public Command
 {
@@ -21,8 +22,10 @@ public:
 
     virtual uint8_t execute(uint16_t& input);
 
-//protected:
+protected:
     
+    // found this online
+    uint16_t checkFreeRam ();
 };
 
 #endif /* COMMAND_TEST_H_ */
