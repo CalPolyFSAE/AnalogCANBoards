@@ -16,8 +16,15 @@
 namespace SENSORCONFIG
 {
 
-    int16_t conversion00( const float& voltage );
-    int16_t conversion01( const float& voltage );
+    inline int16_t conversion00( float const& voltage )
+    {
+        return (voltage * 65.536 * 100.0);
+    }
+
+    inline int16_t conversion01( float const& voltage )
+    {
+        return (voltage * 65.536 * 100.0);
+    }
 
     // Sensor 0 Name
     constexpr Sensor::SENSOR_SETTINGS Sensor00 = {
@@ -100,13 +107,13 @@ namespace SENSORCONFIG
 namespace CANCONFIG
 {
     constexpr CAN_SETTINGS CAN0 = {
-		0x00,
+		0xD3,
 		0,
 		0
     };
 
     constexpr CAN_SETTINGS CAN1 = {
-		0x01,		//message id
+		0xD4,		//message id
 		0,              //identifier extension
 		0               //rtr
     };
