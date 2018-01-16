@@ -15,26 +15,33 @@
 #include <util/atomic.h>
 #include "Config/CONFIG.h"
 
+/** This is a singleton class */
 class SensorManager
 {
 public:
-
-    //sets up sensors and CAN timers
-    static void Init();
+    static SensorManager& GetInstance();
 
     //main program loop calls this
-    static void Update();
+    void Update();
 
     //1000Hz interrupt calls this
-    static void INT_UpdateTiming();
+    void INT_UpdateTiming();
+
+    //c++11 just delete the functions we don't want
+    SensorManager(SensorManager const&) = delete;
+    void operator=(SensorManager const&) = delete;
+
+private:
+    //sets up sensors and CAN timers
+    SensorManager();
 
 private:
 
     //all Sensors (used for diagnostics) TODO: implement
-    static class Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
+    class Sensor* AllSensors[SENSORCONFIG::NUMSENSORS];
 
     //all CAN Message Timers (used for update loop)
-    static class CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];
+    class CANSensorTimer* CANMessageTimers[CANCONFIG::NUMCANCHANNELS];
 
 };
 

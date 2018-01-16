@@ -10,12 +10,14 @@
 #include "Sensor.h"
 #include "CANSensorTimer.h"
 
-//static memory initialization
-Sensor* SensorManager::AllSensors[] = {};
-CANSensorTimer* SensorManager::CANMessageTimers[] = {};
+SensorManager& SensorManager::GetInstance()
+{
+    static SensorManager S; // initialized once
 
-//TODO: put configuration data into progmem?
-void SensorManager::Init()
+    return S;
+}
+
+SensorManager::SensorManager()
 {
     uint8_t allSensorsIndex = 0;
     // create timers for CAN message timing and register sensors
