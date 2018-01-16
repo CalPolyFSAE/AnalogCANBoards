@@ -14,8 +14,6 @@
 #include "SensorManager.h"
 #include "Commands/CommandManager.h"
 
-#include <AVRLibrary/arduino/Arduino.h>//for serial and CAN stuff
-
 void timer1_init() {
     TCCR1B |= (1 << WGM12) | (1 << CS11); //set timer 1 to CTC mode and prescaler 8
     TCNT1 = 0; //initialize counter
@@ -25,20 +23,21 @@ void timer1_init() {
 
 //interrupt function for timing
 SIGNAL(TIMER1_COMPA_vect) {
-    SensorManager::INT_UpdateTiming();
+    SensorManager::GetInstance().INT_UpdateTiming();
+    CommandManager::GetInstance().INT_UpdateTiming();
 }
 
 //interrupt function for ADC completion
-ISR(ADC_vect)
-{
-    ADCManager::INT_ADCFinished();
+ISR(ADC_vect) {
+    ADCManager::INT_ADCFinished ();
 }
 
-int main() {
+int main()
+{
     cli();
 	
     //setup commands first for error reporting
-    CommandManager::Init();
+    CommandManager* ACommandManager = &CommandManager::GetInstance();
 
     //some configuration checks
     if(SENSORCONFIG::NUMSENSORS > MAXSENSORS)
@@ -47,7 +46,7 @@ int main() {
         //this means that there is either too many sensors,
         //or one sensor has been assigned multiple times
         //
-        CommandManager::LogWarning(CommandManager::WarningMessage::ConfigError);
+
     }
 
     //setup 1000Hz interrupt
@@ -56,18 +55,16 @@ int main() {
     //setup ADC sample rate
     ADCManager::Init();
 
-    //setup message timing
-    SensorManager::Init();
+    //get the SensorManager
+    SensorManager* ASensorManager = &SensorManager::GetInstance();
 
     sei();
 
-    //CommandManager::FlagCommandToExe(2, 123);
+    CommandManager::GetInstance().ExecuteCommand(0, 0);
 
-    //TODO: add pause state (for CMDs)
+    //TODO: add pause state (for CMDs) and add main loop to a manager class
     while(true)
     {
-        Serial.flush();
-		
         //FOR TESTING ONLY
         uint32_t c = 0;
         while(c < 150000)
@@ -75,14 +72,15 @@ int main() {
             ++c;
         }
 
-        //for testing Serial input
+        /*//for testing Serial input
         int16_t input = Serial.read();
         if(input != -1)
         {
             Serial.println(input);
-        }
+        }*/
 
-        SensorManager::Update();
-        CommandManager::Update();
+        ASensorManager->Update();
+        ACommandManager->Update();
+        CommandManager::GetInstance().ExecuteCommand(0, 0);
     }
 }
