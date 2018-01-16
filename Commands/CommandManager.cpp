@@ -16,6 +16,13 @@
 
 #ifdef SERIAL_TEXT
 
+// stored in flash
+
+// commands
+static const PROGMEM char CommandText_Test[] = "";
+static const PROGMEM char CommandText_Echo[] = "";
+
+// messages
 static const PROGMEM char WarningMsg_FailedToInit[] = "Failed to Initialize";
 static const PROGMEM char WarningMsg_ConfigError[] = "Configuration is Incorrect";
 static const PROGMEM char WarningMsg_ADCDataOutOfRange[] = "ADC value out of Range";
@@ -25,84 +32,126 @@ static constexpr uint8_t MAX_WARNMSG_LEN = 150;
 
 #endif //SERIAL_TEXT
 
-#ifdef COMMANDS //only create the commands if they are enabled
 
-
-//add all commands here
-static Command_Test cmdtst;
-
-Command* CommandManager::Commands[] =
-    {
-            &cmdtst
-    };
-uint8_t CommandManager::NUM_COMMANDS = 1;
-Command* CommandManager::CurrentCommand = nullptr;
-uint16_t CommandManager::CurrentArgs = 0;
-
-#endif //COMMANDS
-
-
-void CommandManager::Init()
+CommandManager& CommandManager::GetInstance()
 {
-#ifdef SERIAL_TEXT
-    //setup USART
-    Serial.begin(SERIAL_BAUD);
-#endif //SERIAL_TEXT
-    //setup CAN Controller hardware
-    CAN.set_baudrate(CAN_BAUD);
-    CAN.init(1);
+    static CommandManager C{}; // initialized once
+
+    return C;
 }
 
-void CommandManager::FlagCommandToExe(uint8_t cmdID, const uint16_t& input)
+void CommandManager::ExecuteCommand(uint8_t cmdID, const uint16_t& input)
 {
-#ifdef COMMANDS
     // find command with ID and mark it for execution
-    if(CurrentCommand == nullptr)
+    if(currentCommand == nullptr)
     {
         for (uint8_t i = 0; i < NUM_COMMANDS; ++i)
         {
-            if (Commands[i]->getID () == cmdID)
+            if (commands[i]->getID () == cmdID)
             {
-                CurrentCommand = Commands[i];
+                currentCommand = commands[i];
                 //copy atomically because it is 16 bit
                 ATOMIC_BLOCK(ATOMIC_FORCEON)
                 {
-                    CurrentArgs = input;
+                    currentArgs = input;
                 }
             }
         }
     }else
     {
         //TODO: error still waiting for command to exe
+        // this will never happen unless there is more than
+        // one command request per update loop
     }
-#endif //COMMANDS
 }
 
 void CommandManager::Update()
 {
-#ifdef COMMANDS
-    if(CurrentCommand)
+    if(currentCommand)
     {
-        CurrentCommand->execute(CurrentArgs);
-        CurrentCommand = nullptr;
-        CurrentArgs = 0;
+        //TODO: add ability for commands to execute across multiple updates
+        currentCommand->execute(currentArgs);
+        currentCommand = nullptr;
+        currentArgs = 0;
     }
-#endif // COMMANDS
+
+    if(checkForCMD)
+    {
+        checkForCMD = false;
+
+        // this currentCommand check is unnecessary right now
+        //TODO: add ability for commands to execute across multiple updates
+        if(currentCommand == nullptr)
+        {
+            checkForCMD = false;
+            CheckForCANCMD();
+        }
+#ifdef SERIAL_TEXT
+        //
+        if(currentCommand == nullptr)
+        {
+            //TODO: read serial for command
+        }
+#endif //SERIAL_TEXT
+    }
 }
 
-void CommandManager::LogWarning(WarningMessage errID)
+void CommandManager::LogMessage(Message errID)
 {
 #ifdef SERIAL_TEXT
 
     char buf [MAX_WARNMSG_LEN]; //buffer for text
-    WarningToStr(errID, buf);
+    MessageToStr(errID, buf);
     Serial.println(buf);
 
 #endif //SERIAL_TEXT
     //TODO: CAN errors
 }
 
-const char* CommandManager::WarningToStr(WarningMessage msg, char* output)
+void CommandManager::LogMessage(const char c[])
+{
+#ifdef SERIAL_TEXT
+
+    Serial.println(c);
+
+#endif
+}
+
+
+CommandManager::CommandManager() :
+        commands { new Command_Test () }
+{
+    currentCommand = nullptr;
+    currentArgs = 0;
+    //TODO: make command checks based on CANRx INT
+    canRXTimer = CanRXCheckInterval; // check for CMD every 50ms
+    checkForCMD = false;
+
+    //can lib stuff
+    canCMD = {};
+    canCMD.cmd = can_cmd_t::CMD_RX_DATA_MASKED;
+    canCMD.ctrl.ide = 0;
+    canCMD.id.std = CFG_CI::RX_CANID;
+    canCMD.dlc = 8;
+    canCMD.pt_data = data;
+
+    //setup CAN Controller hardware
+    CAN.set_baudrate(CAN_BAUD);
+    CAN.init(1);
+
+#ifdef SERIAL_TEXT
+    //setup USART
+    Serial.begin(SERIAL_BAUD);
+#endif //SERIAL_TEXT
+}
+
+CommandManager::~CommandManager()
+{
+    for(uint8_t i = 0; i < NUM_COMMANDS; ++i)
+        delete commands[i];
+}
+
+const char* CommandManager::MessageToStr(Message msg, char* output)
 {
 
 #ifdef SERIAL_TEXT
@@ -111,13 +160,13 @@ const char* CommandManager::WarningToStr(WarningMessage msg, char* output)
 
     switch(msg)
     {
-        case WarningMessage::FailedToInit:
+        case Message::FailedToInit:
             progWord = WarningMsg_FailedToInit;
             break;
-        case WarningMessage::ConfigError:
+        case Message::ConfigError:
             progWord = WarningMsg_ConfigError;
             break;
-        case WarningMessage::ADCDataOutOfRange:
+        case Message::ADCDataOutOfRange:
             progWord = WarningMsg_ADCDataOutOfRange;
             break;
         default:
@@ -130,4 +179,26 @@ const char* CommandManager::WarningToStr(WarningMessage msg, char* output)
 #endif //SERIAL_TEXT
 
     return output;
+}
+
+void CommandManager::CheckForCANCMD()
+{
+    switch(CAN.get_status(&canCMD))
+    {
+        case CAN_STATUS_COMPLETED:
+            // check out the data we got
+            CommandData* cmdData = (CommandData*)data;
+            if(cmdData->devID == CANCONFIG::CANCMD_DEVID)
+            {
+                ExecuteCommand(cmdData->devID, cmdData->input);
+            }
+            // request command again
+        case CAN_STATUS_ERROR:
+            // something went wrong, or we just haven't yet sent command
+            CAN.cmd(&canCMD);
+            break;
+        case CAN_STATUS_NOT_COMPLETED:
+            // keep waiting
+            break;
+    }
 }

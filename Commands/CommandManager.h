@@ -9,12 +9,24 @@
 #define COMMANDS_COMMANDMANAGER_H_
 
 #include <stdint.h>
+#include "AVRLibrary/arduino/can_lib.h"
 
+/** This is a singleton class */
 class CommandManager
 {
 public:
 
-    enum WarningMessage : uint8_t
+    // this is what the incoming Command data should look like
+    struct CommandData
+    {
+        uint8_t devID;
+        uint8_t cmdID;
+        uint16_t input;
+        uint32_t unused;
+    };
+
+    //TODO: move messages to a command?
+    enum Message : uint8_t
     {
         FailedToInit,
         ConfigError,
@@ -22,32 +34,70 @@ public:
         GeneralError
     };
 
-    // must be called first
-    static void Init();
+    //gets the CommandMnager singleton
+    //TODO: can this inline? (maybe make the static var member)
+    static CommandManager& GetInstance();
 
     // flags a command to be executed(external classes can request a command)
     // for debugging only
-    static void FlagCommandToExe(uint8_t cmdID, const uint16_t& input);
+    // TODO: add a command queue?
+    void ExecuteCommand(uint8_t cmdID, const uint16_t& input);
 
-    // command is executed during this function
-    static void Update();
+    // requested command is executed during this function
+    // also checks for more command requests
+    void Update();
 
-    //used to output warning message
-    static void LogWarning(WarningMessage errID);
+    // called by timer interrupt at 1000Hz
+    inline void INT_UpdateTiming()
+    {
+        if(canRXTimer > 0)
+        {
+            --canRXTimer;
+        }else
+        {
+            canRXTimer = CanRXCheckInterval;
+            checkForCMD = true;
+        }
+    }
+
+    //used to output message
+    void LogMessage(Message errID);
+    void LogMessage(const char c[]);
+
+    //c++11 delete the functions we don't want
+    CommandManager(CommandManager const&) = delete;
+    void operator=(CommandManager const&) = delete;
 
 private:
+    // prevent creation of a new instance
+    CommandManager();
+    // not sure if this should be private
+    ~CommandManager();
+
     //gets message associated with warning
-    static const char* WarningToStr(WarningMessage msg, char* output);
+    const char* MessageToStr(Message msg, char* output);
+
+    //check for CAN RX
+    void CheckForCANCMD();
 
 private:
+    //used to keep track of CAN polling
+    static constexpr uint8_t CanRXCheckInterval = 50;
+    volatile uint8_t canRXTimer;
+    volatile bool checkForCMD;
+
+    // CAN lib cmd forward declaration
+    st_cmd_t canCMD;
+    //CAN RX data
+    uint8_t data[8];
 
     // array of pointers to all commands
-    static class Command* Commands[];
-    static uint8_t NUM_COMMANDS;
+    static constexpr uint8_t NUM_COMMANDS = 1;
+    class Command* commands[NUM_COMMANDS];
 
     // the command that needs to be executed
-    static class Command* CurrentCommand;
-    static uint16_t CurrentArgs;
+    class Command* currentCommand;
+    uint16_t currentArgs;
 
 };
 
