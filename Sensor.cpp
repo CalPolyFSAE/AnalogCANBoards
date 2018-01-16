@@ -22,7 +22,7 @@ Sensor::Sensor() :
 }
 
 
-Sensor::Sensor(const SENSOR_SETTINGS& setup ) :
+Sensor::Sensor(SENSOR_SETTINGS const& setup ) :
         MinExpectedVal (setup.MinExpectedVal),
         MaxExpectedVal (setup.MaxExpectedVal),
         ADCChannel (setup.ADCChannel),
@@ -52,7 +52,7 @@ bool Sensor::requestADCRead()
 }
 
 //Called by ADCManager when read is finished
-void Sensor::INT_Call_ADC_Finished( const uint16_t& value, uint8_t channel ) {
+void Sensor::INT_Call_ADC_Finished( uint16_t const& value, uint8_t channel ) {
         rawADC = value;
         isReady = true;
 }
@@ -61,14 +61,14 @@ void Sensor::INT_Call_ADC_Finished( const uint16_t& value, uint8_t channel ) {
 int16_t Sensor::getValue() {
     int16_t value = 0;
 
-    float voltage = getVoltage();
-
+    float voltage;
     //make sure nothing changes rawADC value
     //although this should never be able to happen
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        value = conversionFunction(voltage);
+        getVoltage(voltage);
     }
+    value = conversionFunction(voltage);
 
     //check if min/max functionality should be used
     if (UseMinMax)
@@ -83,17 +83,15 @@ int16_t Sensor::getValue() {
         }
     }
 
-    if(!isReady)
-        value = 0;
-
     return value;
 }
 
-float Sensor::getVoltage()
+void Sensor::getVoltage(float& out)
 {
     //gain error calculation for ADC
-    float voltage = rawADC * VSCALE;
-    voltage = voltage - (VERRORSCALE * voltage + VERROR);
-    return voltage;
+    out = rawADC * VSCALE;
+    out = out - (VERRORSCALE * out + VERROR);
+    if(out < 0)
+        out = 0;
 }
 

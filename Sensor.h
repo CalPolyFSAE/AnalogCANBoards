@@ -20,7 +20,7 @@ public:
     struct SENSOR_SETTINGS
     {
         // void pointer function pointer (cant point to a member of an object)
-        typedef int16_t (*DataConversion)( const float& voltage );
+        typedef int16_t (*DataConversion)( float const& voltage );
 
         //min and max expected values from processed data
         int16_t MinExpectedVal, MaxExpectedVal;
@@ -46,7 +46,7 @@ public:
 
     Sensor();
 
-    Sensor(const SENSOR_SETTINGS& setup);
+    Sensor(SENSOR_SETTINGS const& setup);
 
     virtual ~Sensor();
 
@@ -54,17 +54,22 @@ public:
     bool requestADCRead();
 
     //Called by ADCManager when read is finished
-    virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel);
+    virtual void INT_Call_ADC_Finished(uint16_t const& value, uint8_t channel);
 
     //get corrected value to send over CAN
     int16_t getValue();
 
     //get corrected voltage
-    float getVoltage();
+    void getVoltage(float& out);
 
     //is the rawADC value ready
     inline bool getIsReady() const {
         return isReady;
+    }
+
+    inline uint16_t getRawADC()
+    {
+        return rawADC;
     }
 
 private:
