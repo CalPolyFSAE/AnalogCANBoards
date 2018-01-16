@@ -33,5 +33,4 @@ CPP_DEPS :=
 SUBDIRS := \
 . \
 Commands \
-Config \
 

@@ -12,7 +12,6 @@
 
 #ifdef DEBUG
 #define SERIAL_TEXT
-#define COMMANDS
 #endif //DEBUG
 
 namespace CFG_CI
