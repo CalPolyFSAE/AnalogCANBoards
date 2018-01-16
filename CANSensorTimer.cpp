@@ -92,14 +92,18 @@ void CANSensorTimer::Update()
             {
                 continue;
             }
-            //TODO: Need to add variable data sizes for CAN messages
+            //TODO: Need to add variable data sizes for CAN data channels
             //CANData.data16[i] = sensors[i]->getValue();
-            canData.data16[i] = 0x0102;
+            int16_t data = sensors[i]->getValue();
+            canData.data16[i] = *(uint16_t*)(&data);// TODO: keep the sign bit?
+            Serial.print(data);
 
             Serial.print (" CH: ");
             Serial.print (sensors[i]->ADCChannel);
             Serial.print (" V: ");
-            Serial.print (sensors[i]->getVoltage (), 4);
+            float volts;
+            sensors[i]->getVoltage (volts);
+            Serial.print (volts, 4);
             Serial.println ("");
             
         }
@@ -124,6 +128,9 @@ void CANSensorTimer::Update()
 
         // send command to CAN lib
         CAN.cmd (&CMD);
+        uint16_t i = 0;
+        while(CAN.get_status(&CMD) != CAN_STATUS_COMPLETED && i < 65000)
+            ++i;
 
         /////////////////
         /////////////////
