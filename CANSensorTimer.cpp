@@ -48,7 +48,6 @@ void CANSensorTimer::INT_Call_Tick()
 
 //make sensors request data if a CAN message needs to be sent
 //then send data over CAN
-// TODO: make static?
 void CANSensorTimer::Update()
 {
     if(needToSend)
@@ -95,8 +94,17 @@ void CANSensorTimer::Update()
             //TODO: Need to add variable data sizes for CAN data channels
             //CANData.data16[i] = sensors[i]->getValue();
             int16_t data = sensors[i]->getValue();
-            canData.data16[i] = *(uint16_t*)(&data);// TODO: keep the sign bit?
+
+            // use mcpy for variable data sizes
+            canData.data16[i] = (uint16_t)(0xA0AF);// TODO: keep the sign bit?
+
+            //TODO: TESTING
+            /*
+            Serial.print (" DATA: ");
             Serial.print(data);
+
+            Serial.print (" CAN DATA: ");
+            Serial.print(canData.data16[i]);
 
             Serial.print (" CH: ");
             Serial.print (sensors[i]->ADCChannel);
@@ -105,6 +113,7 @@ void CANSensorTimer::Update()
             sensors[i]->getVoltage (volts);
             Serial.print (volts, 4);
             Serial.println ("");
+            */
             
         }
 
@@ -128,9 +137,13 @@ void CANSensorTimer::Update()
 
         // send command to CAN lib
         CAN.cmd (&CMD);
+
         uint16_t i = 0;
         while(CAN.get_status(&CMD) != CAN_STATUS_COMPLETED && i < 65000)
+        {
             ++i;
+        }
+
 
         /////////////////
         /////////////////

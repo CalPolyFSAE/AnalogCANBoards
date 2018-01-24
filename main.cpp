@@ -66,11 +66,13 @@ int main()
     while(true)
     {
         //FOR TESTING ONLY
+        /*
         uint32_t c = 0;
         while(c < 150000)
         {
             ++c;
         }
+        */
 
         /*//for testing Serial input
         int16_t input = Serial.read();
@@ -81,6 +83,6 @@ int main()
 
         ASensorManager->Update();
         ACommandManager->Update();
-        CommandManager::GetInstance().ExecuteCommand(0, 0);
+        //CommandManager::GetInstance().ExecuteCommand(0, 0);
     }
 }

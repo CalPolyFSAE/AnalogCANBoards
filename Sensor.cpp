@@ -62,12 +62,8 @@ int16_t Sensor::getValue() {
     int16_t value = 0;
 
     float voltage;
-    //make sure nothing changes rawADC value
-    //although this should never be able to happen
-    ATOMIC_BLOCK(ATOMIC_FORCEON)
-    {
-        getVoltage(voltage);
-    }
+    getVoltage(voltage);
+
     value = conversionFunction(voltage);
 
     //check if min/max functionality should be used
@@ -89,8 +85,14 @@ int16_t Sensor::getValue() {
 void Sensor::getVoltage(float& out)
 {
     //gain error calculation for ADC
-    out = rawADC * VSCALE;
+    //make sure nothing changes rawADC value
+    //although this should never be able to happen
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        out = rawADC * VSCALE;
+    }
     out = out - (VERRORSCALE * out + VERROR);
+
     if(out < 0)
         out = 0;
 }
