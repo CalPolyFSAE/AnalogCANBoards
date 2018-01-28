@@ -15,7 +15,7 @@
 class ADCManagerCallbackInterface
 {
 public:
-    // destructor needs to be virtual for abstract class
+    // destructor virtual for abstract class
     virtual ~ADCManagerCallbackInterface();
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) = 0;
 };

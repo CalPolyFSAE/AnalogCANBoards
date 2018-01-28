@@ -53,33 +53,42 @@ void CANSensorTimer::Update()
     if(needToSend)
     {
         //read data on all sensors
-        for(uint8_t i = 0; i < activeSensors;)
+        for (uint8_t i = 0; i < activeSensors;)
         {
             //only go to next sensor after the request is successful
             //this should only take multiple requests if ADC clock speed is
             //very slow
-            if(sensors[i] == nullptr)
+            if (sensors[i] != nullptr)
             {
-                ++i;
+                if (sensors[i]->requestADCRead ())
+                {
+                    ++i;
+                }
             }
-            else if(sensors[i]->requestADCRead())
+            else
             {
                 ++i;
             }
         }
 
-        //wait for all Sensors to get value from ADC
+        //check that all sensors got value from ADC
+        // this is really unnecessary
         /*
-        for(uint8_t i = 0; i < activeSensors;)
+        for (uint8_t i = 0; i < activeSensors;)
         {
-            if(sensors[i]->getIsReady())
+            if (sensors[i] != nullptr)
+            {
+                if (sensors[i]->getIsReady ())
+                {
+                    ++i;
+                }
+            }
+            else
             {
                 ++i;
             }
         }
         */
-        while(!sensors[activeSensors - 1]->getIsReady())
-            ;
 
 
         //package CAN message using sensor values
@@ -95,7 +104,7 @@ void CANSensorTimer::Update()
             //CANData.data16[i] = sensors[i]->getValue();
             int16_t data = sensors[i]->getValue();
 
-            // use mcpy for variable data sizes
+            // use mcpy for variable data channel sizes
             canData.data16[i] = (uint16_t)(0xA0AF);// TODO: keep the sign bit?
 
             //TODO: TESTING
@@ -122,15 +131,9 @@ void CANSensorTimer::Update()
             { };
         // set up command for can lib
         CMD.cmd = can_cmd_t::CMD_TX_DATA;
-        CMD.dlc = activeSensors * CANBYTESPERDATACHANNEL;// figure out data size
-        if (ide)
-        {
-            CMD.id.ext = id.ext;
-        }
-        else
-        {
-            CMD.id.std = id.std;
-        }
+        CMD.dlc = activeSensors * CANBYTESPERDATACHANNEL;// data size
+
+        ide ? CMD.id.ext = id.ext : CMD.id.std = id.std;
         CMD.ctrl.ide = ide;
 
         CMD.pt_data = canData.data;
@@ -139,6 +142,9 @@ void CANSensorTimer::Update()
         CAN.cmd (&CMD);
 
         uint16_t i = 0;
+
+        //TODO: get rid of this garbage (use tx interrupt)
+        // wait for CAN message to send
         while(CAN.get_status(&CMD) != CAN_STATUS_COMPLETED && i < 65000)
         {
             ++i;

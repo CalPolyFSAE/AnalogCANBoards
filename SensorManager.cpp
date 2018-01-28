@@ -12,7 +12,7 @@
 
 SensorManager& SensorManager::GetInstance()
 {
-    static SensorManager S; // initialized once
+    static SensorManager S{}; // initialized once
 
     return S;
 }

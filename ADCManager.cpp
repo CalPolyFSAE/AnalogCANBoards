@@ -14,8 +14,7 @@
 
 ADCManagerCallbackInterface::~ADCManagerCallbackInterface()
 {
-    //this is just required for pure virtual destructors
-    //and thats the way it is for some reason
+    //required for virtual destructors
 }
 
 
@@ -64,8 +63,6 @@ void ADCManager::INT_ADCFinished()
             result = ADCL;
             result |= ADCH << 8;
         }
-
-        //TODO: add gain error adjustment
 
         currentReadCallback->INT_Call_ADC_Finished(result, channel);
         currentReadCallback = nullptr;
