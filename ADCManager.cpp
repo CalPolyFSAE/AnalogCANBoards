@@ -47,6 +47,7 @@ bool ADCManager::StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t c
     }
 }
 
+//TODO: inline!!
 bool ADCManager::ADCAvailable()
 {
     return !(bool)(currentReadCallback);

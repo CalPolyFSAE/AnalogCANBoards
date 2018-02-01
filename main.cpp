@@ -55,12 +55,12 @@ int main()
     //setup ADC sample rate
     ADCManager::Init();
 
-    //get the SensorManager
+    //get the SensorManager(also initializes it)
     SensorManager* ASensorManager = &SensorManager::GetInstance();
 
     sei();
 
-    CommandManager::GetInstance().ExecuteCommand(0, 0);
+    //CommandManager::GetInstance().ExecuteCommand(0, 0);
 
     //TODO: add pause state (for CMDs) and add main loop to a manager class
     while(true)

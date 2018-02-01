@@ -67,6 +67,7 @@ int16_t Sensor::getValue() {
     value = conversionFunction(voltage);
 
     //check if min/max functionality should be used
+    /*
     if (UseMinMax)
     {
         if (value > MaxExpectedVal)
@@ -78,6 +79,7 @@ int16_t Sensor::getValue() {
             value = MinExpectedVal;
         }
     }
+    */
 
     return value;
 }

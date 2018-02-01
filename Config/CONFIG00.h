@@ -12,6 +12,7 @@
 #define CONFIG00_H_
 
 #include "CONFIG_Structs.h"
+#include "../float16.h"
 
 namespace SENSORCONFIG
 {
@@ -25,7 +26,7 @@ namespace SENSORCONFIG
 
     inline int16_t conversion01( float const& voltage )
     {
-        return (int16_t)(voltage * 65.536 * 100.0);
+        return (int16_t)(voltage * 65.536 * 100.0);;
     }
 
     // Sensor 0 Name
@@ -122,7 +123,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel0 = {
                 CAN0,           // CAN Message ID for this channel
-                50,             // milliseconds between updates
+                2,             // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor00,		//sensors in data channel positions
                     SENSORCONFIG::Sensor01,
@@ -134,7 +135,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel1 = {
                 CAN1,           // CAN Message ID for this channel
-                100,            // milliseconds between updates
+                2,            // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor04,
                     SENSORCONFIG::Sensor05,

@@ -36,9 +36,12 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 }
 
 //do not call. this is used for interrupt timing
+//TODO: This could be inline!!
 void CANSensorTimer::INT_Call_Tick()
 {
     --ticksToSend;
+    //TODO: add check for needToSend to see if we have not sent last mesg
+    //TODO: add var that keeps track of how overdue the msg is
     if(ticksToSend == 0)
     {
         needToSend = true;
@@ -73,6 +76,7 @@ void CANSensorTimer::Update()
 
         //check that all sensors got value from ADC
         // this is really unnecessary
+        //TODO: add full speed sampling so it REALLY IS unnecessary
         /*
         for (uint8_t i = 0; i < activeSensors;)
         {
@@ -104,8 +108,17 @@ void CANSensorTimer::Update()
             //CANData.data16[i] = sensors[i]->getValue();
             int16_t data = sensors[i]->getValue();
 
+            //TODO: Testing
+
+            uint8_t* p_n = (uint8_t *) &data;
+            uint8_t lower = p_n[0];
+            p_n[0] = p_n[1];
+            p_n[1] = lower;
+
+            /////////////
+
             // use mcpy for variable data channel sizes
-            canData.data16[i] = (uint16_t)(0xA0AF);// TODO: keep the sign bit?
+            canData.data16[i] = data;
 
             //TODO: TESTING
             /*
@@ -117,7 +130,11 @@ void CANSensorTimer::Update()
 
             Serial.print (" CH: ");
             Serial.print (sensors[i]->ADCChannel);
+            Serial.println ("");
+
+            /*
             Serial.print (" V: ");
+            /*
             float volts;
             sensors[i]->getVoltage (volts);
             Serial.print (volts, 4);
@@ -143,7 +160,7 @@ void CANSensorTimer::Update()
 
         uint16_t i = 0;
 
-        //TODO: get rid of this garbage (use tx interrupt)
+        //TODO: get rid of this garbage (use CAN tx interrupt)
         // wait for CAN message to send
         while(CAN.get_status(&CMD) != CAN_STATUS_COMPLETED && i < 65000)
         {
