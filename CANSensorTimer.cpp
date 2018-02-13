@@ -15,6 +15,8 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t 
 {
     ticksToSend = interval;
     activeSensors = 0;
+
+    //CANRaw::StaticClass().BindListener(this, 1);
 }
 
 //registers a sensor on this CANChannel at dataChannel position
@@ -53,6 +55,7 @@ void CANSensorTimer::INT_Call_Tick()
 //then send data over CAN
 void CANSensorTimer::Update()
 {
+
     if(needToSend)
     {
         //read data on all sensors

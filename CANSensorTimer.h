@@ -10,10 +10,11 @@
 
 #include <stdint.h>
 #include <util/atomic.h>
+#include "CANLib.h"
 
 //timing objects for tracking when a message needs to be sent and what
 //is sent with it and fetching the data to be sent
-class CANSensorTimer
+class CANSensorTimer: public CANListener
 {
 public:
 
@@ -59,12 +60,16 @@ public:
     
 
     CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t can_ide);
+    ~CANSensorTimer() {};
 
     //registers a sensor on this CANID
     bool registerSensor(class Sensor* sensor, CANDATAChannel dataChannel);
 
     //1000Hz interrupt to keep track of timing
     void INT_Call_Tick();
+
+    // CANListener interface
+    virtual void INT_Call_GotFrame(const struct CAN_FRAME* frame);
 
     //make sensors request data if a CAN message needs to be sent
     //then send data over CAN
@@ -80,9 +85,9 @@ private:
 	
     union CAN_Data
     {
-            uint8_t data[8];
-            uint16_t data16[4];
-            uint32_t data32[2];
+        uint8_t data[8];
+        uint16_t data16[4];
+        uint32_t data32[2];
     };
 
     volatile bool needToSend;                          // CAN message needs to be sent
