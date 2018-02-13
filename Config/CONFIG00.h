@@ -135,7 +135,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel1 = {
                 CAN1,           // CAN Message ID for this channel
-                2,            // milliseconds between updates
+                6,            // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor04,
                     SENSORCONFIG::Sensor05,
