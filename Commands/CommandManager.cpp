@@ -187,10 +187,10 @@ void CommandManager::CheckForCANCMD()
     {
         case CAN_STATUS_COMPLETED:
             // check out the data we got
-            CommandData* cmdData = (CommandData*)data;
-            if(cmdData->devID == CANCONFIG::CANCMD_DEVID)
+            CommandData* commandData = (CommandData*)data;
+            if(commandData->devID == CANCONFIG::CANCMD_DEVID)
             {
-                ExecuteCommand(cmdData->devID, cmdData->input);
+                ExecuteCommand(commandData->devID, commandData->input);
             }
             // request command again
         case CAN_STATUS_ERROR:

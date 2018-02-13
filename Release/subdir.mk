@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../ADCManager.cpp \
+../CANLib.cpp \
 ../CANSensorTimer.cpp \
 ../Sensor.cpp \
 ../SensorManager.cpp \
@@ -12,6 +13,7 @@ CPP_SRCS += \
 
 OBJS += \
 ./ADCManager.o \
+./CANLib.o \
 ./CANSensorTimer.o \
 ./Sensor.o \
 ./SensorManager.o \
@@ -19,6 +21,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./ADCManager.d \
+./CANLib.d \
 ./CANSensorTimer.d \
 ./Sensor.d \
 ./SensorManager.d \
