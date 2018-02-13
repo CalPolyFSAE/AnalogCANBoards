@@ -59,8 +59,8 @@ avrdudedummy \
 all: AnalogCANBoards.elf secondary-outputs
 
 dependents:
-	-cd /root/share/Code/AVRLibrary/Debug && $(MAKE) all
-	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) all
+	-cd /root/share/Code/AVRLibrary/Debug && $(MAKE) clean all
+	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) clean all
 
 # Tool invocations
 AnalogCANBoards.elf: $(OBJS) $(USER_OBJS) /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a /root/share/Code/AnalogCANBoards/Release/AnalogCANBoards.elf

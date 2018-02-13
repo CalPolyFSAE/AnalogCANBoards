@@ -18,7 +18,7 @@ ISR(CANIT_vect)
 
 void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
 {
-    CANGCON = (1 << SWRES);
+    Can_reset();
 
     // disable mob specific interrupts
     CANIE2 = 0x00;
@@ -32,8 +32,8 @@ void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
     // Transmit: On
     // Receive: On
     // Bus Off: Off
-    // All, except Timer Overrun: Off
-    CANGIE = _BV(ENRX) | _BV(ENTX);
+    // (ENIT): All, except Timer Overrun: On
+    CANGIE = _BV(ENRX) | _BV(ENTX) | _BV(ENIT);
 
     // Highest Interrupt Priority: MOb0
     CANHPMOB = 0x00;
@@ -63,7 +63,8 @@ void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
 
     // CAN Timer Clock Period: 1.000 us
     CANTCON = 0x00;
-    CANGCON |= _BV(ENASTB);
+
+    Can_enable();
 
     //reset all mob status registers and configurations
     for (int i = 0; i < NB_MOB; ++i)

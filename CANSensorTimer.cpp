@@ -51,6 +51,11 @@ void CANSensorTimer::INT_Call_Tick()
     }
 }
 
+void CANSensorTimer::INT_Call_GotFrame(const struct CAN_FRAME* frame)
+{
+
+}
+
 //make sensors request data if a CAN message needs to be sent
 //then send data over CAN
 void CANSensorTimer::Update()

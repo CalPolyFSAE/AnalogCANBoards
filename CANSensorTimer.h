@@ -69,7 +69,7 @@ public:
     void INT_Call_Tick();
 
     // CANListener interface
-    virtual void INT_Call_GotFrame(const struct CAN_FRAME* frame);
+    virtual void INT_Call_GotFrame(const struct CAN_FRAME* frame) override;
 
     //make sensors request data if a CAN message needs to be sent
     //then send data over CAN
