@@ -11,13 +11,11 @@
 #include "CANLib.h"
 
 
-ISR(CANIT_vect)
-{
-    CANRaw::StaticClass();
+ISR(CANIT_vect) {
+    CANRaw::StaticClass ().INT_CANIT ();
 }
 
-void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
-{
+void CANRaw::Init( CAN_BAUDRATE baud = CAN_BAUDRATE::B1M ) {
     Can_reset();
 
     // disable mob specific interrupts
@@ -74,7 +72,45 @@ void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
     Can_enable();
 }
 
-bool CANRaw::BindListener(const CANListener* listener, CAN_MOB Mob)
-{
+bool CANRaw::BindListener( const CANListener* listener, CAN_MOB mob,
+                           bool forceOverwrite = false ) {
+    if (mob > LAST_MOB_NB || (Handlers[mob] != nullptr && !forceOverwrite))
+    {
+        return false;
+    }
 
+    Handlers[mob] = listener;
+    MobModes[mob] = CAN_MOB_OPERATING_MODE::DISABLED;
+
+    return true;
+}
+
+bool CANRaw::CanTxData( const CAN_DATA& data, CAN_MOB mobn ) {
+    if (MobModes[mobn] != CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME || mobn > LAST_MOB_NB)
+    {
+        return false;
+    }
+    Can_set_mob(mobn);
+
+    const CAN_FRAME_HEADER& tmp = MobHeaders[mobn];
+
+    if (tmp.ide)
+    {
+        Can_set_ext_id(tmp.id);
+    }
+    else
+    {
+        Can_set_std_id(tmp.id);
+    }
+
+    // copy data to send
+    for (uint8_t cpt = 0; cpt < tmp.dataLength; cpt++)
+        CANMSG = data.byte[cpt];
+
+    Can_clear_rtr();
+
+    Can_set_dlc(tmp.dataLength);
+    Can_config_tx();
+
+    return true;
 }
