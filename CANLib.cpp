@@ -13,7 +13,7 @@
 
 ISR(CANIT_vect)
 {
-
+    CANRaw::StaticClass();
 }
 
 void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
@@ -64,17 +64,17 @@ void CANRaw::Init(CAN_BAUDRATE baud = CAN_BAUDRATE::B1M)
     // CAN Timer Clock Period: 1.000 us
     CANTCON = 0x00;
 
-    Can_enable();
-
     //reset all mob status registers and configurations
     for (int i = 0; i < NB_MOB; ++i)
     {
         Can_set_mob(i)
         Can_clear_mob()
     }
+
+    Can_enable();
 }
 
-void CANRaw::BindListener(const CANListener* listener, uint8_t Mob)
+bool CANRaw::BindListener(const CANListener* listener, CAN_MOB Mob)
 {
 
 }

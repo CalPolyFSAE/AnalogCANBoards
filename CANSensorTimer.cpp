@@ -51,7 +51,7 @@ void CANSensorTimer::INT_Call_Tick()
     }
 }
 
-void CANSensorTimer::INT_Call_GotFrame(const struct CAN_FRAME* frame)
+void CANSensorTimer::INT_Call_GotFrame(const struct CAN_FRAME& frame)
 {
 
 }
