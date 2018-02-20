@@ -9,7 +9,6 @@
 #define COMMANDS_COMMANDMANAGER_H_
 
 #include <stdint.h>
-#include "AVRLibrary/arduino/can_lib.h"
 
 /** This is a singleton class */
 class CommandManager
@@ -36,7 +35,7 @@ public:
 
     //gets the CommandMnager singleton
     //TODO: can this inline? (maybe make the static var member)
-    static CommandManager& GetInstance();
+    static CommandManager& StaticClass();
 
     // flags a command to be executed(external classes can request a command)
     // for debugging only
@@ -48,6 +47,7 @@ public:
     void Update();
 
     // called by timer interrupt at 1000Hz
+    //TODO: make this a CANListener so it doesn't have to poll
     inline void INT_UpdateTiming()
     {
         if(canRXTimer > 0)
@@ -86,8 +86,7 @@ private:
     volatile uint8_t canRXTimer;
     volatile bool checkForCMD;
 
-    // CAN lib cmd forward declaration
-    st_cmd_t canCMD;
+    //st_cmd_t canCMD;
     //CAN RX data
     uint8_t data[8];
 

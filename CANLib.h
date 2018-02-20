@@ -184,24 +184,6 @@
 /////////////////////////////////// End section from can_lib.h///////////////
 
 
-//listener interface for CAN rx callback
-class CANListener
-{
-private:
-    friend class CANRaw;
-
-    volatile struct CAN_FRAME* FrameData;
-
-public:
-    CANListener();
-    virtual ~CANListener();
-
-protected:
-    virtual void INT_Call_GotFrame(const struct CAN_FRAME& frame) {};
-    virtual void INT_Call_SentFrame(const struct CAN_MOB_CONFIG& frameConfig) {};
-
-};
-
 // the initial handler of CAN interrupts
 class CANRaw
 {
@@ -218,10 +200,8 @@ public:
     enum class CAN_MOB_OPERATING_MODE : uint8_t
     {
         DISABLED,               //
-        Tx_DATA_FRAME,          // send data only               // supported
-        Tx_REMOTE_FRAME,        // send data with rtr flag      // supported
-        Rx_DATA_FRAME,          // Receive data only            // supported
-        Rx_REMOTE_FRAME,        // Receive rtr flag             // supported
+        Tx_DATA_FRAME,          // send data                    // supported
+        Rx_DATA_FRAME,          // Receive data                 // supported
         Rx_Tx_REMOTE_FRAME      // Automatic reply              // not supported
         // frame buffer not supported
     };
@@ -239,13 +219,6 @@ public:
         uint8_t rtr;            // rtr (remote frame)
         uint8_t ide;            // ide (use extended ID)
         uint8_t dataLength;     // dlc
-    };
-
-    // an entire data frame, for Tx only
-    struct CAN_FRAME
-    {
-        CAN_FRAME_HEADER header;// frame info
-        CAN_DATA* data;         // data
     };
 
     // used to mask incoming messages, for Rx only
@@ -272,12 +245,13 @@ public:
         MOB_11,
         MOB_12,
         MOB_13,
-        MOB_14
+        MOB_14,
+        MOB_NONE = NB_MOB
     };
 
 private:
     //array of all the CAN rx data handlers
-    const CANListener* Handlers[NB_MOB];
+    class CANListener* Handlers[NB_MOB];
 
     // mob operating modes
     CAN_MOB_OPERATING_MODE MobModes[NB_MOB];
@@ -296,86 +270,86 @@ public:
         return CAN;
     }
 
+    // get the next open mob. invalid mob index returned when none available
+    inline CAN_MOB GetNextFreeMob()
+    {
+        for (uint8_t i = 0; i < NB_MOB; ++i)
+        {
+            if (MobModes[i] == CAN_MOB_OPERATING_MODE::DISABLED)
+            {
+                return CAN_MOB (i);
+            }
+        }
+        return CAN_MOB::MOB_NONE;
+    }
+
+    // gets next unbound Mob
+    inline CAN_MOB GetNextFreeHandle()
+    {
+        for (uint8_t i = 0; i < NB_MOB; ++i)
+        {
+            if (Handlers[i] == nullptr)
+            {
+                return CAN_MOB (i);
+            }
+        }
+        return CAN_MOB::MOB_NONE;
+    }
+
     // reinitialize the can hardware
     void Init(CAN_BAUDRATE baud);
 
     // binds a CANListener to a mob
-    bool BindListener(const CANListener* listener, CAN_MOB mob, bool forceOverwrite = false);
+    bool BindListener(CANListener* listener, CAN_MOB mob, bool forceOverwrite = false);
 
-    inline bool CanTxRemote(CAN_MOB mobn)
-    {
+    // tx data using specified mob, false on error
+    bool TxData(const CAN_DATA& data, CAN_MOB mobn);
 
-    }
+    // configure Mob as Rx or Tx
+    bool ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mask, CAN_MOB mobn );
+    bool ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn );
 
-    bool CanTxData(const CAN_DATA& data, CAN_MOB mobn);
+    // reset the configuration of an Mob
+    void ForceResetMob(CAN_MOB mobn);
 
-    bool CanConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mask, CAN_MOB mobn );
-    bool CanConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn );
-
-    // do not call
-    inline void INT_CANIT() {
-        uint8_t origCANPAGE = CANPAGE;
-        while (CANSIT2 | CANSIT1)
-        {
-
-            CAN_MOB mobn;
-
-            if (CANSIT2 & _BV (0)) mobn = CAN_MOB::MOB_0;
-            else if (CANSIT2 & _BV (1)) mobn = CAN_MOB::MOB_1;
-            else if (CANSIT2 & _BV (2)) mobn = CAN_MOB::MOB_2;
-            else if (CANSIT2 & _BV (3)) mobn = CAN_MOB::MOB_3;
-            else if (CANSIT2 & _BV (4)) mobn = CAN_MOB::MOB_4;
-            else if (CANSIT2 & _BV (5)) mobn = CAN_MOB::MOB_5;
-            else if (CANSIT2 & _BV (6)) mobn = CAN_MOB::MOB_6;
-            else if (CANSIT2 & _BV (7)) mobn = CAN_MOB::MOB_7;
-            else if (CANSIT1 & _BV (0)) mobn = CAN_MOB::MOB_8;
-            else if (CANSIT1 & _BV (1)) mobn = CAN_MOB::MOB_9;
-            else if (CANSIT1 & _BV (2)) mobn = CAN_MOB::MOB_10;
-            else if (CANSIT1 & _BV (3)) mobn = CAN_MOB::MOB_11;
-            else if (CANSIT1 & _BV (4)) mobn = CAN_MOB::MOB_12;
-            else if (CANSIT1 & _BV (5)) mobn = CAN_MOB::MOB_13;
-            else if (CANSIT1 & _BV (6)) mobn = CAN_MOB::MOB_14;
-
-            if (Handlers[mobn] != nullptr)
-            {
-                Can_set_mob(mobn)
-
-                if (CANSTMOB & (1 << RXOK))
-                {
-                    CANSTMOB = 0x00; // clears interrupt flags
-                    CPFECANLib::rxInt ();
-                }
-            }
-
-
-            /*
-             // SLOWER OPTION
-             uint16_t CANSIT = CANSIT2 | (CANSIT1 << 8);
-             for(uint8_t mob; mob < NB_MOB; ++mob)
-             {
-             if(CANSIT & _BV(mob))
-             {
-             Can_set_mob(mob);
-             if(CANSTMOB & MOB_RX_COMPLETED)
-             {
-             Can_clear_status_mob();
-             //handlers[mob]->INT_Call_GotFrame(...);
-             } else if (CANSTMOB & MOB_TX_COMPLETED)
-             {
-             Can_clear_status_mob();
-             //handlers
-             }
-
-             }
-             }*/
-        }
-        CANPAGE = origCANPAGE;
-    }
+    // do not call, this function is for an interrupt
+    inline void INT_CANIT();
 
 private:
-    CANRaw();
+    CANRaw() {};
 
-    ConfigRxMob(CAN_MOB mobn, )
+    //setup registers in mobn based on mode and current configuration
+    inline void ReconfigureMob(CAN_MOB mobn);
+
+};
+
+//listener interface for CAN rx callback
+class CANListener
+{
+private:
+    friend class CANRaw;
+
+    // data is copied here on CAN Rx of the attached Mob
+    const volatile CANRaw::CAN_FRAME_HEADER* FrameData;
+    volatile CANRaw::CAN_DATA Data;
+
+public:
+    CANListener() {}
+
+    virtual ~CANListener() {}
+
+
+protected:
+
+    // atomically copies the data out of the private volatile FrameData and Data
+    void GetCANData(CANRaw::CAN_FRAME_HEADER& outHeader, CANRaw::CAN_DATA& outData);
+
+    // called on Can rx for Mob. Get received data with GetCANData()
+    // dlc is the data length code of the received message. It may be different
+    // than the one set in FrameData
+    virtual void INT_Call_GotFrame(uint8_t dlc) {};
+    // called on Can Tx for Mob.
+    virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) {};
 
 };
 

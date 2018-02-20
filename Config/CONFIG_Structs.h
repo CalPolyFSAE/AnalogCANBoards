@@ -28,7 +28,7 @@ namespace CANCONFIG
 	{
 		//use for this CANMSG
 		//MOB settings for this CAN channel
-		CANSensorTimer::CAN_ID CANId;
+		uint32_t CANId;
 		uint8_t ide;
 		uint8_t rtr;
 	};

@@ -67,7 +67,7 @@ float getMicros()
 ISR(TIMER1_COMPA_vect) {
     sendCAN = true;
     SensorManager::GetInstance().INT_UpdateTiming();
-    CommandManager::GetInstance().INT_UpdateTiming();
+    CommandManager::StaticClass().INT_UpdateTiming();
 }
 
 ISR(TIMER2_COMP_vect)
@@ -85,7 +85,7 @@ int main()
     cli();
 	
     //setup commands first for error reporting
-    CommandManager* ACommandManager = &CommandManager::GetInstance();
+    CommandManager* ACommandManager = &CommandManager::StaticClass();
 
     //some configuration checks
     if(SENSORCONFIG::NUMSENSORS > MAXSENSORS)

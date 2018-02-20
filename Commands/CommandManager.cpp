@@ -33,7 +33,7 @@ static constexpr uint8_t MAX_WARNMSG_LEN = 150;
 #endif //SERIAL_TEXT
 
 
-CommandManager& CommandManager::GetInstance()
+CommandManager& CommandManager::StaticClass()
 {
     static CommandManager C{}; // initialized once
 
@@ -127,17 +127,7 @@ CommandManager::CommandManager() :
     canRXTimer = CanRXCheckInterval; // check for CMD every 50ms
     checkForCMD = false;
 
-    //can lib stuff
-    canCMD = {};
-    canCMD.cmd = can_cmd_t::CMD_RX_DATA_MASKED;
-    canCMD.ctrl.ide = 0;
-    canCMD.id.std = CFG_CI::RX_CANID;
-    canCMD.dlc = 8;
-    canCMD.pt_data = data;
 
-    //setup CAN Controller hardware
-    CAN.set_baudrate(CAN_BAUD);
-    CAN.init(1);
 
 #ifdef SERIAL_TEXT
     //setup USART
@@ -183,6 +173,7 @@ const char* CommandManager::MessageToStr(Message msg, char* output)
 
 void CommandManager::CheckForCANCMD()
 {
+    /*
     switch(CAN.get_status(&canCMD))
     {
         case CAN_STATUS_COMPLETED:
@@ -201,4 +192,5 @@ void CommandManager::CheckForCANCMD()
             // keep waiting
             break;
     }
+    */
 }

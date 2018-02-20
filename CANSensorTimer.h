@@ -21,7 +21,7 @@ public:
     //bytes per data channel
     static constexpr uint8_t CANBYTESPERDATACHANNEL = 2;
     //maximum number of Data Channels
-    static constexpr uint8_t CANMAXDATACHANNELS = 8 / CANBYTESPERDATACHANNEL;
+    static constexpr uint8_t CANMAXDATACHANNELS = NB_DATA_MAX / CANBYTESPERDATACHANNEL;
 
     /*
      * Usage of CANDATAChannel for 2 bytes per channel
@@ -46,21 +46,14 @@ public:
             CANCHANNEL3 = 3
     };
 
-    // info that the class uses when sending CAN messages
-    union CAN_ID
-    {
-        uint16_t std;
-        uint32_t ext;
-    };
+    const uint16_t TimingInterval;              // milliseconds between messages
 
-    const uint16_t TimingInterval;          // milliseconds between messages
-
-    const CAN_ID id;						//CAN ID for this info
-    const uint8_t ide;						//request return message flag and identifier extension
+    const uint32_t id;		                //CAN ID for this info
+    const uint8_t ide;				//request return message flag and identifier extension
     
 
-    CANSensorTimer(uint16_t interval, const CAN_ID* can_id, uint8_t can_ide);
-    ~CANSensorTimer() {};
+    CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_t can_ide);
+    virtual ~CANSensorTimer() {};
 
     //registers a sensor on this CANID
     bool registerSensor(class Sensor* sensor, CANDATAChannel dataChannel);
@@ -69,7 +62,7 @@ public:
     void INT_Call_Tick();
 
     // CANListener interface
-    virtual void INT_Call_GotFrame(const struct CAN_FRAME& frame) override;
+    virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) override;
 
     //make sensors request data if a CAN message needs to be sent
     //then send data over CAN
@@ -82,18 +75,28 @@ public:
     uint8_t getNumActiveSensors();
 
 private:
-	
-    union CAN_Data
-    {
-        uint8_t data[8];
-        uint16_t data16[4];
-        uint32_t data32[2];
-    };
 
+    /* CAN Tx Timing */
     volatile bool needToSend;                          // CAN message needs to be sent
     volatile uint16_t ticksToSend;                     // ticks until next message sent
+
+    /* CAN Tx monitoring */
+    volatile bool bHaveSentLastCAN;                     // has the last CAN message been sent
+    /*  number of CAN Tx message misses. This increments
+     * every time a CAN message fails to send within TimingInterval time frame.
+     * Decrements every 256 successful messages, every TimingInterval*256 ms
+     */
+    uint16_t txCANMessageErrCnt;
+    uint8_t txCANMessageSucCnt;         // successful message counter
+
+    /* CAN Lib Data */
+    CANRaw::CAN_MOB mobHandle;                  //mob number that this class has been bound to
+    CANRaw::CAN_DATA canData;
+
     class Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
     uint8_t activeSensors;                             // Number of sensors on this CAN Channel (used for dlc)
+
+    bool bHaveInitialized;                              // has the CAN Mob for this channel been setup
 };
 
 
