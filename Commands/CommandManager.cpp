@@ -50,18 +50,13 @@ void CommandManager::ExecuteCommand(uint8_t cmdID, const uint16_t& input)
             if (commands[i]->getID () == cmdID)
             {
                 currentCommand = commands[i];
-                //copy atomically because it is 16 bit
-                ATOMIC_BLOCK(ATOMIC_FORCEON)
-                {
-                    currentArgs = input;
-                }
+                currentArgs = input;
             }
         }
     }else
     {
-        //TODO: error still waiting for command to exe
-        // this will never happen unless there is more than
-        // one command request per update loop
+        //TODO: still waiting for command to exe
+        // should only be one ExecuteCommand call per update loop
     }
 }
 
