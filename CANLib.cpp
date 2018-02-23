@@ -10,17 +10,39 @@
 
 #include "CANLib.h"
 
-
+#include "Commands/CommandManager.h"
 ISR(CANIT_vect) {
+    PINA = 255;
     CANRaw::StaticClass ().INT_CANIT ();
+}
+
+CANRaw::CAN_MOB CANRaw::GetNextFreeMob() {
+    for (uint8_t i = 0; i < NB_MOB; ++i)
+    {
+        if (MobModes[i] == CAN_MOB_OPERATING_MODE::DISABLED)
+        {
+            return CAN_MOB (i);
+        }
+    }
+    return CAN_MOB::MOB_NONE;
+}
+
+CANRaw::CAN_MOB CANRaw::GetNextFreeHandle() {
+    for (uint8_t i = 0; i < NB_MOB; ++i)
+    {
+        if (Handlers[i] == nullptr)
+        {
+            return CAN_MOB (i);
+        }
+    }
+    return CAN_MOB::MOB_NONE;
 }
 
 void CANRaw::Init( CAN_BAUDRATE baud = CAN_BAUDRATE::B1M ) {
     Can_reset();
 
-    // disable mob specific interrupts
-    CANIE2 = 0x00;
-    CANIE1 = 0x00;
+    // reset mob specific interrupts
+    Can_clear_all_mob_int();
 
     // CAN Interrupts:
     // Timer Overrun: Off
@@ -132,8 +154,6 @@ bool CANRaw::ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn )
         return false;
     }
 
-    Can_set_mob(mob);
-
     MobModes[mob] = CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME;
     MobHeaders[mob] = header;
 
@@ -158,6 +178,9 @@ void CANRaw::INT_CANIT() {
     uint8_t origCANPAGE = CANPAGE;
     while (CANSIT2 | CANSIT1)
     {
+        /* the CANSIT registers are never written to as they are cleared
+         * when CANSTMOB is cleared for the mob
+         * */
 
         uint8_t mob;
 
@@ -176,27 +199,31 @@ void CANRaw::INT_CANIT() {
         else if (CANSIT1 & _BV (4)) mob = (uint8_t)CAN_MOB::MOB_12;
         else if (CANSIT1 & _BV (5)) mob = (uint8_t)CAN_MOB::MOB_13;
         else if (CANSIT1 & _BV (6)) mob = (uint8_t)CAN_MOB::MOB_14;
+        else break; // don't want anything to happen if we get here
 
         Can_set_mob(mob)
-        uint8_t canstmob_copy = CANSTMOB;
 
         //first check for successful sending
-        uint8_t mobStatus = canstmob_copy
+        uint8_t mobStatus = CANSTMOB
                 & ((_BV (RXOK) | _BV (TXOK) | _BV (DLCW)));
+
 
         if (mobStatus)
         {
-            CANListener& handler = *Handlers[mob];
-            if (mobStatus & MOB_TX_COMPLETED)
+            CANListener& handler = *(Handlers[mob]);
+
+            if (mobStatus & _BV (TXOK))
             {
-                Can_clear_status_mob();
                 // notify that message was sent (Tx callback)
                 handler.INT_Call_SentFrame(MobHeaders[mob]);
-            }
-            else if (mobStatus & MOB_RX_COMPLETED)
-            {
+
+                // clear CANSTMOB
                 Can_clear_status_mob();
 
+                //do not reconfigure because this mob should still be configured properly
+            }
+            else if (mobStatus & _BV (RXOK))
+            {
                 // TODO: dlcw warning
                 uint8_t dlc = Can_get_dlc();// in case of dlcw and dlc changing
                 for (uint8_t data_index = 0; data_index < dlc;
@@ -210,13 +237,15 @@ void CANRaw::INT_CANIT() {
                 // as it will be different when using masks for Rx
                 handler.FrameData = &MobHeaders[mob];
 
-                // reset Mob to correct configuration as it will change when using masks
-                ReconfigureMob(CAN_MOB(mob));
-
 
                 // the dlc in received data might be different than what was specified when configured
                 // notify that message was received (Rx callback)
                 handler.INT_Call_GotFrame(dlc);
+
+                // reset Mob to correct configuration as it will change when using masks
+                ReconfigureMob((CAN_MOB)mob);
+
+                Can_clear_status_mob();
             }
         }
         else
@@ -304,10 +333,11 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
     switch(MobModes[mob])
     {
         case CAN_MOB_OPERATING_MODE::DISABLED:
+            Can_disable_mob_int(mob);// disable interrupts for this mob
             return;
             break;
         case CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME:
-
+            Can_enable_mob_int(mob);// enable interrupts for this mob, used in callbacks
             break;
         case CAN_MOB_OPERATING_MODE::Rx_DATA_FRAME:
             if(msk.extendedIdMask) //check if the ide mask is being used
@@ -333,6 +363,8 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
             {
                 Can_set_std_msk(msk.idMask);
             }
+
+            Can_enable_mob_int(mob);// enable interrupts for this mob
 
             break;
         default:

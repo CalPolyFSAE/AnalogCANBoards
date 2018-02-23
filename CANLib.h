@@ -183,6 +183,9 @@
     // ----------
 /////////////////////////////////// End section from can_lib.h///////////////
 
+#define Can_clear_all_mob_int()  { CANIE2 = 0x00; CANIE1 = 0x00; }
+#define Can_enable_mob_int( mob) { CANIE2 |= _BV (mob); CANIE1 |= (_BV (mob) >> 8); }
+#define Can_disable_mob_int(mob) { CANIE2 &= ~(_BV (mob)); CANIE1 &= ~(_BV (mob) >> 8); }
 
 // the initial handler of CAN interrupts
 class CANRaw
@@ -231,7 +234,7 @@ public:
 
     enum class CAN_MOB : uint8_t
     {
-        MOB_0 = 0,
+        MOB_0,
         MOB_1,
         MOB_2,
         MOB_3,
@@ -271,30 +274,10 @@ public:
     }
 
     // get the next open mob. invalid mob index returned when none available
-    inline CAN_MOB GetNextFreeMob()
-    {
-        for (uint8_t i = 0; i < NB_MOB; ++i)
-        {
-            if (MobModes[i] == CAN_MOB_OPERATING_MODE::DISABLED)
-            {
-                return CAN_MOB (i);
-            }
-        }
-        return CAN_MOB::MOB_NONE;
-    }
+    CAN_MOB GetNextFreeMob();
 
     // gets next unbound Mob
-    inline CAN_MOB GetNextFreeHandle()
-    {
-        for (uint8_t i = 0; i < NB_MOB; ++i)
-        {
-            if (Handlers[i] == nullptr)
-            {
-                return CAN_MOB (i);
-            }
-        }
-        return CAN_MOB::MOB_NONE;
-    }
+    CAN_MOB GetNextFreeHandle();
 
     // reinitialize the can hardware
     void Init(CAN_BAUDRATE baud);
@@ -334,7 +317,7 @@ private:
     volatile CANRaw::CAN_DATA Data;
 
 public:
-    CANListener() {}
+    CANListener() { FrameData = nullptr; }
 
     virtual ~CANListener() {}
 

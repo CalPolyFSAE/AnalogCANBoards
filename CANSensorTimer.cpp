@@ -7,6 +7,7 @@
 
 #include "CANSensorTimer.h"
 #include "Sensor.h"
+#include "Commands/CommandManager.h"
 
 CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_t can_ide) :
     TimingInterval(interval), id(*can_id), ide(can_ide)
@@ -18,9 +19,17 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     mobHandle = can.GetNextFreeHandle();
 
     //bind this class to the next open mob handle
-    can.BindListener(this, mobHandle);
+    if(!can.BindListener(this, mobHandle))
+    {
+        //error
+        //CommandManager::StaticClass().LogMessage("FAILED TO BIND LISTENER");
+    }
+
 
     bHaveInitialized = false;
+    bHaveSentLastCAN = true;
+    txCANMessageErrCnt = 0;
+    txCANMessageSucCnt = 0;
 }
 
 //registers a sensor on this CANChannel at dataChannel position
@@ -58,6 +67,7 @@ void CANSensorTimer::INT_Call_Tick()
 
 void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
 {
+    CommandManager::StaticClass().LogMessage(FSTR("INT_Call_SentFrame"));
     bHaveSentLastCAN = true;
 }
 
@@ -130,6 +140,7 @@ void CANSensorTimer::Update()
         if(bHaveSentLastCAN)
         {
             isFirstError = false; // reset error flag
+            CommandManager::StaticClass().LogMessage("txCANM Sending...");
             bHaveSentLastCAN = false;
             needToSend = false;
             ++txCANMessageSucCnt; // increment success counter
@@ -199,6 +210,7 @@ void CANSensorTimer::Update()
                 isFirstError = true;
                 ++txCANMessageErrCnt;
             }
+            CommandManager::StaticClass().LogMessage("txCANM ERROR");
         }
 
 
