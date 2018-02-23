@@ -15,7 +15,6 @@
 #include "Commands/CommandManager.h"
 
 //TODO: TESTING:
-#include "AVRLibrary/arduino/can_lib.h"
 volatile bool sendCAN = false;
 uint32_t totalUs = 0;
 uint16_t iterations = 0;
@@ -105,13 +104,16 @@ int main()
 
     //setup ADC sample rate
     ADCManager::Init();
+    CANRaw::StaticClass().Init(CANRaw::CAN_BAUDRATE::B1M);
 
     //get the SensorManager(also initializes it)
     SensorManager* ASensorManager = &SensorManager::GetInstance();
 
     sei();
 
-    //CommandManager::GetInstance().ExecuteCommand(0, 0);
+
+
+    CommandManager::StaticClass().ExecuteCommand(0, 0);
 
 
     float loopTiming = 0.0f;
@@ -166,7 +168,7 @@ int main()
             canData[1] = tmp;
 
             //canid
-            uint16_t CANID = 0xD5;
+            /*uint16_t CANID = 0xD5;
 
             //send CAN message
             st_cmd_t CMD =
@@ -189,7 +191,7 @@ int main()
             while (CAN.get_status (&CMD) != CAN_STATUS_COMPLETED && i < 65000)
             {
                 ++i;
-            }
+            }*/
         }
 
 
