@@ -112,6 +112,15 @@ void CommandManager::LogMessage(const char c[])
 #endif
 }
 
+void CommandManager::LogMessage( const __FlashStringHelper* c)
+{
+#ifdef SERIAL_TEXT
+
+    Serial.print(c);
+
+#endif
+}
+
 
 CommandManager::CommandManager() :
         commands { new Command_Test () }

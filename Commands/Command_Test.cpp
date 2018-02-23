@@ -7,8 +7,6 @@
 #include "Command_Test.h"
 #include "CommandManager.h"
 
-#include "AVRLibrary/arduino/Arduino.h"
-
 Command_Test::Command_Test()
 {
     CommandID = 0;
@@ -21,7 +19,7 @@ Command_Test::~Command_Test()
 
 uint8_t Command_Test::execute(uint16_t& input)
 {
-    Serial.println(checkFreeRam());
+    CommandManager::StaticClass().LogMessage(FSTR("Command_Test"));
     return 0;
 }
 

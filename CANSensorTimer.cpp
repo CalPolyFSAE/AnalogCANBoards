@@ -140,7 +140,7 @@ void CANSensorTimer::Update()
         if(bHaveSentLastCAN)
         {
             isFirstError = false; // reset error flag
-            CommandManager::StaticClass().LogMessage("txCANM Sending...");
+            CommandManager::StaticClass().LogMessage(FSTR("txCANM Sending..."));
             bHaveSentLastCAN = false;
             needToSend = false;
             ++txCANMessageSucCnt; // increment success counter
@@ -210,7 +210,7 @@ void CANSensorTimer::Update()
                 isFirstError = true;
                 ++txCANMessageErrCnt;
             }
-            CommandManager::StaticClass().LogMessage("txCANM ERROR");
+            CommandManager::StaticClass().LogMessage(FSTR("txCANM ERROR"));
         }
 
 

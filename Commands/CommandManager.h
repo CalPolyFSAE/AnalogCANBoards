@@ -9,6 +9,11 @@
 #define COMMANDS_COMMANDMANAGER_H_
 
 #include <stdint.h>
+#include "avr/pgmspace.h"
+
+// a string helper that replaces the Arduino F macro and maintains const
+class __FlashStringHelper;
+#define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))
 
 /** This is a singleton class */
 class CommandManager
@@ -61,8 +66,9 @@ public:
     }
 
     //used to output message
-    void LogMessage(Message errID);
-    void LogMessage(const char c[]);
+    void LogMessage( Message errID );
+    void LogMessage( const char c[] );
+    void LogMessage( const __FlashStringHelper* c);
 
     //c++11 delete the functions we don't want
     CommandManager(CommandManager const&) = delete;
