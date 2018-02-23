@@ -51,16 +51,13 @@ AnalogCANBoards.hex \
 SIZEDUMMY += \
 sizedummy \
 
-AVRDUDEDUMMY += \
-avrdudedummy \
-
 
 # All Target
 all: AnalogCANBoards.elf secondary-outputs
 
 dependents:
-	-cd /root/share/Code/AVRLibrary/Debug && $(MAKE) clean all
-	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) clean all
+	-cd /root/share/Code/AVRLibrary/Debug && $(MAKE) all
+	-cd /root/share/Code/AnalogCANBoards/Release && $(MAKE) all
 
 # Tool invocations
 AnalogCANBoards.elf: $(OBJS) $(USER_OBJS) /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a /root/share/Code/AnalogCANBoards/Release/AnalogCANBoards.elf
@@ -82,18 +79,12 @@ sizedummy: AnalogCANBoards.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
-avrdudedummy: AnalogCANBoards.elf
-	@echo 'Invoking: AVRDude'
-	/usr/bin/avrdude -pc128 -Uflash:w:AnalogCANBoards.hex:a
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
-	-$(RM) $(C_UPPER_DEPS)$(AVRDUDEDUMMY)$(S_DEPS)$(C_DEPS)$(FLASH_IMAGE)$(CC_DEPS)$(ELFS)$(C++_DEPS)$(OBJS)$(CXX_DEPS)$(ASM_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(CPP_DEPS) AnalogCANBoards.elf
+	-$(RM) $(C_UPPER_DEPS)$(S_DEPS)$(C_DEPS)$(FLASH_IMAGE)$(CC_DEPS)$(ELFS)$(C++_DEPS)$(OBJS)$(CXX_DEPS)$(ASM_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(CPP_DEPS) AnalogCANBoards.elf
 	-@echo ' '
 
-secondary-outputs: $(FLASH_IMAGE) $(SIZEDUMMY) $(AVRDUDEDUMMY)
+secondary-outputs: $(FLASH_IMAGE) $(SIZEDUMMY)
 
 .PHONY: all clean dependents
 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a:

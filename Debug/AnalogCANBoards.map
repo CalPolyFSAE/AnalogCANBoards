@@ -8,16 +8,12 @@ Archive member included to satisfy reference by file (symbol)
                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o) (_ZN5Print5writeEPKhj)
 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o) (_ZNK6StringixEj)
-/root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                              ./main.o (_ZN6canlib3cmdEP8st_cmd_t)
 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
                               ./Commands/CommandManager.o (_Znwj)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
-                              ./main.o (__udivmodsi4)
+                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o) (__udivmodsi4)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
                               /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o (exit)
-/usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
-                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o) (__tablejump2__)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
                               ./Commands/CommandManager.o (__do_copy_data)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
@@ -26,6 +22,8 @@ Archive member included to satisfy reference by file (symbol)
                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o) (__do_global_ctors)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o) (__muluhisi3)
+/usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+                              /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_ctors.o) (__tablejump2__)
 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
                               /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o) (__umulhisi3)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3.o)
@@ -35,11 +33,11 @@ Archive member included to satisfy reference by file (symbol)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
                               ./Sensor.o (__ltsf2)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
-                              ./main.o (__divsf3)
+                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o) (__divsf3)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
                               /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o) (__divsf3x)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
-                              ./Commands/CommandManager.o (__fixsfsi)
+                              ./SensorManager.o (__fixsfsi)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
                               ./main.o (__fixunssfsi)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(floatsisf.o)
@@ -61,7 +59,7 @@ Archive member included to satisfy reference by file (symbol)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_zero.o)
                               /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3x.o) (__fp_zero)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3.o)
-                              ./Commands/CommandManager.o (__mulsf3)
+                              ./Sensor.o (__mulsf3)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3x.o)
                               /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3.o) (__mulsf3x)
 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
@@ -151,90 +149,45 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 ./Commands/Command.o
  .stab          0x0000000000000000      0x498 ./Commands/Command.o
  .comment       0x0000000000000000       0x12 ./Commands/Command.o
- .group         0x0000000000000000        0x8 ./Commands/CommandManager.o
- .group         0x0000000000000000        0x8 ./Commands/CommandManager.o
  .text          0x0000000000000000        0x0 ./Commands/CommandManager.o
  .data          0x0000000000000000        0x0 ./Commands/CommandManager.o
  .bss           0x0000000000000000        0x0 ./Commands/CommandManager.o
- .text._ZL12__iCliRetValv
-                0x0000000000000000       0x12 ./Commands/CommandManager.o
- .text._ZL11__iSeiParamPKh
-                0x0000000000000000       0x1c ./Commands/CommandManager.o
- .text._ZN7Command5getIDEv
-                0x0000000000000000       0x20 ./Commands/CommandManager.o
- .rodata._ZN6CFG_CIL8RX_CANIDE
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .rodata._ZN6CFG_CIL8TX_CANIDE
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor00E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor01E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor02E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor03E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor04E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor05E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor06E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor07E
-                0x0000000000000000        0x7 ./Commands/CommandManager.o
- .rodata._ZN12SENSORCONFIGL10NUMSENSORSE
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL4CAN0E
+ .text._ZN14CommandManager10LogMessageENS_7MessageE
+                0x0000000000000000       0x5e ./Commands/CommandManager.o
+ .text._ZN14CommandManager10LogMessageEPKc
+                0x0000000000000000        0x8 ./Commands/CommandManager.o
+ .text._ZN14CommandManagerD2Ev
+                0x0000000000000000       0x1e ./Commands/CommandManager.o
+ .text._ZN14CommandManager12MessageToStrENS_7MessageEPc
+                0x0000000000000000       0x32 ./Commands/CommandManager.o
+ .text._ZN14CommandManager14CheckForCANCMDEv
+                0x0000000000000000        0x2 ./Commands/CommandManager.o
+ .rodata.CSWTCH.14
                 0x0000000000000000        0x6 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL4CAN1E
-                0x0000000000000000        0x6 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL11CANChannel0E
-                0x0000000000000000       0x25 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL11CANChannel1E
-                0x0000000000000000       0x25 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL11CANChannelsE
-                0x0000000000000000       0x4a ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL14NUMCANCHANNELSE
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .rodata._ZN9CANCONFIGL12CANCMD_DEVIDE
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .progmem.data._ZL16CommandText_Test
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .progmem.data._ZL16CommandText_Echo
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .progmem.data._ZL23WarningMsg_FailedToInit
-                0x0000000000000000       0x15 ./Commands/CommandManager.o
- .progmem.data._ZL22WarningMsg_ConfigError
-                0x0000000000000000       0x1b ./Commands/CommandManager.o
- .progmem.data._ZL28WarningMsg_ADCDataOutOfRange
-                0x0000000000000000       0x17 ./Commands/CommandManager.o
  .progmem.data._ZL23WarningMsg_GeneralError
                 0x0000000000000000        0xe ./Commands/CommandManager.o
- .rodata._ZL15MAX_WARNMSG_LEN
-                0x0000000000000000        0x1 ./Commands/CommandManager.o
- .text._ZN14CommandManager14ExecuteCommandEhRKj
-                0x0000000000000000       0xd4 ./Commands/CommandManager.o
- .text._ZN14CommandManager10LogMessageENS_7MessageE
-                0x0000000000000000       0x72 ./Commands/CommandManager.o
- .text._ZN14CommandManager10LogMessageEPKc
-                0x0000000000000000       0x32 ./Commands/CommandManager.o
- .text._ZN14CommandManager12MessageToStrENS_7MessageEPc
-                0x0000000000000000       0x88 ./Commands/CommandManager.o
- .group         0x0000000000000000        0xc ./Commands/Command_Test.o
- .group         0x0000000000000000        0x8 ./Commands/Command_Test.o
- .group         0x0000000000000000        0x8 ./Commands/Command_Test.o
+ .progmem.data._ZL28WarningMsg_ADCDataOutOfRange
+                0x0000000000000000       0x17 ./Commands/CommandManager.o
+ .progmem.data._ZL22WarningMsg_ConfigError
+                0x0000000000000000       0x1b ./Commands/CommandManager.o
+ .progmem.data._ZL23WarningMsg_FailedToInit
+                0x0000000000000000       0x15 ./Commands/CommandManager.o
  .group         0x0000000000000000        0x8 ./Commands/Command_Test.o
  .text          0x0000000000000000        0x0 ./Commands/Command_Test.o
  .data          0x0000000000000000        0x0 ./Commands/Command_Test.o
  .bss           0x0000000000000000        0x0 ./Commands/Command_Test.o
+ .text._ZN12Command_Test12checkFreeRamEv
+                0x0000000000000000       0x30 ./Commands/Command_Test.o
  .group         0x0000000000000000        0x8 ./ADCManager.o
  .text          0x0000000000000000        0x0 ./ADCManager.o
  .data          0x0000000000000000        0x0 ./ADCManager.o
  .bss           0x0000000000000000        0x0 ./ADCManager.o
  .text._ZN27ADCManagerCallbackInterfaceD0Ev
-                0x0000000000000000       0x28 ./ADCManager.o
- .group         0x0000000000000000        0x8 ./CANLib.o
- .group         0x0000000000000000        0x8 ./CANLib.o
+                0x0000000000000000        0x4 ./ADCManager.o
+ .text._ZN10ADCManager12ADCAvailableEv
+                0x0000000000000000       0x12 ./ADCManager.o
+ .rodata._ZTV27ADCManagerCallbackInterface
+                0x0000000000000000        0xa ./ADCManager.o
  .group         0x0000000000000000        0x8 ./CANLib.o
  .group         0x0000000000000000        0x8 ./CANLib.o
  .group         0x0000000000000000        0x8 ./CANLib.o
@@ -242,132 +195,61 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./CANLib.o
  .data          0x0000000000000000        0x0 ./CANLib.o
  .bss           0x0000000000000000        0x0 ./CANLib.o
- .text._ZN6CANRaw4InitENS_12CAN_BAUDRATEE
-                0x0000000000000000      0x152 ./CANLib.o
+ .text._ZN6CANRaw14GetNextFreeMobEv
+                0x0000000000000000       0x1a ./CANLib.o
  .text._ZN6CANRaw8ConfigRxERKNS_16CAN_FRAME_HEADERERKNS_14CAN_FRAME_MASKENS_7CAN_MOBE
-                0x0000000000000000      0x12a ./CANLib.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./CANSensorTimer.o
+                0x0000000000000000      0x336 ./CANLib.o
  .group         0x0000000000000000        0xc ./CANSensorTimer.o
  .group         0x0000000000000000        0x8 ./CANSensorTimer.o
  .group         0x0000000000000000        0x8 ./CANSensorTimer.o
  .group         0x0000000000000000        0xc ./CANSensorTimer.o
+ .group         0x0000000000000000        0x8 ./CANSensorTimer.o
  .group         0x0000000000000000        0x8 ./CANSensorTimer.o
  .group         0x0000000000000000        0x8 ./CANSensorTimer.o
  .text          0x0000000000000000        0x0 ./CANSensorTimer.o
  .data          0x0000000000000000        0x0 ./CANSensorTimer.o
  .bss           0x0000000000000000        0x0 ./CANSensorTimer.o
- .text._ZL12__iCliRetValv
-                0x0000000000000000       0x12 ./CANSensorTimer.o
- .text._ZL11__iSeiParamPKh
-                0x0000000000000000       0x1c ./CANSensorTimer.o
- .bss._ZZN6CANRaw11StaticClassEvE3CAN
-                0x0000000000000000       0xf0 ./CANSensorTimer.o
+ .text._ZN11CANListenerD2Ev
+                0x0000000000000000        0x2 ./CANSensorTimer.o
+ .text._ZN11CANListener17INT_Call_GotFrameEh
+                0x0000000000000000        0x2 ./CANSensorTimer.o
+ .text._ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
+                0x0000000000000000        0x2 ./CANSensorTimer.o
+ .text._ZN11CANListenerD0Ev
+                0x0000000000000000        0x4 ./CANSensorTimer.o
+ .text._ZN14CANSensorTimer13timeUntilSendEv
+                0x0000000000000000        0xc ./CANSensorTimer.o
+ .text._ZN14CANSensorTimer19getNumActiveSensorsEv
+                0x0000000000000000        0x6 ./CANSensorTimer.o
  .bss._ZGVZN6CANRaw11StaticClassEvE3CAN
                 0x0000000000000000        0x8 ./CANSensorTimer.o
- .text._ZN6CANRaw11StaticClassEv
-                0x0000000000000000       0x42 ./CANSensorTimer.o
- .text._ZN6CANRawC2Ev
-                0x0000000000000000       0x1a ./CANSensorTimer.o
- .text._ZN14CANSensorTimer13timeUntilSendEv
-                0x0000000000000000       0x50 ./CANSensorTimer.o
- .text._ZN14CANSensorTimer19getNumActiveSensorsEv
-                0x0000000000000000       0x20 ./CANSensorTimer.o
- .group         0x0000000000000000        0x8 ./Sensor.o
- .group         0x0000000000000000        0x8 ./Sensor.o
+ .bss._ZZN6CANRaw11StaticClassEvE3CAN
+                0x0000000000000000       0xf0 ./CANSensorTimer.o
  .group         0x0000000000000000        0x8 ./Sensor.o
  .text          0x0000000000000000        0x0 ./Sensor.o
  .data          0x0000000000000000        0x0 ./Sensor.o
  .bss           0x0000000000000000        0x0 ./Sensor.o
  .text._ZN6SensorC2Ev
-                0x0000000000000000       0x66 ./Sensor.o
+                0x0000000000000000       0x1e ./Sensor.o
+ .text._ZN6Sensor10getVoltageERf
+                0x0000000000000000       0xa2 ./Sensor.o
  .group         0x0000000000000000        0x8 ./SensorManager.o
  .text          0x0000000000000000        0x0 ./SensorManager.o
  .data          0x0000000000000000        0x0 ./SensorManager.o
  .bss           0x0000000000000000        0x0 ./SensorManager.o
- .rodata._ZN6CFG_CIL8RX_CANIDE
-                0x0000000000000000        0x1 ./SensorManager.o
- .rodata._ZN6CFG_CIL8TX_CANIDE
-                0x0000000000000000        0x1 ./SensorManager.o
- .text._ZN12SENSORCONFIG12conversion00ERKf
-                0x0000000000000000       0x5a ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor00E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor01E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor02E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor03E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor04E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor05E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor06E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL8Sensor07E
-                0x0000000000000000        0x7 ./SensorManager.o
- .rodata._ZN12SENSORCONFIGL10NUMSENSORSE
-                0x0000000000000000        0x1 ./SensorManager.o
- .rodata._ZN9CANCONFIGL4CAN0E
-                0x0000000000000000        0x6 ./SensorManager.o
- .rodata._ZN9CANCONFIGL4CAN1E
-                0x0000000000000000        0x6 ./SensorManager.o
- .rodata._ZN9CANCONFIGL11CANChannel0E
-                0x0000000000000000       0x25 ./SensorManager.o
- .rodata._ZN9CANCONFIGL11CANChannel1E
-                0x0000000000000000       0x25 ./SensorManager.o
- .rodata._ZN9CANCONFIGL14NUMCANCHANNELSE
-                0x0000000000000000        0x1 ./SensorManager.o
- .rodata._ZN9CANCONFIGL12CANCMD_DEVIDE
-                0x0000000000000000        0x1 ./SensorManager.o
  .group         0x0000000000000000        0x8 ./main.o
  .group         0x0000000000000000        0x8 ./main.o
  .text          0x0000000000000000        0x0 ./main.o
  .data          0x0000000000000000        0x0 ./main.o
  .bss           0x0000000000000000        0x0 ./main.o
- .rodata._ZN6CFG_CIL8RX_CANIDE
-                0x0000000000000000        0x1 ./main.o
- .rodata._ZN6CFG_CIL8TX_CANIDE
-                0x0000000000000000        0x1 ./main.o
- .text._ZN12SENSORCONFIG12conversion00ERKf
-                0x0000000000000000       0x5a ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor00E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor01E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor02E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor03E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor04E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor05E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor06E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL8Sensor07E
-                0x0000000000000000        0x7 ./main.o
- .rodata._ZN12SENSORCONFIGL10NUMSENSORSE
-                0x0000000000000000        0x1 ./main.o
- .rodata._ZN9CANCONFIGL4CAN0E
-                0x0000000000000000        0x6 ./main.o
- .rodata._ZN9CANCONFIGL4CAN1E
-                0x0000000000000000        0x6 ./main.o
- .rodata._ZN9CANCONFIGL11CANChannel0E
-                0x0000000000000000       0x25 ./main.o
- .rodata._ZN9CANCONFIGL11CANChannel1E
-                0x0000000000000000       0x25 ./main.o
- .rodata._ZN9CANCONFIGL11CANChannelsE
-                0x0000000000000000       0x4a ./main.o
- .rodata._ZN9CANCONFIGL14NUMCANCHANNELSE
-                0x0000000000000000        0x1 ./main.o
- .rodata._ZN9CANCONFIGL12CANCMD_DEVIDE
-                0x0000000000000000        0x1 ./main.o
+ .text._Z11timer1_initv
+                0x0000000000000000       0x2a ./main.o
+ .text._Z11timer2_initv
+                0x0000000000000000       0x20 ./main.o
+ .bss._ZGVZN6CANRaw11StaticClassEvE3CAN
+                0x0000000000000000        0x8 ./main.o
+ .bss._ZZN6CANRaw11StaticClassEvE3CAN
+                0x0000000000000000       0xf0 ./main.o
  .group         0x0000000000000000        0xc /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
  .group         0x0000000000000000        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
  .group         0x0000000000000000        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
@@ -382,8 +264,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .data          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .bss           0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
- .text._ZN5Print5printEPK19__FlashStringHelper
-                0x0000000000000000       0x52 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .text._ZN5Print5printERK6String
                 0x0000000000000000       0x7c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .text._ZN5Print5printEPKc
@@ -416,6 +296,8 @@ Discarded input sections
                 0x0000000000000000      0x17a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .text._ZN5Print7printlnEii
                 0x0000000000000000      0x336 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+ .text._ZN5Print7printlnEji
+                0x0000000000000000      0x178 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .text._ZN5Print7printlnEli
                 0x0000000000000000      0x312 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
  .text._ZN5Print7printlnEmi
@@ -582,31 +464,12 @@ Discarded input sections
  .bss._ZZN6StringixEjE19dummy_writable_char
                 0x0000000000000000        0x1 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
  .comment       0x0000000000000000       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
- .text          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .data          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .bss           0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib11Can_conf_btEv
-                0x0000000000000000       0x7c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib17can_clear_all_mobEv
-                0x0000000000000000      0x2fa /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib16can_get_mob_freeEv
-                0x0000000000000000      0x130 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib18can_get_mob_statusEv
-                0x0000000000000000       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib12can_get_dataEPh
-                0x0000000000000000       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib17can_auto_baudrateEh
-                0x0000000000000000      0x58e /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib18can_fixed_baudrateEh
-                0x0000000000000000       0x8a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib12set_baudrateEt
-                0x0000000000000000        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
- .text._ZN6canlib4initEh
-                0x0000000000000000      0x35a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
  .text          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
  .data          0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
  .bss           0x0000000000000000        0x0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
  .text.__cxa_guard_abort
+                0x0000000000000000        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+ .text.__cxa_pure_virtual
                 0x0000000000000000        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
@@ -638,21 +501,6 @@ Discarded input sections
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.fixed
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
- .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.mul
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.div
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.prologue
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.builtins
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.fmul
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
- .text.libgcc.fixed
-                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
@@ -715,6 +563,21 @@ Discarded input sections
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
  .text.libgcc.fixed
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.mul
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.div
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.prologue
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.builtins
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.fmul
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+ .text.libgcc.fixed
+                0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
@@ -741,9 +604,13 @@ Discarded input sections
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
+ .text.avr-libc.fplib
+                0x0000000000000000        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
+ .text.avr-libc.fplib
+                0x0000000000000000       0xdc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
@@ -1072,480 +939,406 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x49ee
+.text           0x0000000000000000     0x2c0a
  *(.vectors)
  .vectors       0x0000000000000000       0x94 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
                 0x0000000000000000                __vectors
                 0x0000000000000000                __vector_default
  *(.vectors)
  *(.progmem.gcc*)
- .progmem.gcc_sw_table._ZN6canlib3cmdEP8st_cmd_t
-                0x0000000000000094       0x16 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                0x00000000000000aa                . = ALIGN (0x2)
-                0x00000000000000aa                __trampolines_start = .
+                0x0000000000000094                . = ALIGN (0x2)
+                0x0000000000000094                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x00000000000000aa        0x0 linker stubs
+ .trampolines   0x0000000000000094        0x0 linker stubs
  *(.trampolines*)
-                0x00000000000000aa                __trampolines_end = .
+                0x0000000000000094                __trampolines_end = .
  *libprintf_flt.a:*(.progmem.data)
- .progmem.data  0x00000000000000aa        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libprintf_flt.a(vfprintf_flt.o)
+ .progmem.data  0x0000000000000094        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libprintf_flt.a(vfprintf_flt.o)
  *libc.a:*(.progmem.data)
- .progmem.data  0x00000000000000b2       0xfa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
+ .progmem.data  0x000000000000009c       0xfa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
  *(.progmem*)
-                0x00000000000001ac                . = ALIGN (0x2)
+ .progmem.data._ZZN12Command_Test7executeERjE3__c
+                0x0000000000000196        0xd ./Commands/Command_Test.o
+ .progmem.data._ZZN14CANSensorTimer6UpdateEvE3__c_0
+                0x00000000000001a3        0xd ./CANSensorTimer.o
+ .progmem.data._ZZN14CANSensorTimer6UpdateEvE3__c
+                0x00000000000001b0       0x12 ./CANSensorTimer.o
+ .progmem.data._ZZN14CANSensorTimer18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADEREE3__c
+                0x00000000000001c2       0x13 ./CANSensorTimer.o
+                0x00000000000001d6                . = ALIGN (0x2)
+ *fill*         0x00000000000001d5        0x1 
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x00000000000001ac                __ctors_start = .
+                0x00000000000001d6                __ctors_start = .
  *(.ctors)
- .ctors         0x00000000000001ac        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x00000000000001ae                __ctors_end = .
-                0x00000000000001ae                __dtors_start = .
+ .ctors         0x00000000000001d6        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x00000000000001d8                __ctors_end = .
+                0x00000000000001d8                __dtors_start = .
  *(.dtors)
-                0x00000000000001ae                __dtors_end = .
+                0x00000000000001d8                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x00000000000001ae        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
-                0x00000000000001ae                __init
+ .init0         0x00000000000001d8        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
+                0x00000000000001d8                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x00000000000001ae        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
+ .init2         0x00000000000001d8        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000000000001ba       0x1a /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
-                0x00000000000001ba                __do_copy_data
- .init4         0x00000000000001d4       0x10 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
-                0x00000000000001d4                __do_clear_bss
+ .init4         0x00000000000001e4       0x1a /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x00000000000001e4                __do_copy_data
+ .init4         0x00000000000001fe       0x10 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x00000000000001fe                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
  *(.init6)
- .init6         0x00000000000001e4       0x16 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_ctors.o)
-                0x00000000000001e4                __do_global_ctors
+ .init6         0x000000000000020e       0x16 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_ctors.o)
+                0x000000000000020e                __do_global_ctors
  *(.init6)
  *(.init7)
  *(.init7)
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x00000000000001fa        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
+ .init9         0x0000000000000224        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
  *(.init9)
  *(.text)
- .text          0x0000000000000202        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
-                0x0000000000000202                __vector_22
-                0x0000000000000202                __vector_28
-                0x0000000000000202                __vector_1
-                0x0000000000000202                __vector_34
-                0x0000000000000202                __vector_24
-                0x0000000000000202                __bad_interrupt
-                0x0000000000000202                __vector_6
-                0x0000000000000202                __vector_31
-                0x0000000000000202                __vector_35
-                0x0000000000000202                __vector_3
-                0x0000000000000202                __vector_23
-                0x0000000000000202                __vector_30
-                0x0000000000000202                __vector_11
-                0x0000000000000202                __vector_13
-                0x0000000000000202                __vector_17
-                0x0000000000000202                __vector_19
-                0x0000000000000202                __vector_7
-                0x0000000000000202                __vector_27
-                0x0000000000000202                __vector_5
-                0x0000000000000202                __vector_33
-                0x0000000000000202                __vector_4
-                0x0000000000000202                __vector_2
-                0x0000000000000202                __vector_15
-                0x0000000000000202                __vector_36
-                0x0000000000000202                __vector_29
-                0x0000000000000202                __vector_8
-                0x0000000000000202                __vector_26
-                0x0000000000000202                __vector_14
-                0x0000000000000202                __vector_10
-                0x0000000000000202                __vector_16
-                0x0000000000000202                __vector_20
- .text          0x0000000000000204       0x64 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
-                0x000000000000022c                atexit
-                0x0000000000000268                . = ALIGN (0x2)
+ .text          0x000000000000022c        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
+                0x000000000000022c                __vector_22
+                0x000000000000022c                __vector_28
+                0x000000000000022c                __vector_1
+                0x000000000000022c                __vector_34
+                0x000000000000022c                __vector_24
+                0x000000000000022c                __bad_interrupt
+                0x000000000000022c                __vector_6
+                0x000000000000022c                __vector_31
+                0x000000000000022c                __vector_35
+                0x000000000000022c                __vector_3
+                0x000000000000022c                __vector_23
+                0x000000000000022c                __vector_30
+                0x000000000000022c                __vector_11
+                0x000000000000022c                __vector_13
+                0x000000000000022c                __vector_17
+                0x000000000000022c                __vector_19
+                0x000000000000022c                __vector_7
+                0x000000000000022c                __vector_27
+                0x000000000000022c                __vector_5
+                0x000000000000022c                __vector_33
+                0x000000000000022c                __vector_4
+                0x000000000000022c                __vector_2
+                0x000000000000022c                __vector_15
+                0x000000000000022c                __vector_36
+                0x000000000000022c                __vector_29
+                0x000000000000022c                __vector_8
+                0x000000000000022c                __vector_26
+                0x000000000000022c                __vector_14
+                0x000000000000022c                __vector_10
+                0x000000000000022c                __vector_16
+                0x000000000000022c                __vector_20
+ .text          0x000000000000022e       0x64 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
+                0x0000000000000256                atexit
+                0x0000000000000292                . = ALIGN (0x2)
  *(.text.*)
  .text.avr-libc
-                0x0000000000000268      0x74c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libprintf_flt.a(vfprintf_flt.o)
-                0x0000000000000268                vfprintf
- .text._ZN12SENSORCONFIG12conversion00ERKf
-                0x00000000000009b4       0x5a ./Commands/CommandManager.o
-                0x00000000000009b4                _ZN12SENSORCONFIG12conversion00ERKf
- .text.__tcf_0  0x0000000000000a0e       0x14 ./Commands/CommandManager.o
- .text._ZN14CommandManager11StaticClassEv
-                0x0000000000000a22       0x46 ./Commands/CommandManager.o
-                0x0000000000000a22                _ZN14CommandManager11StaticClassEv
+                0x0000000000000292      0x74c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libprintf_flt.a(vfprintf_flt.o)
+                0x0000000000000292                vfprintf
+ .text.__tcf_0  0x00000000000009de       0x1c ./Commands/CommandManager.o
+ .text._ZN14CommandManager14ExecuteCommandEhRKj
+                0x00000000000009fa       0x2a ./Commands/CommandManager.o
+                0x00000000000009fa                _ZN14CommandManager14ExecuteCommandEhRKj
  .text._ZN14CommandManager6UpdateEv
-                0x0000000000000a68       0x9e ./Commands/CommandManager.o
-                0x0000000000000a68                _ZN14CommandManager6UpdateEv
+                0x0000000000000a24       0x44 ./Commands/CommandManager.o
+                0x0000000000000a24                _ZN14CommandManager6UpdateEv
+ .text._ZN14CommandManager10LogMessageEPK19__FlashStringHelper
+                0x0000000000000a68        0x8 ./Commands/CommandManager.o
+                0x0000000000000a68                _ZN14CommandManager10LogMessageEPK19__FlashStringHelper
  .text._ZN14CommandManagerC2Ev
-                0x0000000000000b06       0x70 ./Commands/CommandManager.o
-                0x0000000000000b06                _ZN14CommandManagerC1Ev
-                0x0000000000000b06                _ZN14CommandManagerC2Ev
- .text._ZN14CommandManagerD2Ev
-                0x0000000000000b76       0x92 ./Commands/CommandManager.o
-                0x0000000000000b76                _ZN14CommandManagerD2Ev
-                0x0000000000000b76                _ZN14CommandManagerD1Ev
- .text._ZN14CommandManager14CheckForCANCMDEv
-                0x0000000000000c08       0x1a ./Commands/CommandManager.o
-                0x0000000000000c08                _ZN14CommandManager14CheckForCANCMDEv
- .text._ZN7CommandD2Ev
-                0x0000000000000c22       0x36 ./Commands/Command_Test.o
-                0x0000000000000c22                _ZN7CommandD1Ev
-                0x0000000000000c22                _ZN7CommandD2Ev
- .text._ZN7CommandD0Ev
-                0x0000000000000c58       0x26 ./Commands/Command_Test.o
-                0x0000000000000c58                _ZN7CommandD0Ev
- .text._ZN7CommandC2Ev
-                0x0000000000000c7e       0x28 ./Commands/Command_Test.o
-                0x0000000000000c7e                _ZN7CommandC2Ev
-                0x0000000000000c7e                _ZN7CommandC1Ev
- .text._ZN12Command_TestC2Ev
-                0x0000000000000ca6       0x36 ./Commands/Command_Test.o
-                0x0000000000000ca6                _ZN12Command_TestC2Ev
-                0x0000000000000ca6                _ZN12Command_TestC1Ev
+                0x0000000000000a70       0x40 ./Commands/CommandManager.o
+                0x0000000000000a70                _ZN14CommandManagerC1Ev
+                0x0000000000000a70                _ZN14CommandManagerC2Ev
+ .text._ZN14CommandManager11StaticClassEv
+                0x0000000000000ab0       0x34 ./Commands/CommandManager.o
+                0x0000000000000ab0                _ZN14CommandManager11StaticClassEv
  .text._ZN12Command_TestD2Ev
-                0x0000000000000cdc       0x3c ./Commands/Command_Test.o
-                0x0000000000000cdc                _ZN12Command_TestD2Ev
-                0x0000000000000cdc                _ZN12Command_TestD1Ev
+                0x0000000000000ae4        0x2 ./Commands/Command_Test.o
+                0x0000000000000ae4                _ZN12Command_TestD2Ev
+                0x0000000000000ae4                _ZN12Command_TestD1Ev
  .text._ZN12Command_TestD0Ev
-                0x0000000000000d18       0x26 ./Commands/Command_Test.o
-                0x0000000000000d18                _ZN12Command_TestD0Ev
+                0x0000000000000ae6        0x4 ./Commands/Command_Test.o
+                0x0000000000000ae6                _ZN12Command_TestD0Ev
  .text._ZN12Command_Test7executeERj
-                0x0000000000000d3e       0x38 ./Commands/Command_Test.o
-                0x0000000000000d3e                _ZN12Command_Test7executeERj
- .text._ZN12Command_Test12checkFreeRamEv
-                0x0000000000000d76       0x46 ./Commands/Command_Test.o
-                0x0000000000000d76                _ZN12Command_Test12checkFreeRamEv
- .text._ZL12__iCliRetValv
-                0x0000000000000dbc       0x12 ./ADCManager.o
- .text._ZL11__iSeiParamPKh
-                0x0000000000000dce       0x1c ./ADCManager.o
+                0x0000000000000aea        0xc ./Commands/Command_Test.o
+                0x0000000000000aea                _ZN12Command_Test7executeERj
+ .text._ZN12Command_TestC2Ev
+                0x0000000000000af6        0xe ./Commands/Command_Test.o
+                0x0000000000000af6                _ZN12Command_TestC2Ev
+                0x0000000000000af6                _ZN12Command_TestC1Ev
  .text._ZN27ADCManagerCallbackInterfaceD2Ev
-                0x0000000000000dea       0x36 ./ADCManager.o
-                0x0000000000000dea                _ZN27ADCManagerCallbackInterfaceD2Ev
-                0x0000000000000dea                _ZN27ADCManagerCallbackInterfaceD1Ev
+                0x0000000000000b04        0x2 ./ADCManager.o
+                0x0000000000000b04                _ZN27ADCManagerCallbackInterfaceD2Ev
+                0x0000000000000b04                _ZN27ADCManagerCallbackInterfaceD1Ev
  .text._ZN10ADCManager4InitEv
-                0x0000000000000e20       0x36 ./ADCManager.o
-                0x0000000000000e20                _ZN10ADCManager4InitEv
+                0x0000000000000b06       0x16 ./ADCManager.o
+                0x0000000000000b06                _ZN10ADCManager4InitEv
  .text._ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
-                0x0000000000000e56       0x5c ./ADCManager.o
-                0x0000000000000e56                _ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
- .text._ZN10ADCManager12ADCAvailableEv
-                0x0000000000000eb2       0x20 ./ADCManager.o
-                0x0000000000000eb2                _ZN10ADCManager12ADCAvailableEv
+                0x0000000000000b1c       0x32 ./ADCManager.o
+                0x0000000000000b1c                _ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
  .text._ZN10ADCManager15INT_ADCFinishedEv
-                0x0000000000000ed2       0xa4 ./ADCManager.o
-                0x0000000000000ed2                _ZN10ADCManager15INT_ADCFinishedEv
- .text._ZN6CANRaw11StaticClassEv
-                0x0000000000000f76       0x40 ./CANLib.o
-                0x0000000000000f76                _ZN6CANRaw11StaticClassEv
- .text._ZN6CANRawC2Ev
-                0x0000000000000fb6       0x1a ./CANLib.o
-                0x0000000000000fb6                _ZN6CANRawC1Ev
-                0x0000000000000fb6                _ZN6CANRawC2Ev
- .text.__vector_18
-                0x0000000000000fd0       0x66 ./CANLib.o
-                0x0000000000000fd0                __vector_18
- .text._ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
-                0x0000000000001036       0x84 ./CANLib.o
-                0x0000000000001036                _ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
- .text._ZN6CANRaw6TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
-                0x00000000000010ba       0xcc ./CANLib.o
-                0x00000000000010ba                _ZN6CANRaw6TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
- .text._ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
-                0x0000000000001186       0xc8 ./CANLib.o
-                0x0000000000001186                _ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
- .text._ZN6CANRaw13ForceResetMobENS_7CAN_MOBE
-                0x000000000000124e       0x98 ./CANLib.o
-                0x000000000000124e                _ZN6CANRaw13ForceResetMobENS_7CAN_MOBE
- .text._ZN6CANRaw9INT_CANITEv
-                0x00000000000012e6      0x38e ./CANLib.o
-                0x00000000000012e6                _ZN6CANRaw9INT_CANITEv
- .text._ZN6CANRaw14ReconfigureMobENS_7CAN_MOBE
-                0x0000000000001674      0x43e ./CANLib.o
-                0x0000000000001674                _ZN6CANRaw14ReconfigureMobENS_7CAN_MOBE
- .text._ZN6CANRaw17GetNextFreeHandleEv
-                0x0000000000001ab2       0x4e ./CANSensorTimer.o
-                0x0000000000001ab2                _ZN6CANRaw17GetNextFreeHandleEv
- .text._ZN11CANListenerC2Ev
-                0x0000000000001b00       0x28 ./CANSensorTimer.o
-                0x0000000000001b00                _ZN11CANListenerC2Ev
-                0x0000000000001b00                _ZN11CANListenerC1Ev
- .text._ZN11CANListenerD2Ev
-                0x0000000000001b28       0x36 ./CANSensorTimer.o
-                0x0000000000001b28                _ZN11CANListenerD2Ev
-                0x0000000000001b28                _ZN11CANListenerD1Ev
- .text._ZN11CANListenerD0Ev
-                0x0000000000001b5e       0x26 ./CANSensorTimer.o
-                0x0000000000001b5e                _ZN11CANListenerD0Ev
+                0x0000000000000b4e       0x64 ./ADCManager.o
+                0x0000000000000b4e                _ZN10ADCManager15INT_ADCFinishedEv
  .text._ZN11CANListener17INT_Call_GotFrameEh
-                0x0000000000001b84       0x20 ./CANSensorTimer.o
-                0x0000000000001b84                _ZN11CANListener17INT_Call_GotFrameEh
+                0x0000000000000bb2        0x2 ./CANLib.o
+                0x0000000000000bb2                _ZN11CANListener17INT_Call_GotFrameEh
  .text._ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
-                0x0000000000001ba4       0x24 ./CANSensorTimer.o
-                0x0000000000001ba4                _ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
+                0x0000000000000bb4        0x2 ./CANLib.o
+                0x0000000000000bb4                _ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
+ .text.__vector_18
+                0x0000000000000bb6      0x4ce ./CANLib.o
+                0x0000000000000bb6                __vector_18
+ .text._ZN6CANRaw17GetNextFreeHandleEv
+                0x0000000000001084       0x1a ./CANLib.o
+                0x0000000000001084                _ZN6CANRaw17GetNextFreeHandleEv
+ .text._ZN6CANRaw4InitENS_12CAN_BAUDRATEE
+                0x000000000000109e       0x80 ./CANLib.o
+                0x000000000000109e                _ZN6CANRaw4InitENS_12CAN_BAUDRATEE
+ .text._ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
+                0x000000000000111e       0x28 ./CANLib.o
+                0x000000000000111e                _ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
+ .text._ZN6CANRaw6TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
+                0x0000000000001146       0x68 ./CANLib.o
+                0x0000000000001146                _ZN6CANRaw6TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
+ .text._ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
+                0x00000000000011ae      0x32a ./CANLib.o
+                0x00000000000011ae                _ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
+ .text._ZN6CANRaw13ForceResetMobENS_7CAN_MOBE
+                0x00000000000014d8       0x34 ./CANLib.o
+                0x00000000000014d8                _ZN6CANRaw13ForceResetMobENS_7CAN_MOBE
  .text._ZN14CANSensorTimerD2Ev
-                0x0000000000001bc8       0x3c ./CANSensorTimer.o
-                0x0000000000001bc8                _ZN14CANSensorTimerD1Ev
-                0x0000000000001bc8                _ZN14CANSensorTimerD2Ev
+                0x000000000000150c        0x2 ./CANSensorTimer.o
+                0x000000000000150c                _ZN14CANSensorTimerD1Ev
+                0x000000000000150c                _ZN14CANSensorTimerD2Ev
  .text._ZN14CANSensorTimerD0Ev
-                0x0000000000001c04       0x26 ./CANSensorTimer.o
-                0x0000000000001c04                _ZN14CANSensorTimerD0Ev
- .text._ZN14CANSensorTimerC2EjPKmh
-                0x0000000000001c2a       0xda ./CANSensorTimer.o
-                0x0000000000001c2a                _ZN14CANSensorTimerC1EjPKmh
-                0x0000000000001c2a                _ZN14CANSensorTimerC2EjPKmh
- .text._ZN14CANSensorTimer14registerSensorEP6SensorNS_14CANDATAChannelE
-                0x0000000000001d04       0x9e ./CANSensorTimer.o
-                0x0000000000001d04                _ZN14CANSensorTimer14registerSensorEP6SensorNS_14CANDATAChannelE
- .text._ZN14CANSensorTimer13INT_Call_TickEv
-                0x0000000000001da2       0x68 ./CANSensorTimer.o
-                0x0000000000001da2                _ZN14CANSensorTimer13INT_Call_TickEv
+                0x000000000000150e        0x2 ./CANSensorTimer.o
+                0x000000000000150e                _ZN14CANSensorTimerD0Ev
  .text._ZN14CANSensorTimer18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
-                0x0000000000001e0a       0x2e ./CANSensorTimer.o
-                0x0000000000001e0a                _ZN14CANSensorTimer18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
+                0x0000000000001510       0x18 ./CANSensorTimer.o
+                0x0000000000001510                _ZN14CANSensorTimer18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE
+ .text._ZN14CANSensorTimerC2EjPKmh
+                0x0000000000001528       0x7e ./CANSensorTimer.o
+                0x0000000000001528                _ZN14CANSensorTimerC1EjPKmh
+                0x0000000000001528                _ZN14CANSensorTimerC2EjPKmh
+ .text._ZN14CANSensorTimer14registerSensorEP6SensorNS_14CANDATAChannelE
+                0x00000000000015a6       0x3e ./CANSensorTimer.o
+                0x00000000000015a6                _ZN14CANSensorTimer14registerSensorEP6SensorNS_14CANDATAChannelE
+ .text._ZN14CANSensorTimer13INT_Call_TickEv
+                0x00000000000015e4       0x22 ./CANSensorTimer.o
+                0x00000000000015e4                _ZN14CANSensorTimer13INT_Call_TickEv
  .text._ZN14CANSensorTimer6UpdateEv
-                0x0000000000001e38      0x296 ./CANSensorTimer.o
-                0x0000000000001e38                _ZN14CANSensorTimer6UpdateEv
- .text._ZN6Sensor10EvalMinMaxERKiS1_
-                0x00000000000020ce       0x42 ./Sensor.o
-                0x00000000000020ce                _ZN6Sensor10EvalMinMaxERKiS1_
- .text._ZL12__iCliRetValv
-                0x0000000000002110       0x12 ./Sensor.o
- .text._ZL11__iSeiParamPKh
-                0x0000000000002122       0x1c ./Sensor.o
- .text._ZN27ADCManagerCallbackInterfaceC2Ev
-                0x000000000000213e       0x28 ./Sensor.o
-                0x000000000000213e                _ZN27ADCManagerCallbackInterfaceC1Ev
-                0x000000000000213e                _ZN27ADCManagerCallbackInterfaceC2Ev
- .text._ZN6SensorC2ERKNS_15SENSOR_SETTINGSE
-                0x0000000000002166       0xa8 ./Sensor.o
-                0x0000000000002166                _ZN6SensorC1ERKNS_15SENSOR_SETTINGSE
-                0x0000000000002166                _ZN6SensorC2ERKNS_15SENSOR_SETTINGSE
- .text._ZN6SensorD2Ev
-                0x000000000000220e       0x3e ./Sensor.o
-                0x000000000000220e                _ZN6SensorD2Ev
-                0x000000000000220e                _ZN6SensorD1Ev
- .text._ZN6SensorD0Ev
-                0x000000000000224c       0x26 ./Sensor.o
-                0x000000000000224c                _ZN6SensorD0Ev
- .text._ZN6Sensor14requestADCReadEv
-                0x0000000000002272       0x3c ./Sensor.o
-                0x0000000000002272                _ZN6Sensor14requestADCReadEv
+                0x0000000000001606      0x1c2 ./CANSensorTimer.o
+                0x0000000000001606                _ZN14CANSensorTimer6UpdateEv
  .text._ZN6Sensor21INT_Call_ADC_FinishedERKjh
-                0x00000000000022ae       0x48 ./Sensor.o
-                0x00000000000022ae                _ZN6Sensor21INT_Call_ADC_FinishedERKjh
+                0x00000000000017c8       0x12 ./Sensor.o
+                0x00000000000017c8                _ZN6Sensor21INT_Call_ADC_FinishedERKjh
+ .text._ZN6SensorD2Ev
+                0x00000000000017da        0xc ./Sensor.o
+                0x00000000000017da                _ZN6SensorD2Ev
+                0x00000000000017da                _ZN6SensorD1Ev
+ .text._ZN6SensorD0Ev
+                0x00000000000017e6       0x1a ./Sensor.o
+                0x00000000000017e6                _ZN6SensorD0Ev
+ .text._ZN6SensorC2ERKNS_15SENSOR_SETTINGSE
+                0x0000000000001800       0x54 ./Sensor.o
+                0x0000000000001800                _ZN6SensorC1ERKNS_15SENSOR_SETTINGSE
+                0x0000000000001800                _ZN6SensorC2ERKNS_15SENSOR_SETTINGSE
+ .text._ZN6Sensor14requestADCReadEv
+                0x0000000000001854       0x14 ./Sensor.o
+                0x0000000000001854                _ZN6Sensor14requestADCReadEv
  .text._ZN6Sensor8getValueEv
-                0x00000000000022f6       0x56 ./Sensor.o
-                0x00000000000022f6                _ZN6Sensor8getValueEv
- .text._ZN6Sensor10getVoltageERf
-                0x000000000000234c      0x120 ./Sensor.o
-                0x000000000000234c                _ZN6Sensor10getVoltageERf
- .text._ZN13SensorManager11GetInstanceEv
-                0x000000000000246c       0x40 ./SensorManager.o
-                0x000000000000246c                _ZN13SensorManager11GetInstanceEv
+                0x0000000000001868       0xb6 ./Sensor.o
+                0x0000000000001868                _ZN6Sensor8getValueEv
+ .text._ZN12SENSORCONFIG12conversion00ERKf
+                0x000000000000191e       0x24 ./SensorManager.o
+                0x000000000000191e                _ZN12SENSORCONFIG12conversion00ERKf
  .text._ZN13SensorManagerC2Ev
-                0x00000000000024ac      0x126 ./SensorManager.o
-                0x00000000000024ac                _ZN13SensorManagerC1Ev
-                0x00000000000024ac                _ZN13SensorManagerC2Ev
+                0x0000000000001942      0x100 ./SensorManager.o
+                0x0000000000001942                _ZN13SensorManagerC1Ev
+                0x0000000000001942                _ZN13SensorManagerC2Ev
+ .text._ZN13SensorManager11GetInstanceEv
+                0x0000000000001a42       0x2a ./SensorManager.o
+                0x0000000000001a42                _ZN13SensorManager11GetInstanceEv
  .text._ZN13SensorManager6UpdateEv
-                0x00000000000025d2       0x4a ./SensorManager.o
-                0x00000000000025d2                _ZN13SensorManager6UpdateEv
+                0x0000000000001a6c       0x16 ./SensorManager.o
+                0x0000000000001a6c                _ZN13SensorManager6UpdateEv
  .text._ZN13SensorManager16INT_UpdateTimingEv
-                0x000000000000261c       0x4a ./SensorManager.o
-                0x000000000000261c                _ZN13SensorManager16INT_UpdateTimingEv
- .text._ZN14CommandManager16INT_UpdateTimingEv
-                0x0000000000002666       0x58 ./main.o
-                0x0000000000002666                _ZN14CommandManager16INT_UpdateTimingEv
- .text._Z11timer1_initv
-                0x00000000000026be       0x4c ./main.o
-                0x00000000000026be                _Z11timer1_initv
- .text._Z11timer2_initv
-                0x000000000000270a       0x46 ./main.o
-                0x000000000000270a                _Z11timer2_initv
+                0x0000000000001a82       0x16 ./SensorManager.o
+                0x0000000000001a82                _ZN13SensorManager16INT_UpdateTimingEv
  .text._Z9getMicrosv
-                0x0000000000002750      0x13c ./main.o
-                0x0000000000002750                _Z9getMicrosv
+                0x0000000000001a98       0xbe ./main.o
+                0x0000000000001a98                _Z9getMicrosv
  .text.__vector_12
-                0x000000000000288c       0x72 ./main.o
-                0x000000000000288c                __vector_12
+                0x0000000000001b56       0x74 ./main.o
+                0x0000000000001b56                __vector_12
  .text.__vector_9
-                0x00000000000028fe       0x5c ./main.o
-                0x00000000000028fe                __vector_9
+                0x0000000000001bca       0x4a ./main.o
+                0x0000000000001bca                __vector_9
  .text.__vector_25
-                0x000000000000295a       0x66 ./main.o
-                0x000000000000295a                __vector_25
- .text.main     0x00000000000029c0      0x1bc ./main.o
-                0x00000000000029c0                main
+                0x0000000000001c14       0x50 ./main.o
+                0x0000000000001c14                __vector_25
+ .text.startup.main
+                0x0000000000001c64      0x120 ./main.o
+                0x0000000000001c64                main
  .text._ZN14HardwareSerialD2Ev
-                0x0000000000002b7c        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002b7c                _ZN14HardwareSerialD2Ev
-                0x0000000000002b7c                _ZN14HardwareSerialD1Ev
+                0x0000000000001d84        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001d84                _ZN14HardwareSerialD2Ev
+                0x0000000000001d84                _ZN14HardwareSerialD1Ev
  .text._ZN14HardwareSerial4peekEv
-                0x0000000000002b7e        0x6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002b7e                _ZN14HardwareSerial4peekEv
+                0x0000000000001d86        0x6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001d86                _ZN14HardwareSerial4peekEv
  .text._ZN14HardwareSerial9availableEv
-                0x0000000000002b84       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002b84                _ZN14HardwareSerial9availableEv
+                0x0000000000001d8c       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001d8c                _ZN14HardwareSerial9availableEv
  .text._ZN14HardwareSerial4readEv
-                0x0000000000002bb4       0x56 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002bb4                _ZN14HardwareSerial4readEv
+                0x0000000000001dbc       0x56 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001dbc                _ZN14HardwareSerial4readEv
  .text._ZN14HardwareSerial5flushEv
-                0x0000000000002c0a       0x1c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002c0a                _ZN14HardwareSerial5flushEv
+                0x0000000000001e12       0x1c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001e12                _ZN14HardwareSerial5flushEv
  .text._ZN14HardwareSerial5writeEh
-                0x0000000000002c26       0x3a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002c26                _ZN14HardwareSerial5writeEh
+                0x0000000000001e2e       0x3a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001e2e                _ZN14HardwareSerial5writeEh
  .text._ZN14HardwareSerialD0Ev
-                0x0000000000002c60        0x4 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002c60                _ZN14HardwareSerialD0Ev
+                0x0000000000001e68        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001e68                _ZN14HardwareSerialD0Ev
  .text.__vector_21
-                0x0000000000002c64       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002c64                __vector_21
+                0x0000000000001e6a       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001e6a                __vector_21
  .text.__vector_32
-                0x0000000000002ce4       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002ce4                __vector_32
+                0x0000000000001eea       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001eea                __vector_32
  .text._ZN14HardwareSerial5beginEl
-                0x0000000000002d64      0x1d2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000002d64                _ZN14HardwareSerial5beginEl
+                0x0000000000001f6a      0x1c0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000001f6a                _ZN14HardwareSerial5beginEl
  .text.startup._GLOBAL__sub_I_rx_buffer
-                0x0000000000002f36       0xd8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x000000000000212a       0xd8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
  .text._ZN5Print5writeEPKhj
-                0x000000000000300e       0x58 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x000000000000300e                _ZN5Print5writeEPKhj
- .text._ZN5Print7printlnEji
-                0x0000000000003066      0x176 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000003066                _ZN5Print7printlnEji
- .text._ZN6canlib3cmdEP8st_cmd_t
-                0x00000000000031dc      0xc64 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                0x00000000000031dc                _ZN6canlib3cmdEP8st_cmd_t
- .text._ZN6canlib10get_statusEP8st_cmd_t
-                0x0000000000003e40      0x17e /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                0x0000000000003e40                _ZN6canlib10get_statusEP8st_cmd_t
- .text._Znwj    0x0000000000003fbe        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000003fbe                _Znwj
- .text._ZdlPv   0x0000000000003fc0        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000003fc0                _ZdlPv
+                0x0000000000002202       0x58 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x0000000000002202                _ZN5Print5writeEPKhj
+ .text._ZN5Print5printEPK19__FlashStringHelper
+                0x000000000000225a       0x52 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x000000000000225a                _ZN5Print5printEPK19__FlashStringHelper
+ .text._Znwj    0x00000000000022ac        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x00000000000022ac                _Znwj
+ .text._ZdlPv   0x00000000000022ae        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x00000000000022ae                _ZdlPv
  .text.__cxa_guard_acquire
-                0x0000000000003fc2       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000003fc2                __cxa_guard_acquire
+                0x00000000000022b0       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x00000000000022b0                __cxa_guard_acquire
  .text.__cxa_guard_release
-                0x0000000000003fd4        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000003fd4                __cxa_guard_release
- .text.__cxa_pure_virtual
-                0x0000000000003fdc        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000003fdc                __cxa_pure_virtual
+                0x00000000000022c2        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x00000000000022c2                __cxa_guard_release
  .text.libgcc.div
-                0x0000000000003fde       0x44 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
-                0x0000000000003fde                __udivmodsi4
- .text.libgcc   0x0000000000004022       0x12 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
-                0x0000000000004022                __tablejump2__
+                0x00000000000022ca       0x44 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
+                0x00000000000022ca                __udivmodsi4
  .text.libgcc.mul
-                0x0000000000004034       0x14 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
-                0x0000000000004034                __muluhisi3
+                0x000000000000230e       0x14 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
+                0x000000000000230e                __muluhisi3
+ .text.libgcc   0x0000000000002322       0x12 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+                0x0000000000002322                __tablejump2__
  .text.libgcc.mul
-                0x0000000000004048       0x1e /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
-                0x0000000000004048                __umulhisi3
+                0x0000000000002334       0x1e /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
+                0x0000000000002334                __umulhisi3
  .text.avr-libc.fplib
-                0x0000000000004066        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3.o)
-                0x0000000000004066                __subsf3
-                0x0000000000004068                __addsf3
+                0x0000000000002352        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3.o)
+                0x0000000000002352                __subsf3
+                0x0000000000002354                __addsf3
  .text.avr-libc.fplib
-                0x0000000000004070       0xc0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3x.o)
-                0x000000000000408a                __addsf3x
+                0x000000000000235c       0xc0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3x.o)
+                0x0000000000002376                __addsf3x
  .text.avr-libc.fplib
-                0x0000000000004130        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
-                0x0000000000004130                __lesf2
-                0x0000000000004130                __nesf2
-                0x0000000000004130                __eqsf2
-                0x0000000000004130                __cmpsf2
-                0x0000000000004130                __ltsf2
+                0x000000000000241c        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
+                0x000000000000241c                __lesf2
+                0x000000000000241c                __nesf2
+                0x000000000000241c                __eqsf2
+                0x000000000000241c                __cmpsf2
+                0x000000000000241c                __ltsf2
  .text.avr-libc.fplib
-                0x0000000000004138        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
-                0x0000000000004138                __divsf3
+                0x0000000000002424        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
+                0x0000000000002424                __fixsfsi
  .text.avr-libc.fplib
-                0x000000000000413c       0xcc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
-                0x0000000000004152                __divsf3x
-                0x0000000000004156                __divsf3_pse
+                0x000000000000242e       0x58 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
+                0x000000000000242e                __fixunssfsi
  .text.avr-libc.fplib
-                0x0000000000004208        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
-                0x0000000000004208                __fixsfsi
+                0x0000000000002486       0x7a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(floatsisf.o)
+                0x0000000000002486                __floatunsisf
+                0x000000000000248a                __floatsisf
  .text.avr-libc.fplib
-                0x0000000000004212       0x58 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
-                0x0000000000004212                __fixunssfsi
+                0x0000000000002500       0x48 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_cmp.o)
+                0x0000000000002500                __fp_cmp
  .text.avr-libc.fplib
-                0x000000000000426a       0x7a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(floatsisf.o)
-                0x000000000000426a                __floatunsisf
-                0x000000000000426e                __floatsisf
+                0x0000000000002548        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_inf.o)
+                0x0000000000002548                __fp_inf
  .text.avr-libc.fplib
-                0x00000000000042e4       0x48 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_cmp.o)
-                0x00000000000042e4                __fp_cmp
+                0x0000000000002554        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_nan.o)
+                0x0000000000002554                __fp_nan
  .text.avr-libc.fplib
-                0x000000000000432c        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_inf.o)
-                0x000000000000432c                __fp_inf
+                0x000000000000255a        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscA.o)
+                0x000000000000255a                __fp_pscA
  .text.avr-libc.fplib
-                0x0000000000004338        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_nan.o)
-                0x0000000000004338                __fp_nan
+                0x0000000000002568        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscB.o)
+                0x0000000000002568                __fp_pscB
  .text.avr-libc.fplib
-                0x000000000000433e        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscA.o)
-                0x000000000000433e                __fp_pscA
+                0x0000000000002576       0x22 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_round.o)
+                0x0000000000002576                __fp_round
  .text.avr-libc.fplib
-                0x000000000000434c        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscB.o)
-                0x000000000000434c                __fp_pscB
+                0x0000000000002598       0x44 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_split3.o)
+                0x0000000000002598                __fp_split3
+                0x00000000000025a8                __fp_splitA
  .text.avr-libc.fplib
-                0x000000000000435a       0x22 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_round.o)
-                0x000000000000435a                __fp_round
+                0x00000000000025dc        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_zero.o)
+                0x00000000000025dc                __fp_zero
+                0x00000000000025de                __fp_szero
  .text.avr-libc.fplib
-                0x000000000000437c       0x44 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_split3.o)
-                0x000000000000437c                __fp_split3
-                0x000000000000438c                __fp_splitA
+                0x00000000000025ea        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3.o)
+                0x00000000000025ea                __mulsf3
  .text.avr-libc.fplib
-                0x00000000000043c0        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_zero.o)
-                0x00000000000043c0                __fp_zero
-                0x00000000000043c2                __fp_szero
- .text.avr-libc.fplib
-                0x00000000000043ce        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3.o)
-                0x00000000000043ce                __mulsf3
- .text.avr-libc.fplib
-                0x00000000000043d2       0xc2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3x.o)
-                0x00000000000043e6                __mulsf3x
-                0x00000000000043ea                __mulsf3_pse
+                0x00000000000025ee       0xc2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3x.o)
+                0x0000000000002602                __mulsf3x
+                0x0000000000002606                __mulsf3_pse
  .text.avr-libc
-                0x0000000000004494      0x242 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
-                0x0000000000004494                malloc
-                0x00000000000045c4                free
+                0x00000000000026b0      0x242 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
+                0x00000000000026b0                malloc
+                0x00000000000027e0                free
  .text.avr-libc
-                0x00000000000046d6      0x1b0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
-                0x00000000000046d6                __ftoa_engine
+                0x00000000000028f2      0x1b0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
+                0x00000000000028f2                __ftoa_engine
  .text.avr-libc
-                0x0000000000004886       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen_P.o)
-                0x0000000000004886                strnlen_P
+                0x0000000000002aa2       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen_P.o)
+                0x0000000000002aa2                strnlen_P
  .text.avr-libc
-                0x000000000000489c       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen.o)
-                0x000000000000489c                strnlen
+                0x0000000000002ab8       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen.o)
+                0x0000000000002ab8                strnlen
  .text.avr-libc
-                0x00000000000048b2       0x78 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(fputc.o)
-                0x00000000000048b2                fputc
+                0x0000000000002ace       0x78 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(fputc.o)
+                0x0000000000002ace                fputc
  .text.avr-libc
-                0x000000000000492a       0xbc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa_invert.o)
-                0x000000000000492a                __ultoa_invert
-                0x00000000000049e6                . = ALIGN (0x2)
+                0x0000000000002b46       0xbc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa_invert.o)
+                0x0000000000002b46                __ultoa_invert
+                0x0000000000002c02                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000000000049e6        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
-                0x00000000000049e6                exit
-                0x00000000000049e6                _exit
+ .fini9         0x0000000000002c02        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000002c02                exit
+                0x0000000000002c02                _exit
  *(.fini9)
  *(.fini8)
- .fini8         0x00000000000049e6        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
+ .fini8         0x0000000000002c02        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
  *(.fini8)
  *(.fini7)
  *(.fini7)
@@ -1562,11 +1355,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000000000049ea        0x4 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .fini0         0x0000000000002c06        0x4 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000000000049ee                _etext = .
+                0x0000000000002c0a                _etext = .
 
-.data           0x0000000000800100       0xa4 load address 0x00000000000049ee
+.data           0x0000000000800100       0x84 load address 0x0000000000002c0a
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800100        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
@@ -1579,94 +1372,83 @@ END GROUP
  .rodata._ZTV12Command_Test
                 0x0000000000800106        0xa ./Commands/Command_Test.o
                 0x0000000000800106                _ZTV12Command_Test
- .rodata._ZTV7Command
-                0x0000000000800110        0xa ./Commands/Command_Test.o
-                0x0000000000800110                _ZTV7Command
- .rodata._ZTV27ADCManagerCallbackInterface
-                0x000000000080011a        0xa ./ADCManager.o
-                0x000000000080011a                _ZTV27ADCManagerCallbackInterface
  .rodata._ZTV14CANSensorTimer
-                0x0000000000800124        0xc ./CANSensorTimer.o
-                0x0000000000800124                _ZTV14CANSensorTimer
- .rodata._ZTV11CANListener
-                0x0000000000800130        0xc ./CANSensorTimer.o
-                0x0000000000800130                _ZTV11CANListener
+                0x0000000000800110        0xc ./CANSensorTimer.o
+                0x0000000000800110                _ZTV14CANSensorTimer
  .rodata._ZTV6Sensor
-                0x000000000080013c        0xa ./Sensor.o
-                0x000000000080013c                _ZTV6Sensor
+                0x000000000080011c        0xa ./Sensor.o
+                0x000000000080011c                _ZTV6Sensor
  .rodata._ZN9CANCONFIGL11CANChannelsE
-                0x0000000000800146       0x4a ./SensorManager.o
+                0x0000000000800126       0x4a ./SensorManager.o
  .rodata._ZTV14HardwareSerial
-                0x0000000000800190       0x14 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000800190                _ZTV14HardwareSerial
+                0x0000000000800170       0x14 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000800170                _ZTV14HardwareSerial
  *(.gnu.linkonce.d*)
-                0x00000000008001a4                . = ALIGN (0x2)
-                0x00000000008001a4                _edata = .
-                0x00000000008001a4                PROVIDE (__data_end, .)
+                0x0000000000800184                . = ALIGN (0x2)
+                0x0000000000800184                _edata = .
+                0x0000000000800184                PROVIDE (__data_end, .)
 
-.bss            0x00000000008001a4      0x285
-                0x00000000008001a4                PROVIDE (__bss_start, .)
+.bss            0x0000000000800184      0x283
+                0x0000000000800184                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00000000008001a4        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
+ .bss           0x0000000000800184        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
  *(.bss*)
- .bss._ZGVZN14CommandManager11StaticClassEvE1C
-                0x00000000008001a6        0x8 ./Commands/CommandManager.o
  .bss._ZZN14CommandManager11StaticClassEvE1C
-                0x00000000008001ae       0x10 ./Commands/CommandManager.o
- .bss._ZN10ADCManager19currentReadCallbackE
-                0x00000000008001be        0x2 ./ADCManager.o
-                0x00000000008001be                _ZN10ADCManager19currentReadCallbackE
+                0x0000000000800186       0x10 ./Commands/CommandManager.o
+ .bss._ZGVZN14CommandManager11StaticClassEvE1C
+                0x0000000000800196        0x8 ./Commands/CommandManager.o
  .bss._ZN10ADCManager7channelE
-                0x00000000008001c0        0x1 ./ADCManager.o
-                0x00000000008001c0                _ZN10ADCManager7channelE
- .bss._ZZN6CANRaw11StaticClassEvE3CAN
-                0x00000000008001c1       0xf0 ./CANLib.o
-                0x00000000008001c1                _ZZN6CANRaw11StaticClassEvE3CAN
+                0x000000000080019e        0x1 ./ADCManager.o
+                0x000000000080019e                _ZN10ADCManager7channelE
+ .bss._ZN10ADCManager19currentReadCallbackE
+                0x000000000080019f        0x2 ./ADCManager.o
+                0x000000000080019f                _ZN10ADCManager19currentReadCallbackE
  .bss._ZGVZN6CANRaw11StaticClassEvE3CAN
-                0x00000000008002b1        0x8 ./CANLib.o
-                0x00000000008002b1                _ZGVZN6CANRaw11StaticClassEvE3CAN
+                0x00000000008001a1        0x8 ./CANLib.o
+                0x00000000008001a1                _ZGVZN6CANRaw11StaticClassEvE3CAN
+ .bss._ZZN6CANRaw11StaticClassEvE3CAN
+                0x00000000008001a9       0xf0 ./CANLib.o
+                0x00000000008001a9                _ZZN6CANRaw11StaticClassEvE3CAN
  .bss._ZZN14CANSensorTimer6UpdateEvE12isFirstError
-                0x00000000008002b9        0x1 ./CANSensorTimer.o
- .bss._ZGVZN13SensorManager11GetInstanceEvE1S
-                0x00000000008002ba        0x8 ./SensorManager.o
+                0x0000000000800299        0x1 ./CANSensorTimer.o
  .bss._ZZN13SensorManager11GetInstanceEvE1S
-                0x00000000008002c2       0x14 ./SensorManager.o
- .bss.sendCAN   0x00000000008002d6        0x1 ./main.o
-                0x00000000008002d6                sendCAN
- .bss.totalUs   0x00000000008002d7        0x4 ./main.o
-                0x00000000008002d7                totalUs
- .bss.iterations
-                0x00000000008002db        0x2 ./main.o
-                0x00000000008002db                iterations
+                0x000000000080029a       0x14 ./SensorManager.o
+ .bss._ZGVZN13SensorManager11GetInstanceEvE1S
+                0x00000000008002ae        0x8 ./SensorManager.o
  .bss.timer2Count
-                0x00000000008002dd        0x4 ./main.o
-                0x00000000008002dd                timer2Count
- .bss.Serial1   0x00000000008002e1       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x00000000008002e1                Serial1
- .bss.Serial    0x00000000008002fe       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x00000000008002fe                Serial
+                0x00000000008002b6        0x4 ./main.o
+                0x00000000008002b6                timer2Count
+ .bss.iterations
+                0x00000000008002ba        0x2 ./main.o
+                0x00000000008002ba                iterations
+ .bss.totalUs   0x00000000008002bc        0x4 ./main.o
+                0x00000000008002bc                totalUs
+ .bss.sendCAN   0x00000000008002c0        0x1 ./main.o
+                0x00000000008002c0                sendCAN
+ .bss.Serial1   0x00000000008002c1       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x00000000008002c1                Serial1
+ .bss.Serial    0x00000000008002de       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x00000000008002de                Serial
  .bss.rx_buffer1
-                0x000000000080031b       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x000000000080031b                rx_buffer1
+                0x00000000008002fb       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x00000000008002fb                rx_buffer1
  .bss.rx_buffer
-                0x000000000080039f       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x000000000080039f                rx_buffer
- .bss.CAN       0x0000000000800423        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                0x0000000000800423                CAN
+                0x000000000080037f       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x000000000080037f                rx_buffer
  *(COMMON)
- COMMON         0x0000000000800425        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
-                0x0000000000800425                __brkval
-                0x0000000000800427                __flp
-                0x0000000000800429                PROVIDE (__bss_end, .)
-                0x00000000000049ee                __data_load_start = LOADADDR (.data)
-                0x0000000000004a92                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x0000000000800403        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
+                0x0000000000800403                __brkval
+                0x0000000000800405                __flp
+                0x0000000000800407                PROVIDE (__bss_end, .)
+                0x0000000000002c0a                __data_load_start = LOADADDR (.data)
+                0x0000000000002c8e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0000000000800429        0x0
+.noinit         0x0000000000800407        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                        PROVIDE (__noinit_end, .)
-                0x0000000000800429                _end = .
-                0x0000000000800429                PROVIDE (__heap_start, .)
+                0x0000000000800407                _end = .
+                0x0000000000800407                PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000        0x0
  *(.eeprom*)
@@ -1687,36 +1469,34 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x86ac
+.stab           0x0000000000000000     0x6b10
  *(.stab)
- .stab          0x0000000000000000      0xbe8 ./Commands/CommandManager.o
-                                        0xf9c (size before relaxing)
- .stab          0x0000000000000be8      0x954 ./Commands/Command_Test.o
-                                        0x960 (size before relaxing)
- .stab          0x000000000000153c      0x7ec ./ADCManager.o
-                                        0x828 (size before relaxing)
- .stab          0x0000000000001d28      0xf54 ./CANLib.o
-                                       0x1254 (size before relaxing)
- .stab          0x0000000000002c7c      0xd50 ./CANSensorTimer.o
-                                        0xfb4 (size before relaxing)
- .stab          0x00000000000039cc      0x978 ./Sensor.o
-                                        0x9e4 (size before relaxing)
- .stab          0x0000000000004344      0x9e4 ./SensorManager.o
-                                        0xa38 (size before relaxing)
- .stab          0x0000000000004d28      0xd50 ./main.o
-                                        0xda4 (size before relaxing)
- .stab          0x0000000000005a78      0xc90 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+ .stab          0x0000000000000000      0xa50 ./Commands/CommandManager.o
+                                        0xca8 (size before relaxing)
+ .stab          0x0000000000000a50      0x5f4 ./Commands/Command_Test.o
+                                        0x684 (size before relaxing)
+ .stab          0x0000000000001044      0x6cc ./ADCManager.o
+                                        0x738 (size before relaxing)
+ .stab          0x0000000000001710     0x14f4 ./CANLib.o
+                                       0x1824 (size before relaxing)
+ .stab          0x0000000000002c04      0xc00 ./CANSensorTimer.o
+                                        0xdd4 (size before relaxing)
+ .stab          0x0000000000003804      0x750 ./Sensor.o
+                                        0x888 (size before relaxing)
+ .stab          0x0000000000003f54      0x8b8 ./SensorManager.o
+                                        0x8c4 (size before relaxing)
+ .stab          0x000000000000480c      0xa44 ./main.o
+                                        0xae0 (size before relaxing)
+ .stab          0x0000000000005250      0xc90 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
                                         0xea0 (size before relaxing)
- .stab          0x0000000000006708      0xa5c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+ .stab          0x0000000000005ee0      0x7ec /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
                                        0x4bc0 (size before relaxing)
- .stab          0x0000000000007164     0x10e0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                                       0x2040 (size before relaxing)
- .stab          0x0000000000008244      0x468 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+ .stab          0x00000000000066cc      0x444 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
                                         0x48c (size before relaxing)
 
-.stabstr        0x0000000000000000     0x92d3
+.stabstr        0x0000000000000000     0x7c57
  *(.stabstr)
- .stabstr       0x0000000000000000     0x92d3 ./Commands/Command.o
+ .stabstr       0x0000000000000000     0x7c57 ./Commands/Command.o
 
 .stab.excl
  *(.stab.excl)
@@ -1744,7 +1524,6 @@ END GROUP
  .comment       0x0000000000000011       0x12 ./main.o
  .comment       0x0000000000000011       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
  .comment       0x0000000000000011       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
- .comment       0x0000000000000011       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
  .comment       0x0000000000000011       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
  .comment       0x0000000000000011       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
  .comment       0x0000000000000011       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
@@ -1827,16 +1606,14 @@ LOAD linker stubs
 Cross Reference Table
 
 Symbol                                            File
-CAN                                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                                                  ./main.o
 Serial                                            /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                                                  ./Commands/Command_Test.o
                                                   ./Commands/CommandManager.o
 Serial1                                           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
 _Z11timer1_initv                                  ./main.o
 _Z11timer2_initv                                  ./main.o
 _Z9getMicrosv                                     ./main.o
 _ZGVZN6CANRaw11StaticClassEvE3CAN                 ./CANLib.o
+                                                  ./main.o
                                                   ./CANSensorTimer.o
 _ZN10ADCManager12ADCAvailableEv                   ./ADCManager.o
 _ZN10ADCManager15INT_ADCFinishedEv                ./ADCManager.o
@@ -1847,10 +1624,10 @@ _ZN10ADCManager4InitEv                            ./ADCManager.o
 _ZN10ADCManager7channelE                          ./ADCManager.o
 _ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh ./ADCManager.o
                                                   ./Sensor.o
-_ZN11CANListener17INT_Call_GotFrameEh             ./CANSensorTimer.o
-_ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE ./CANSensorTimer.o
-_ZN11CANListenerC1Ev                              ./CANSensorTimer.o
-_ZN11CANListenerC2Ev                              ./CANSensorTimer.o
+_ZN11CANListener17INT_Call_GotFrameEh             ./CANLib.o
+                                                  ./CANSensorTimer.o
+_ZN11CANListener18INT_Call_SentFrameERKN6CANRaw16CAN_FRAME_HEADERE ./CANLib.o
+                                                  ./CANSensorTimer.o
 _ZN11CANListenerD0Ev                              ./CANSensorTimer.o
 _ZN11CANListenerD1Ev                              ./CANSensorTimer.o
 _ZN11CANListenerD2Ev                              ./CANSensorTimer.o
@@ -1862,9 +1639,7 @@ _ZN12Command_TestC2Ev                             ./Commands/Command_Test.o
 _ZN12Command_TestD0Ev                             ./Commands/Command_Test.o
 _ZN12Command_TestD1Ev                             ./Commands/Command_Test.o
 _ZN12Command_TestD2Ev                             ./Commands/Command_Test.o
-_ZN12SENSORCONFIG12conversion00ERKf               ./Commands/CommandManager.o
-                                                  ./main.o
-                                                  ./SensorManager.o
+_ZN12SENSORCONFIG12conversion00ERKf               ./SensorManager.o
 _ZN13SensorManager11GetInstanceEv                 ./SensorManager.o
                                                   ./main.o
 _ZN13SensorManager16INT_UpdateTimingEv            ./SensorManager.o
@@ -1889,13 +1664,18 @@ _ZN14CANSensorTimerD0Ev                           ./CANSensorTimer.o
 _ZN14CANSensorTimerD1Ev                           ./CANSensorTimer.o
 _ZN14CANSensorTimerD2Ev                           ./CANSensorTimer.o
 _ZN14CommandManager10LogMessageENS_7MessageE      ./Commands/CommandManager.o
+_ZN14CommandManager10LogMessageEPK19__FlashStringHelper ./Commands/CommandManager.o
+                                                  ./CANSensorTimer.o
+                                                  ./Commands/Command_Test.o
 _ZN14CommandManager10LogMessageEPKc               ./Commands/CommandManager.o
 _ZN14CommandManager11StaticClassEv                ./Commands/CommandManager.o
                                                   ./main.o
+                                                  ./CANSensorTimer.o
+                                                  ./Commands/Command_Test.o
 _ZN14CommandManager12MessageToStrENS_7MessageEPc  ./Commands/CommandManager.o
 _ZN14CommandManager14CheckForCANCMDEv             ./Commands/CommandManager.o
 _ZN14CommandManager14ExecuteCommandEhRKj          ./Commands/CommandManager.o
-_ZN14CommandManager16INT_UpdateTimingEv           ./main.o
+                                                  ./main.o
 _ZN14CommandManager6UpdateEv                      ./Commands/CommandManager.o
                                                   ./main.o
 _ZN14CommandManagerC1Ev                           ./Commands/CommandManager.o
@@ -1914,8 +1694,6 @@ _ZN14HardwareSerialC2EP11ring_bufferPVhS3_S3_S3_S3_hhhhh /root/share/Code/AVRLib
 _ZN14HardwareSerialD0Ev                           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
 _ZN14HardwareSerialD1Ev                           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
 _ZN14HardwareSerialD2Ev                           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-_ZN27ADCManagerCallbackInterfaceC1Ev              ./Sensor.o
-_ZN27ADCManagerCallbackInterfaceC2Ev              ./Sensor.o
 _ZN27ADCManagerCallbackInterfaceD0Ev              ./ADCManager.o
 _ZN27ADCManagerCallbackInterfaceD1Ev              ./ADCManager.o
 _ZN27ADCManagerCallbackInterfaceD2Ev              ./ADCManager.o
@@ -1923,6 +1701,7 @@ _ZN27ADCManagerCallbackInterfaceD2Ev              ./ADCManager.o
 _ZN5Print10printFloatEdh                          /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print11printNumberEmh                         /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print5printEPK19__FlashStringHelper           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                                                  ./Commands/CommandManager.o
 _ZN5Print5printEPKc                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print5printERK6String                         /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print5printERK9Printable                      /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
@@ -1946,30 +1725,23 @@ _ZN5Print7printlnEdi                              /root/share/Code/AVRLibrary/De
 _ZN5Print7printlnEhi                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print7printlnEii                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print7printlnEji                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                                                  ./Commands/Command_Test.o
 _ZN5Print7printlnEli                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print7printlnEmi                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZN5Print7printlnEv                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-_ZN6CANRaw11StaticClassEv                         ./CANLib.o
-                                                  ./CANSensorTimer.o
 _ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb ./CANLib.o
                                                   ./CANSensorTimer.o
 _ZN6CANRaw13ForceResetMobENS_7CAN_MOBE            ./CANLib.o
                                                   ./CANSensorTimer.o
-_ZN6CANRaw14ReconfigureMobENS_7CAN_MOBE           ./CANLib.o
-_ZN6CANRaw17GetNextFreeHandleEv                   ./CANSensorTimer.o
+_ZN6CANRaw14GetNextFreeMobEv                      ./CANLib.o
+_ZN6CANRaw17GetNextFreeHandleEv                   ./CANLib.o
+                                                  ./CANSensorTimer.o
 _ZN6CANRaw4InitENS_12CAN_BAUDRATEE                ./CANLib.o
+                                                  ./main.o
 _ZN6CANRaw6TxDataERKNS_8CAN_DATAENS_7CAN_MOBE     ./CANLib.o
                                                   ./CANSensorTimer.o
 _ZN6CANRaw8ConfigRxERKNS_16CAN_FRAME_HEADERERKNS_14CAN_FRAME_MASKENS_7CAN_MOBE ./CANLib.o
 _ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE ./CANLib.o
                                                   ./CANSensorTimer.o
-_ZN6CANRaw9INT_CANITEv                            ./CANLib.o
-_ZN6CANRawC1Ev                                    ./CANLib.o
-                                                  ./CANSensorTimer.o
-_ZN6CANRawC2Ev                                    ./CANLib.o
-                                                  ./CANSensorTimer.o
-_ZN6Sensor10EvalMinMaxERKiS1_                     ./Sensor.o
 _ZN6Sensor10getVoltageERf                         ./Sensor.o
 _ZN6Sensor14requestADCReadEv                      ./Sensor.o
                                                   ./CANSensorTimer.o
@@ -2031,25 +1803,6 @@ _ZN6StringaSEOS_                                  /root/share/Code/AVRLibrary/De
 _ZN6StringaSEPKc                                  /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 _ZN6StringaSERKS_                                 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 _ZN6StringixEj                                    /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
-_ZN6canlib10get_statusEP8st_cmd_t                 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                                                  ./main.o
-_ZN6canlib11Can_conf_btEv                         /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib12can_get_dataEPh                       /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib12set_baudrateEt                        /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib16can_get_mob_freeEv                    /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib17can_auto_baudrateEh                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib17can_clear_all_mobEv                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib18can_fixed_baudrateEh                  /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib18can_get_mob_statusEv                  /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN6canlib3cmdEP8st_cmd_t                         /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-                                                  ./main.o
-_ZN6canlib4initEh                                 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
-_ZN7Command5getIDEv                               ./Commands/CommandManager.o
-_ZN7CommandC1Ev                                   ./Commands/Command_Test.o
-_ZN7CommandC2Ev                                   ./Commands/Command_Test.o
-_ZN7CommandD0Ev                                   ./Commands/Command_Test.o
-_ZN7CommandD1Ev                                   ./Commands/Command_Test.o
-_ZN7CommandD2Ev                                   ./Commands/Command_Test.o
 _ZNK6String10startsWithERKS_                      /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 _ZNK6String10startsWithERKS_j                     /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 _ZNK6String11lastIndexOfERKS_                     /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
@@ -2076,16 +1829,14 @@ _ZNK6StringixEj                                   /root/share/Code/AVRLibrary/De
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZNK6StringleERKS_                                /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 _ZNK6StringltERKS_                                /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
-_ZTV11CANListener                                 ./CANSensorTimer.o
 _ZTV12Command_Test                                ./Commands/Command_Test.o
 _ZTV14CANSensorTimer                              ./CANSensorTimer.o
 _ZTV14HardwareSerial                              /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
 _ZTV27ADCManagerCallbackInterface                 ./ADCManager.o
-                                                  ./Sensor.o
 _ZTV5Print                                        /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
 _ZTV6Sensor                                       ./Sensor.o
-_ZTV7Command                                      ./Commands/Command_Test.o
 _ZZN6CANRaw11StaticClassEvE3CAN                   ./CANLib.o
+                                                  ./main.o
                                                   ./CANSensorTimer.o
 _ZdlPv                                            /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
@@ -2125,11 +1876,13 @@ __ctype_isfalse                                   /usr/lib/gcc/avr/5.4.0/../../.
 __ctype_istrue                                    /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(cty_isfalse.o)
 __cxa_guard_abort                                 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
 __cxa_guard_acquire                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                                                  ./main.o
                                                   ./SensorManager.o
                                                   ./CANSensorTimer.o
                                                   ./CANLib.o
                                                   ./Commands/CommandManager.o
 __cxa_guard_release                               /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                                                  ./main.o
                                                   ./SensorManager.o
                                                   ./CANSensorTimer.o
                                                   ./CANLib.o
@@ -2137,20 +1890,17 @@ __cxa_guard_release                               /root/share/Code/AVRLibrary/De
 __cxa_pure_virtual                                /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
                                                   ./ADCManager.o
-                                                  ./Commands/Command_Test.o
 __data_end                                        /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
 __data_load_start                                 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
 __data_start                                      /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
 __divsf3                                          /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                                                  ./main.o
 __divsf3_pse                                      /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
 __divsf3x                                         /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
 __do_clear_bss                                    /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
-                                                  /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
                                                   ./main.o
@@ -2163,7 +1913,6 @@ __do_copy_data                                    /usr/lib/gcc/avr/5.4.0/avr51/l
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                                                  ./main.o
                                                   ./SensorManager.o
                                                   ./Sensor.o
                                                   ./CANSensorTimer.o
@@ -2175,9 +1924,7 @@ __do_global_ctors                                 /usr/lib/gcc/avr/5.4.0/avr51/l
 __eqsf2                                           /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
 __fixsfsi                                         /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                                                  ./main.o
                                                   ./SensorManager.o
-                                                  ./Commands/CommandManager.o
 __fixunssfsi                                      /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixsfsi.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
@@ -2257,7 +2004,6 @@ __mulsf3                                          /usr/lib/gcc/avr/5.4.0/../../.
                                                   ./main.o
                                                   ./SensorManager.o
                                                   ./Sensor.o
-                                                  ./Commands/CommandManager.o
 __mulsf3_pse                                      /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3x.o)
 __mulsf3x                                         /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3x.o)
                                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(mulsf3.o)
@@ -2273,11 +2019,9 @@ __subsf3                                          /usr/lib/gcc/avr/5.4.0/../../.
                                                   ./Sensor.o
 __tablejump2__                                    /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
                                                   /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_ctors.o)
-                                                  /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(can_lib.o)
 __udivmodsi4                                      /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                                                  ./main.o
 __ultoa                                           /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa.o)
                                                   /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(WString.o)
 __ultoa_common                                    /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa_ncheck.o)
