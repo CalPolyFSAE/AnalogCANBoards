@@ -22,9 +22,12 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     if(!can.BindListener(this, mobHandle))
     {
         //error
-        //CommandManager::StaticClass().LogMessage("FAILED TO BIND LISTENER");
+        CommandManager::StaticClass().LogMessageln(FSTR("FAILED TO BIND LISTENER"));
     }
-
+    CommandManager::StaticClass().LogMessage(FSTR("CANSensorTimer Created: "));
+    CommandManager::StaticClass().LogMessage((uint8_t)(mobHandle));
+    CommandManager::StaticClass().LogMessage(FSTR("ID: "));
+    CommandManager::StaticClass().LogMessageln((uint8_t)id);
 
     bHaveInitialized = false;
     bHaveSentLastCAN = true;
@@ -67,7 +70,6 @@ void CANSensorTimer::INT_Call_Tick()
 
 void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
 {
-    CommandManager::StaticClass().LogMessage(FSTR("INT_Call_SentFrame"));
     bHaveSentLastCAN = true;
 }
 
@@ -93,56 +95,16 @@ void CANSensorTimer::Update()
         }else
         {
             //TODO: error
+            CommandManager::StaticClass().LogMessageln(FSTR("Unable to ConfigTx"));
         }
     }
     else if(needToSend)
     {
-        //read data on all sensors
-        for (uint8_t i = 0; i < activeSensors;)
-        {
-            //only go to next sensor after the request is successful
-            //this should only take multiple requests if ADC clock speed is
-            //very slow
-            if (sensors[i] != nullptr)
-            {
-                if (sensors[i]->requestADCRead ())
-                {
-                    // Sensor has completed last read
-                    ++i;
-                }
-            }
-            else
-            {
-                ++i;
-            }
-        }
-
-        //check that all sensors got value from ADC
-        // this is really unnecessary
-        //TODO: add full speed sampling so it REALLY IS unnecessary
-        /*
-        for (uint8_t i = 0; i < activeSensors;)
-        {
-            if (sensors[i] != nullptr)
-            {
-                if (sensors[i]->getIsReady ())
-                {
-                    ++i;
-                }
-            }
-            else
-            {
-                ++i;
-            }
-        }
-        */
-
         if(bHaveSentLastCAN)
         {
-            isFirstError = false; // reset error flag
-            CommandManager::StaticClass().LogMessage(FSTR("txCANM Sending..."));
-            bHaveSentLastCAN = false;
             needToSend = false;
+            isFirstError = false; // reset error flag
+            bHaveSentLastCAN = false;
             ++txCANMessageSucCnt; // increment success counter
             /////////////////
             /////////////////
@@ -153,6 +115,46 @@ void CANSensorTimer::Update()
                 //decrement error count
                 --txCANMessageErrCnt;
             }
+
+            //read data on all sensors
+            for (uint8_t i = 0; i < activeSensors;)
+            {
+                //only go to next sensor after the request is successful
+                //this should only take multiple requests if ADC clock speed is
+                //very slow
+                if (sensors[i] != nullptr)
+                {
+                    if (sensors[i]->requestADCRead ())
+                    {
+                        // Sensor has completed last read
+                        ++i;
+                    }
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            //check that all sensors got value from ADC
+            // this is really unnecessary
+            //TODO: add full speed sampling so it REALLY IS unnecessary
+            /*
+             for (uint8_t i = 0; i < activeSensors;)
+             {
+             if (sensors[i] != nullptr)
+             {
+             if (sensors[i]->getIsReady ())
+             {
+             ++i;
+             }
+             }
+             else
+             {
+             ++i;
+             }
+             }
+             */
 
             //package CAN message using sensor values
             canData = {};
@@ -210,7 +212,6 @@ void CANSensorTimer::Update()
                 isFirstError = true;
                 ++txCANMessageErrCnt;
             }
-            CommandManager::StaticClass().LogMessage(FSTR("txCANM ERROR"));
         }
 
 

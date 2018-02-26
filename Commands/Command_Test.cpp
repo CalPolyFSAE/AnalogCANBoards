@@ -19,7 +19,7 @@ Command_Test::~Command_Test()
 
 uint8_t Command_Test::execute(uint16_t& input)
 {
-    CommandManager::StaticClass().LogMessage(FSTR("Command_Test"));
+    CommandManager::StaticClass().LogMessageln(FSTR("Command_Test"));
     return 0;
 }
 

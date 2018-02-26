@@ -91,7 +91,7 @@ void CommandManager::Update()
     }
 }
 
-void CommandManager::LogMessage(Message errID)
+void CommandManager::LogMessageln(Message errID)
 {
 #ifdef SERIAL_TEXT
 
@@ -103,11 +103,50 @@ void CommandManager::LogMessage(Message errID)
     //TODO: CAN errors
 }
 
-void CommandManager::LogMessage(const char c[])
+void CommandManager::LogMessageln(const char c[])
 {
 #ifdef SERIAL_TEXT
 
     Serial.println(c);
+
+#endif
+}
+
+void CommandManager::LogMessageln( const __FlashStringHelper* c)
+{
+#ifdef SERIAL_TEXT
+
+    Serial.println(c);
+
+#endif
+}
+
+void CommandManager::LogMessageln( uint8_t num )
+{
+#ifdef SERIAL_TEXT
+
+    Serial.println(num);
+
+#endif
+}
+
+void CommandManager::LogMessage(Message errID)
+{
+#ifdef SERIAL_TEXT
+
+    char buf [MAX_WARNMSG_LEN]; //buffer for text
+    MessageToStr(errID, buf);
+    Serial.print(buf);
+
+#endif //SERIAL_TEXT
+    //TODO: CAN errors
+}
+
+void CommandManager::LogMessage(const char c[])
+{
+#ifdef SERIAL_TEXT
+
+    Serial.print(c);
 
 #endif
 }
@@ -117,6 +156,15 @@ void CommandManager::LogMessage( const __FlashStringHelper* c)
 #ifdef SERIAL_TEXT
 
     Serial.print(c);
+
+#endif
+}
+
+void CommandManager::LogMessage( uint8_t num )
+{
+#ifdef SERIAL_TEXT
+
+    Serial.print(num);
 
 #endif
 }

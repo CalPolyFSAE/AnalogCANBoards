@@ -123,7 +123,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel0 = {
                 CAN0,           // CAN Message ID for this channel
-                2,             // milliseconds between updates
+                1,             // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor00,		//sensors in data channel positions
                     SENSORCONFIG::Sensor01,
@@ -135,7 +135,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel1 = {
                 CAN1,           // CAN Message ID for this channel
-                6,            // milliseconds between updates
+                3,            // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor04,
                     SENSORCONFIG::Sensor05,
@@ -147,9 +147,9 @@ namespace CANCONFIG
 
     // all can channels
     constexpr CANSensorChannel CANChannels[] =
-        { CANChannel0, CANChannel1 };
+        { CANChannel0 };
     //number of CAN Channels
-    constexpr uint8_t NUMCANCHANNELS = 2;
+    constexpr uint8_t NUMCANCHANNELS = 1;
 
     //Device id for commands over CAN
     constexpr uint8_t CANCMD_DEVID = 0x00;

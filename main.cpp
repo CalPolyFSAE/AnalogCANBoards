@@ -16,8 +16,6 @@
 
 //TODO: TESTING:
 volatile bool sendCAN = false;
-uint32_t totalUs = 0;
-uint16_t iterations = 0;
 
 void timer1_init() {
     TCCR1B |= (1 << WGM12) | (1 << CS11); //set timer 1 to CTC mode and prescaler 8
@@ -66,7 +64,6 @@ float getMicros()
 ISR(TIMER1_COMPA_vect) {
     sendCAN = true;
     SensorManager::GetInstance().INT_UpdateTiming();
-    CommandManager::StaticClass().INT_UpdateTiming();
 }
 
 ISR(TIMER2_COMP_vect)
@@ -116,26 +113,25 @@ int main()
     CommandManager::StaticClass().ExecuteCommand(0, 0);
 
 
+    ////////////////////////////////TESTING
+    CANRaw& can = CANRaw::StaticClass ();
+    // create CAN Tx settings
+    CANRaw::CAN_FRAME_HEADER tmpHeader
+        {       0xD5,         // can id
+                0,          // rtr flag
+                0,          // ide flag
+                2 // dlc
+        };
+    can.ForceResetMob (CANRaw::CAN_MOB::MOB_4); // make sure mob is ready
+    can.ConfigTx (tmpHeader, CANRaw::CAN_MOB::MOB_4);
+    ////////////////////////////////
+
     float loopTiming = 0.0f;
+    float totalUs = 0;
+    uint16_t iterations = 0;
     //TODO: add pause state (for CMDs) and add main loop to a manager class
     while(true)
     {
-        //FOR TESTING ONLY
-        /*
-        uint32_t c = 0;
-        while(c < 150000)
-        {
-            ++c;
-        }
-        */
-
-        /*//for testing Serial input
-        int16_t input = Serial.read();
-        if(input != -1)
-        {
-            Serial.println(input);
-        }*/
-
         //TODO: testing
 
         //timing the update length
@@ -144,55 +140,34 @@ int main()
         ASensorManager->Update();
         ACommandManager->Update();
 
-        loopTiming = getMicros() - loopTiming;
-
-        //previous
-        totalUs += uint16_t(loopTiming*2);
-        ++iterations;
-
         if(sendCAN)
         {
             //TODO: TESTING:
             sendCAN = false;
-            uint8_t canData[8] =
-                { };
+            CANRaw::CAN_DATA canData = {};
 
-            //go from 0.5us resolution to int
-            canData[0] = totalUs/iterations;//moving average
+            //
+            //canData.value = (uint16_t)((float)(totalUs)/iterations);//moving average
+            canData.value = (uint16_t)(totalUs);
             totalUs = 0;
             iterations = 0;
 
             //hton
-            uint8_t tmp = canData[0];
-            canData[0] = canData[1];
-            canData[1] = tmp;
+            uint8_t tmp = canData.byte[0];
+            canData.byte[0] = canData.byte[1];
+            canData.byte[1] = tmp;
 
-            //canid
-            /*uint16_t CANID = 0xD5;
-
-            //send CAN message
-            st_cmd_t CMD =
-                { };
-            // set up command for can lib
-            CMD.cmd = can_cmd_t::CMD_TX_DATA;
-            CMD.dlc = 2;        // data size
-
-            CMD.id.std = CANID;
-            CMD.ctrl.ide = 0;
-
-            CMD.pt_data = canData;
-
-            // send command to CAN lib
-            CAN.cmd (&CMD);
-
-            uint16_t i = 0;
-            // wait for CAN message to send
-
-            while (CAN.get_status (&CMD) != CAN_STATUS_COMPLETED && i < 65000)
-            {
-                ++i;
-            }*/
+            CANRaw::StaticClass().TxData(canData, CANRaw::CAN_MOB::MOB_4);
         }
+
+        loopTiming = getMicros() - loopTiming;
+
+        //previous
+        if(loopTiming > totalUs)
+            totalUs = loopTiming;
+
+            //totalUs += loopTiming;
+        ++iterations;
 
 
     }

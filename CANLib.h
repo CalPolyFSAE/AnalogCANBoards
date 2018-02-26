@@ -184,8 +184,8 @@
 /////////////////////////////////// End section from can_lib.h///////////////
 
 #define Can_clear_all_mob_int()  { CANIE2 = 0x00; CANIE1 = 0x00; }
-#define Can_enable_mob_int( mob) { CANIE2 |= _BV (mob); CANIE1 |= (_BV (mob) >> 8); }
-#define Can_disable_mob_int(mob) { CANIE2 &= ~(_BV (mob)); CANIE1 &= ~(_BV (mob) >> 8); }
+#define Can_enable_mob_int( mob) { CANIE2 |= (uint8_t)_BV (mob); CANIE1 |= (uint8_t)(_BV (mob) >> 8); }
+#define Can_disable_mob_int(mob) { CANIE2 &= (uint8_t)~(_BV (mob)); CANIE1 &= (uint8_t)~(_BV (mob) >> 8); }
 
 // the initial handler of CAN interrupts
 class CANRaw

@@ -12,7 +12,6 @@
 
 #include "Commands/CommandManager.h"
 ISR(CANIT_vect) {
-    PINA = 255;
     CANRaw::StaticClass ().INT_CANIT ();
 }
 
@@ -21,7 +20,7 @@ CANRaw::CAN_MOB CANRaw::GetNextFreeMob() {
     {
         if (MobModes[i] == CAN_MOB_OPERATING_MODE::DISABLED)
         {
-            return CAN_MOB (i);
+            return (CAN_MOB)i;
         }
     }
     return CAN_MOB::MOB_NONE;
@@ -32,7 +31,7 @@ CANRaw::CAN_MOB CANRaw::GetNextFreeHandle() {
     {
         if (Handlers[i] == nullptr)
         {
-            return CAN_MOB (i);
+            return (CAN_MOB)i;
         }
     }
     return CAN_MOB::MOB_NONE;
@@ -114,6 +113,8 @@ bool CANRaw::TxData( const CAN_DATA& data, CAN_MOB mobn ) {
         return false;
     }
 
+    Can_set_mob(mob);
+
     // copy data to send
     for (uint8_t cpt = 0; cpt < MobHeaders[mob].dataLength; cpt++)
         CANMSG = data.byte[cpt];
@@ -133,15 +134,14 @@ bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mas
         return false;
     }
 
-    Can_set_mob(mob);
-
     MobModes[mob] = CAN_MOB_OPERATING_MODE::Rx_DATA_FRAME;
     MobHeaders[mob] = header;
     MobMasks[mob] = mask;
 
     ReconfigureMob(mobn);
 
-    Can_config_rx();
+    Can_set_mob(mob);// has to happen before Can_config_rx
+    Can_config_rx();// must happen after ReconfigureMob
 
     return true;
 }
@@ -149,7 +149,7 @@ bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mas
 bool CANRaw::ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn )
 {
     uint8_t mob = (uint8_t) mobn;
-    if (MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED || Handlers[mob] == nullptr)
+    if (MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED)
     {
         return false;
     }
@@ -165,13 +165,10 @@ bool CANRaw::ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn )
 void CANRaw::ForceResetMob(CAN_MOB mobn)
 {
     uint8_t mob = (uint8_t) mobn;
-    Can_set_mob(mob);
-
-    // clear all mob registers
-    Can_full_abort();// in case anything is in progress
-    Can_clear_mob();// clear all Can mob specific registers
 
     MobModes[mob] = CAN_MOB_OPERATING_MODE::DISABLED;
+
+    ReconfigureMob(mobn);// will disable mob interrupts
 }
 
 void CANRaw::INT_CANIT() {
@@ -210,12 +207,13 @@ void CANRaw::INT_CANIT() {
 
         if (mobStatus)
         {
-            CANListener& handler = *(Handlers[mob]);
+            CANListener* handler = Handlers[mob];
 
             if (mobStatus & _BV (TXOK))
             {
                 // notify that message was sent (Tx callback)
-                handler.INT_Call_SentFrame(MobHeaders[mob]);
+                if(handler != nullptr)
+                    handler->INT_Call_SentFrame(MobHeaders[mob]);
 
                 // clear CANSTMOB
                 Can_clear_status_mob();
@@ -229,18 +227,18 @@ void CANRaw::INT_CANIT() {
                 for (uint8_t data_index = 0; data_index < dlc;
                         data_index++)
                 {
-                    handler.Data.byte[data_index] = CANMSG;
+                    handler->Data.byte[data_index] = CANMSG;
                 }
 
                 //set the Frame header data
                 // TODO: copy the data out of mob config registers
                 // as it will be different when using masks for Rx
-                handler.FrameData = &MobHeaders[mob];
+                handler->FrameData = &MobHeaders[mob];
 
 
                 // the dlc in received data might be different than what was specified when configured
                 // notify that message was received (Rx callback)
-                handler.INT_Call_GotFrame(dlc);
+                handler->INT_Call_GotFrame(dlc);
 
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);

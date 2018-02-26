@@ -66,9 +66,15 @@ public:
     }
 
     //used to output message
+    void LogMessageln( Message errID );
+    void LogMessageln( const char c[] );
+    void LogMessageln( const __FlashStringHelper* c);
+    void LogMessageln( uint8_t num );
+
     void LogMessage( Message errID );
     void LogMessage( const char c[] );
     void LogMessage( const __FlashStringHelper* c);
+    void LogMessage( uint8_t num );
 
     //c++11 delete the functions we don't want
     CommandManager(CommandManager const&) = delete;
