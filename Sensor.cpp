@@ -41,7 +41,7 @@ Sensor::~Sensor()
 //request an ADC read for this sensor
 bool Sensor::requestADCRead()
 {
-    if(ADCManager::StartRead(this, ADCChannel))
+    if(ADCManager<Sensor>::StaticClass().StartRead(this, ADCChannel))
     {
         isReady = false;
         return true;
@@ -52,7 +52,7 @@ bool Sensor::requestADCRead()
 }
 
 //Called by ADCManager when read is finished
-void Sensor::INT_Call_ADC_Finished( uint16_t const& value, uint8_t channel ) {
+void Sensor::INT_Call_ADC_Finished_Implementation( uint16_t const& value, uint8_t channel ) {
         rawADC = value;
         isReady = true;
 }
@@ -67,7 +67,6 @@ int16_t Sensor::getValue() {
     value = conversionFunction(voltage);
 
     //check if min/max functionality should be used
-    /*
     if (UseMinMax)
     {
         if (value > MaxExpectedVal)
@@ -79,7 +78,7 @@ int16_t Sensor::getValue() {
             value = MinExpectedVal;
         }
     }
-    */
+
 
     return value;
 }
@@ -88,7 +87,6 @@ void Sensor::getVoltage(float& out)
 {
     //gain error calculation for ADC
     //make sure nothing changes rawADC value
-    //although this should never be able to happen
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
         out = rawADC * VSCALE;
