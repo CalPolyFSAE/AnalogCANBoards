@@ -224,21 +224,29 @@ void CANRaw::INT_CANIT() {
             {
                 // TODO: dlcw warning
                 uint8_t dlc = Can_get_dlc();// in case of dlcw and dlc changing
+                CAN_DATA Data;
+                CAN_FRAME_HEADER Header = &MobHeaders[mob];
+
                 for (uint8_t data_index = 0; data_index < dlc;
                         data_index++)
                 {
-                    handler->Data.byte[data_index] = CANMSG;
+                    Data.byte[data_index] = CANMSG;
                 }
 
-                //set the Frame header data
-                // TODO: copy the data out of mob config registers
+                // copy the data out of mob config registers
                 // as it will be different when using masks for Rx
-                handler->FrameData = &MobHeaders[mob];
-
+                Header.dataLength = dlc;
+                Header.rtr = Can_get_rtr();
+                if (Header.ide){
+                    Can_get_ext_id(Header.id);
+                }
+                else {
+                    Can_get_std_id(Header.id);
+                }
 
                 // the dlc in received data might be different than what was specified when configured
                 // notify that message was received (Rx callback)
-                handler->INT_Call_GotFrame(dlc);
+                handler->INT_Call_GotFrame(&Header, &Data);
 
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);

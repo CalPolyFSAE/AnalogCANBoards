@@ -42,7 +42,7 @@ public:
         {
             CANCHANNEL0 = 0,
             CANCHANNEL1 = 1,
-            ANCHANNEL2 = 2,
+            CANCHANNEL2 = 2,
             CANCHANNEL3 = 3
     };
 
@@ -59,7 +59,17 @@ public:
     bool registerSensor(class Sensor* sensor, CANDATAChannel dataChannel);
 
     //1000Hz interrupt to keep track of timing
-    void INT_Call_Tick();
+    inline void INT_Call_Tick()
+    {
+        --ticksToSend;
+        //TODO: add check for needToSend to see if we have not sent last mesg
+        //TODO: add var that keeps track of how overdue the msg is
+        if(ticksToSend == 0)
+        {
+            needToSend = true;
+            ticksToSend = TimingInterval;   // reset timer
+        }
+    }
 
     // CANListener interface
     virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) override;

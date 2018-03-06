@@ -4,6 +4,7 @@
 *  Created on: Dec 10, 2017
 *      Author: root
 */
+#include "Config/CONFIG00.h"
 
 #include "CANSensorTimer.h"
 #include "Sensor.h"
@@ -26,8 +27,10 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     }
     CommandManager::StaticClass().LogMessage(FSTR("CANSensorTimer Created: "));
     CommandManager::StaticClass().LogMessage((uint8_t)(mobHandle));
-    CommandManager::StaticClass().LogMessage(FSTR("ID: "));
-    CommandManager::StaticClass().LogMessageln((uint8_t)id);
+    CommandManager::StaticClass().LogMessage(FSTR(" ID: "));
+    CommandManager::StaticClass().LogMessage((uint8_t)id);
+    CommandManager::StaticClass().LogMessage(FSTR(" Interval: "));
+    CommandManager::StaticClass().LogMessageln((uint8_t)TimingInterval);
 
     bHaveInitialized = false;
     bHaveSentLastCAN = true;
@@ -52,20 +55,6 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
     sensors[index] = sensor;
     bHaveInitialized = false;
     return true;
-}
-
-//do not call. this is used for interrupt timing
-//TODO: This could be inline
-void CANSensorTimer::INT_Call_Tick()
-{
-    --ticksToSend;
-    //TODO: add check for needToSend to see if we have not sent last mesg
-    //TODO: add var that keeps track of how overdue the msg is
-    if(ticksToSend == 0)
-    {
-        needToSend = true;
-        ticksToSend = TimingInterval;   // reset timer
-    }
 }
 
 void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
@@ -117,6 +106,7 @@ void CANSensorTimer::Update()
             }
 
             //read data on all sensors
+
             for (uint8_t i = 0; i < activeSensors;)
             {
                 //only go to next sensor after the request is successful
@@ -135,6 +125,7 @@ void CANSensorTimer::Update()
                     ++i;
                 }
             }
+
 
             //check that all sensors got value from ADC
             // this is really unnecessary

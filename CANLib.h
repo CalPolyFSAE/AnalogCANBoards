@@ -312,25 +312,18 @@ class CANListener
 private:
     friend class CANRaw;
 
-    // data is copied here on CAN Rx of the attached Mob
-    const volatile CANRaw::CAN_FRAME_HEADER* FrameData;
-    volatile CANRaw::CAN_DATA Data;
-
 public:
-    CANListener() { FrameData = nullptr; }
+    CANListener() {}
 
     virtual ~CANListener() {}
 
 
 protected:
 
-    // atomically copies the data out of the private volatile FrameData and Data
-    void GetCANData(CANRaw::CAN_FRAME_HEADER& outHeader, CANRaw::CAN_DATA& outData);
-
     // called on Can rx for Mob. Get received data with GetCANData()
     // dlc is the data length code of the received message. It may be different
     // than the one set in FrameData
-    virtual void INT_Call_GotFrame(uint8_t dlc) {};
+    virtual void INT_Call_GotFrame(const volatile CANRaw::CAN_FRAME_HEADER* FrameData, const volatile CANRaw::CAN_DATA* Data) {};
     // called on Can Tx for Mob.
     virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) {};
 
