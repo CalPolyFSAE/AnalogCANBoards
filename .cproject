@@ -180,7 +180,7 @@
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.605450780" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
-							<tool command="avr-g++ -std=c++0x -fpermissive" id="de.innot.avreclipse.tool.cppcompiler.app.debug.1601031974" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.debug">
+							<tool command="avr-g++ -std=gnu++11 -fpermissive" id="de.innot.avreclipse.tool.cppcompiler.app.debug.1601031974" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.debug">
 								<option id="de.innot.avreclipse.cppcompiler.option.debug.level.219553913" name="Generate Debugging Info" superClass="de.innot.avreclipse.cppcompiler.option.debug.level" useByScannerDiscovery="false"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.845831444" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" useByScannerDiscovery="false" value="de.innot.avreclipse.cppcompiler.optimize.three" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.1678030581" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" useByScannerDiscovery="false" valueType="includePath">
