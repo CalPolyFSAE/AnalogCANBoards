@@ -22,7 +22,13 @@ public:
     static SensorManager& GetInstance();
 
     //main program loop calls this
-    void Update();
+    inline void Update() {
+        //update the CANSensorTimers
+        for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
+        {
+            CANMessageTimers[i]->Update ();
+        }
+    }
 
     //1000Hz interrupt calls this
     void INT_UpdateTiming();

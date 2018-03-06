@@ -48,15 +48,6 @@ SensorManager::SensorManager()
     }
 }
 
-void SensorManager::Update()
-{
-    //update the CANSensorTimers
-    for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
-    {
-        CANMessageTimers[i]->Update ();
-    }
-}
-
 //1000Hz interrupt timing call
 void SensorManager::INT_UpdateTiming()
 {
