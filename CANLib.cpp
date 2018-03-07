@@ -38,6 +38,7 @@ CANRaw::CAN_MOB CANRaw::GetNextFreeHandle() {
 }
 
 void CANRaw::Init( CAN_BAUDRATE baud = CAN_BAUDRATE::B1M ) {
+    CommandManager::StaticClass().LogMessageln(FSTR("CANRaw::Init"));
     Can_reset();
 
     // reset mob specific interrupts
@@ -91,10 +92,17 @@ void CANRaw::Init( CAN_BAUDRATE baud = CAN_BAUDRATE::B1M ) {
     }
 
     Can_enable();
+
+    //wait for the controller to start up
+    while(!(CANGSTA & _BV(ENFG)))
+        ;
+
+    bHaveInit = true;
 }
 
 bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
                            bool forceOverwrite) {
+    CommandManager::StaticClass().LogMessageln(FSTR("CANRaw::BindListener"));
     uint8_t mob = (uint8_t)mobn;
     if (mob > LAST_MOB_NB || (Handlers[mob] != nullptr && !forceOverwrite))
     {
@@ -102,12 +110,15 @@ bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
     }
 
     Handlers[mob] = listener;
-    ForceResetMob(mobn);
+    MobModes[mob] = CAN_MOB_OPERATING_MODE::DISABLED;
 
     return true;
 }
 
 bool CANRaw::TxData( const CAN_DATA& data, CAN_MOB mobn ) {
+    if(!bHaveInit)
+        return false;
+
     uint8_t mob = (uint8_t)mobn;
     if (MobModes[mob] != CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME || mob > LAST_MOB_NB)
     {
@@ -129,6 +140,9 @@ bool CANRaw::TxData( const CAN_DATA& data, CAN_MOB mobn ) {
 bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mask,
                   CAN_MOB mobn )
 {
+    if(!bHaveInit)
+        return false;
+
     uint8_t mob = (uint8_t)mobn;
     if(MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED || Handlers[mob] == nullptr)
     {
@@ -149,6 +163,10 @@ bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mas
 
 bool CANRaw::ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn )
 {
+    CommandManager::StaticClass().LogMessageln(FSTR("CANRaw::ConfigTx"));
+    if(!bHaveInit)
+        return false;
+
     uint8_t mob = (uint8_t) mobn;
     if (MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED)
     {
@@ -165,6 +183,7 @@ bool CANRaw::ConfigTx( const CAN_FRAME_HEADER& header, CAN_MOB mobn )
 
 void CANRaw::ForceResetMob(CAN_MOB mobn)
 {
+    CommandManager::StaticClass().LogMessageln(FSTR("ForceResetMob"));
     uint8_t mob = (uint8_t) mobn;
 
     MobModes[mob] = CAN_MOB_OPERATING_MODE::DISABLED;
@@ -223,6 +242,7 @@ void CANRaw::INT_CANIT() {
             }
             else if (mobStatus & _BV (RXOK))
             {
+                /*
                 // TODO: dlcw warning
                 uint8_t dlc = Can_get_dlc();// in case of dlcw and dlc changing
                 CAN_DATA Data;
@@ -253,7 +273,7 @@ void CANRaw::INT_CANIT() {
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);
 
-                Can_clear_status_mob();
+                Can_clear_status_mob();*/
             }
         }
         else
@@ -302,6 +322,7 @@ void CANRaw::INT_CANIT() {
 
 void CANRaw::ReconfigureMob(CAN_MOB mobn)
 {
+    CommandManager::StaticClass().LogMessageln(FSTR("CANRaw::ReconfigureMob"));
     uint8_t origCANPAGE = CANPAGE;
 
     uint8_t mob = (uint8_t)mobn;
@@ -375,7 +396,7 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
 
             break;
         default:
-            return;
+            break;
     }
 
     CANPAGE = origCANPAGE;

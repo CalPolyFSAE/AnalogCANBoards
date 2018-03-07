@@ -103,6 +103,9 @@ int main()
 
     sei();
 
+    // print reset flag status
+    CommandManager::StaticClass().LogMessage(FSTR("START "));
+    CommandManager::StaticClass().LogMessageln(MCUSR);
 
     // test command (for testing)
     //CommandManager::StaticClass().ExecuteCommand(0, 0);
@@ -131,7 +134,6 @@ int main()
         //loopTiming = getMicros();
 
         ASensorManager->Update();
-        //ACommandManager->Update();
 
         //loopTiming = getMicros() - loopTiming;
 

@@ -296,13 +296,15 @@ public:
     void ForceResetMob(CAN_MOB mobn);
 
     // do not call, this function is for an interrupt
-    inline void INT_CANIT();
+    void INT_CANIT();
 
 private:
     CANRaw() {};
 
     //setup registers in mobn based on mode and current configuration
     inline void ReconfigureMob(CAN_MOB mobn);
+
+    bool bHaveInit = false;
 
 };
 

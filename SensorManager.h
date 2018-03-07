@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <util/atomic.h>
 #include "Config/CONFIG.h"
+#include "Commands/CommandManager.h"
 
 /** This is a singleton class */
 class SensorManager
@@ -22,13 +23,7 @@ public:
     static SensorManager& GetInstance();
 
     //main program loop calls this
-    inline void Update() {
-        //update the CANSensorTimers
-        for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
-        {
-            CANMessageTimers[i]->Update ();
-        }
-    }
+    void Update();
 
     //1000Hz interrupt calls this
     void INT_UpdateTiming();

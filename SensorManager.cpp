@@ -17,7 +17,17 @@ SensorManager& SensorManager::GetInstance()
     return S;
 }
 
-SensorManager::SensorManager()
+void SensorManager::Update() {
+    //update the CANSensorTimers
+    for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
+    {
+        if (CANMessageTimers[i] != nullptr)
+            CANMessageTimers[i]->Update ();
+    }
+}
+
+SensorManager::SensorManager() :
+         AllSensors{}, CANMessageTimers{}
 {
     uint8_t allSensorsIndex = 0;
     // create timers for CAN message timing and register sensors

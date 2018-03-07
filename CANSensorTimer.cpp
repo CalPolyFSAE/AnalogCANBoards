@@ -59,7 +59,6 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 
 void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
 {
-    CommandManager::StaticClass().LogMessageln(FSTR("TX"));
     bHaveSentLastCAN = true;
 }
 
@@ -70,6 +69,7 @@ void CANSensorTimer::Update()
     static bool isFirstError = false;
     if(!bHaveInitialized)// has the CAN Mob been configured?
     {
+
         CANRaw& can = CANRaw::StaticClass();
         // create CAN Tx settings
         CANRaw::CAN_FRAME_HEADER tmpHeader{
@@ -78,7 +78,6 @@ void CANSensorTimer::Update()
             0,          // ide flag
             (static_cast<uint8_t>(activeSensors * CANBYTESPERDATACHANNEL))      // dlc
         };
-        can.ForceResetMob(mobHandle); // make sure mob is ready
         if(can.ConfigTx(tmpHeader, mobHandle))// attempt to config mob as Tx
         {
             bHaveInitialized = true;
@@ -90,11 +89,12 @@ void CANSensorTimer::Update()
     }
     else if(needToSend)
     {
+
         if(bHaveSentLastCAN)
         {
+            bHaveSentLastCAN = false;
             needToSend = false;
             isFirstError = false; // reset error flag
-            bHaveSentLastCAN = false;
             ++txCANMessageSucCnt; // increment success counter
             /////////////////
             /////////////////
@@ -128,6 +128,7 @@ void CANSensorTimer::Update()
             }
 
 
+
             //check that all sensors got value from ADC
             // this is really unnecessary
             //TODO: add full speed sampling so it REALLY IS unnecessary
@@ -147,6 +148,7 @@ void CANSensorTimer::Update()
              }
              }
              */
+
 
             //package CAN message using sensor values
             canData = {};
@@ -194,7 +196,11 @@ void CANSensorTimer::Update()
             }
 
             //send CAN message
-            CANRaw::StaticClass().TxData(canData, mobHandle);
+            if (!CANRaw::StaticClass ().TxData (canData, mobHandle))
+            {
+                //error
+            }
+
 
         }else
         {
@@ -208,6 +214,7 @@ void CANSensorTimer::Update()
             if(txCANMessageErrCnt == 0xFF)
             {
                 CommandManager::StaticClass().LogMessageln(FSTR("txCANMessageErrCnt exceeded 0xAF Cannot Send"));
+                bHaveSentLastCAN = true;
             }
         }
 
