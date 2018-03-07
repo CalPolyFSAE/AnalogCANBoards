@@ -102,6 +102,7 @@ bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
     }
 
     Handlers[mob] = listener;
+    ForceResetMob(mobn);
 
     return true;
 }
@@ -212,7 +213,7 @@ void CANRaw::INT_CANIT() {
             if (mobStatus & _BV (TXOK))
             {
                 // notify that message was sent (Tx callback)
-                if(handler != nullptr)
+               if(handler != nullptr)
                     handler->INT_Call_SentFrame(MobHeaders[mob]);
 
                 // clear CANSTMOB
@@ -246,7 +247,8 @@ void CANRaw::INT_CANIT() {
 
                 // the dlc in received data might be different than what was specified when configured
                 // notify that message was received (Rx callback)
-                handler->INT_Call_GotFrame(&Header, &Data);
+                if(handler)
+                    handler->INT_Call_GotFrame(Header, Data);
 
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);
@@ -340,7 +342,6 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
     {
         case CAN_MOB_OPERATING_MODE::DISABLED:
             Can_disable_mob_int(mob);// disable interrupts for this mob
-            return;
             break;
         case CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME:
             Can_enable_mob_int(mob);// enable interrupts for this mob, used in callbacks

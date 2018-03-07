@@ -59,6 +59,7 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 
 void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
 {
+    CommandManager::StaticClass().LogMessageln(FSTR("TX"));
     bHaveSentLastCAN = true;
 }
 
@@ -198,10 +199,15 @@ void CANSensorTimer::Update()
         }else
         {
             // missed a CAN message
+            ++txCANMessageErrCnt;
             if(!isFirstError)
             {
                 isFirstError = true;
-                ++txCANMessageErrCnt;
+                CommandManager::StaticClass().LogMessageln(FSTR("txCANMessageErrCnt First Error"));
+            }
+            if(txCANMessageErrCnt == 0xFF)
+            {
+                CommandManager::StaticClass().LogMessageln(FSTR("txCANMessageErrCnt exceeded 0xAF Cannot Send"));
             }
         }
 
