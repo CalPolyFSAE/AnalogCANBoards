@@ -225,7 +225,7 @@ void CANRaw::INT_CANIT() {
                 // TODO: dlcw warning
                 uint8_t dlc = Can_get_dlc();// in case of dlcw and dlc changing
                 CAN_DATA Data;
-                CAN_FRAME_HEADER Header = &MobHeaders[mob];
+                CAN_FRAME_HEADER Header = MobHeaders[mob];
 
                 for (uint8_t data_index = 0; data_index < dlc;
                         data_index++)

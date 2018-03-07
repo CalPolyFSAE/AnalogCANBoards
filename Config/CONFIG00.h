@@ -147,9 +147,9 @@ namespace CANCONFIG
 
     // all can channels
     constexpr CANSensorChannel CANChannels[] =
-        { CANChannel0, CANChannel1 };
+        { CANChannel0 };
     //number of CAN Channels
-    constexpr uint8_t NUMCANCHANNELS = 2;
+    constexpr uint8_t NUMCANCHANNELS = 1;
 
     //Device id for commands over CAN
     constexpr uint8_t CANCMD_DEVID = 0x00;
