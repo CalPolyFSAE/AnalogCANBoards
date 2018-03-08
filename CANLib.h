@@ -286,7 +286,8 @@ public:
     bool BindListener(CANListener* listener, CAN_MOB mob, bool forceOverwrite = false);
 
     // tx data using specified mob, false on error
-    bool TxData(const CAN_DATA& data, CAN_MOB mobn);
+    // this function is interrupt safe
+    bool INTS_TxData(const CAN_DATA& data, CAN_MOB mobn);
 
     // configure Mob as Rx or Tx
     bool ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mask, CAN_MOB mobn );

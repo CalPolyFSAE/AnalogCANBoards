@@ -115,11 +115,14 @@ bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
     return true;
 }
 
-bool CANRaw::TxData( const CAN_DATA& data, CAN_MOB mobn ) {
+bool CANRaw::INTS_TxData( const CAN_DATA& data, CAN_MOB mobn ) {
     if(!bHaveInit)
         return false;
 
+    uint8_t origCANPAGE = CANPAGE;
+
     uint8_t mob = (uint8_t)mobn;
+    //check that this mob can be used
     if (MobModes[mob] != CAN_MOB_OPERATING_MODE::Tx_DATA_FRAME || mob > LAST_MOB_NB)
     {
         return false;
@@ -132,6 +135,8 @@ bool CANRaw::TxData( const CAN_DATA& data, CAN_MOB mobn ) {
         CANMSG = data.byte[cpt];
 
     Can_config_tx();
+
+    CANPAGE = origCANPAGE;
 
     return true;
 }
