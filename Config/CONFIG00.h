@@ -123,7 +123,7 @@ namespace CANCONFIG
 
     constexpr CANSensorChannel CANChannel0 = {
                 CAN0,           // CAN Message ID for this channel
-                2,             // milliseconds between updates
+                1,             // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor00,		//sensors in data channel positions
                     SENSORCONFIG::Sensor01,

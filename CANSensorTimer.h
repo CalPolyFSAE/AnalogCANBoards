@@ -61,13 +61,36 @@ public:
     //1000Hz interrupt to keep track of timing
     inline void INT_Call_Tick()
     {
+        if(!bHaveInitialized)
+            return;
+
         --ticksToSend;
-        //TODO: add check for needToSend to see if we have not sent last mesg
         //TODO: add var that keeps track of how overdue the msg is
         if(ticksToSend == 0)
         {
-            needToSend = true;
             ticksToSend = TimingInterval;   // reset timer
+            //send CAN message
+            if(bHaveSentLastCAN)
+            {
+                ++txCANMessageSucCnt; // increment success counter
+
+                if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)
+                {
+                    //decrement error count
+                    --txCANMessageErrCnt;
+                }
+
+                bHaveSentLastCAN = false;
+                if (!CANRaw::StaticClass ().INTS_TxData (canData, mobHandle))
+                {
+                    //TODO: error
+                }
+            }else
+            {
+                // missed a CAN message
+                // increment error counter
+                ++txCANMessageErrCnt;
+            }
         }
     }
 
@@ -87,7 +110,6 @@ public:
 private:
 
     /* CAN Tx Timing */
-    volatile bool needToSend;                          // CAN message needs to be sent
     volatile uint16_t ticksToSend;                     // ticks until next message sent
 
     /* CAN Tx monitoring */

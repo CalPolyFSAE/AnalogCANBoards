@@ -23,6 +23,7 @@ public:
     static SensorManager& GetInstance();
 
     //main program loop calls this
+    // WARNING: do not inline. will crash code for an unknown reason!!!!
     void Update();
 
     //1000Hz interrupt calls this
