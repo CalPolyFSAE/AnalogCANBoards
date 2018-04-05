@@ -110,7 +110,7 @@ namespace SENSORCONFIG
 namespace CANCONFIG
 {
     constexpr CAN_SETTINGS CAN0 = {
-		0xD3,
+		0xD5,
 		0,
 		0
     };

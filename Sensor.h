@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include "ADCManager.h"
 
-class Sensor : public ADCManagerCallbackInterface<Sensor>
+class Sensor : public ADCManagerCallbackInterface
 {
 public:
 
@@ -54,7 +54,7 @@ public:
     bool requestADCRead();
 
     //Called by ADCManager when read is finished
-    void INT_Call_ADC_Finished_Implementation(uint16_t const& value, uint8_t channel);
+    void INT_Call_ADC_Finished(uint16_t const& value, uint8_t channel) override;
 
     //get corrected value to send over CAN
     int16_t getValue();

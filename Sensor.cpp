@@ -41,7 +41,7 @@ Sensor::~Sensor()
 //request an ADC read for this sensor
 bool Sensor::requestADCRead()
 {
-    if(ADCManager<Sensor>::StaticClass().StartRead(this, ADCChannel))
+    if(ADCManager::StaticClass().StartRead(this, ADCChannel))
     {
         isReady = false;
         return true;
@@ -52,7 +52,7 @@ bool Sensor::requestADCRead()
 }
 
 //Called by ADCManager when read is finished
-void Sensor::INT_Call_ADC_Finished_Implementation( uint16_t const& value, uint8_t channel ) {
+void Sensor::INT_Call_ADC_Finished( uint16_t const& value, uint8_t channel ) {
         rawADC = value;
         isReady = true;
 }

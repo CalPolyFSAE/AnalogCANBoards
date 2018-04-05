@@ -68,13 +68,13 @@ ISR(TIMER2_COMP_vect)
 //TODO: set up this interrupt as part of an ADCManager derived class
 //interrupt function for ADC completion
 ISR(ADC_vect) {
-    ADCManager<Sensor>::StaticClass().INT_ADCFinished ();
+    ADCManager::StaticClass().INT_ADCFinished ();
 }
 
 int main()
 {
     cli();
-	
+
     //setup commands first for error reporting
     //CommandManager* ACommandManager = &CommandManager::StaticClass();
 
@@ -92,10 +92,10 @@ int main()
     timer1_init();
 
     //setup timer 2
-    timer2_init();
+    //timer2_init();
 
     //setup ADC sample rate
-    ADCManager<Sensor>::StaticClass().Init();
+    ADCManager::StaticClass().Init();
     CANRaw::StaticClass().Init(CANRaw::CAN_BAUDRATE::B1M);
 
     //get the SensorManager(also initializes it)
