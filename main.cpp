@@ -45,7 +45,7 @@ float getMicros()
     if(TIFR2 & _BV(OCF2A))
     {
         ++timer2Count;
-        TIFR2 |= ~(_BV(OCF2A));//clear interrupt flag
+        TIFR2 &= ~(_BV(OCF2A));//clear interrupt flag
     }
 
     uint32_t timer2cntCp = timer2Count;
