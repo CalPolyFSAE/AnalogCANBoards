@@ -61,9 +61,6 @@ public:
     //1000Hz interrupt to keep track of timing
     inline void INT_Call_Tick()
     {
-        if(!bHaveInitialized)
-            return;
-
         --ticksToSend;
         //TODO: add var that keeps track of how overdue the msg is
         if(ticksToSend == 0)
@@ -118,8 +115,8 @@ private:
      * every time a CAN message fails to send within TimingInterval time frame.
      * Decrements every 256 successful messages, every TimingInterval*256 ms
      */
-    uint16_t txCANMessageErrCnt;
-    uint8_t txCANMessageSucCnt;         // successful message counter
+    volatile uint16_t txCANMessageErrCnt;
+    volatile uint8_t txCANMessageSucCnt;         // successful message counter
 
     /* CAN Lib Data */
     CANRaw::CAN_MOB mobHandle;                  //mob number that this class has been bound to
@@ -127,8 +124,6 @@ private:
 
     class Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
     uint8_t activeSensors;                             // Number of sensors on this CAN Channel (used for dlc)
-
-    bool bHaveInitialized;                              // has the CAN Mob for this channel been setup
 };
 
 

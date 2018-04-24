@@ -106,6 +106,8 @@ int main()
     // print reset flag status
     CommandManager::StaticClass().LogMessage(FSTR("START "));
     CommandManager::StaticClass().LogMessageln(MCUSR);
+    CommandManager::StaticClass().LogMessage(FSTR("DEVID "));
+    CommandManager::StaticClass().LogMessageln(CANCONFIG::CANCMD_DEVID);
 
     // test command (for testing)
     //CommandManager::StaticClass().ExecuteCommand(0, 0);

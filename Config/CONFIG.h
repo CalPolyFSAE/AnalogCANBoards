@@ -8,7 +8,7 @@
 #ifndef CONFIG_CONFIG_H_
 #define CONFIG_CONFIG_H_
 
-#define CONF00
+#define CONFFR
 
 #define MAXSENSORS 8
 
@@ -19,6 +19,8 @@
 
 #ifdef CONF00
 #include "CONFIG00.h"
+#else CONFFR
+#include "CONFIG_FR.h"
 #endif
 
 

@@ -19,23 +19,36 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     CANRaw& can = CANRaw::StaticClass();
     mobHandle = can.GetNextFreeHandle();
 
-    //bind this class to the next open mob handle
-    if(!can.BindListener(this, mobHandle))
-    {
-        //error
-        CommandManager::StaticClass().LogMessageln(FSTR("FAILED TO BIND LISTENER"));
-    }
-    CommandManager::StaticClass().LogMessage(FSTR("CANSensorTimer Created: "));
-    CommandManager::StaticClass().LogMessage((uint8_t)(mobHandle));
-    CommandManager::StaticClass().LogMessage(FSTR(" ID: "));
-    CommandManager::StaticClass().LogMessage((uint8_t)id);
-    CommandManager::StaticClass().LogMessage(FSTR(" Interval: "));
-    CommandManager::StaticClass().LogMessageln((uint8_t)TimingInterval);
-
-    bHaveInitialized = false;
     bHaveSentLastCAN = true;
     txCANMessageErrCnt = 0;
     txCANMessageSucCnt = 0;
+
+    //bind this class to the next open mob handle
+    if (!can.BindListener (this, mobHandle))
+    {
+        //error
+        CommandManager::StaticClass ().LogMessageln (FSTR("FAILED TO BIND LISTENER"));
+    }
+    CommandManager::StaticClass ().LogMessage (FSTR("CANSensorTimer Created: "));
+    CommandManager::StaticClass ().LogMessage ((uint8_t) (mobHandle));
+    CommandManager::StaticClass ().LogMessage (FSTR(" ID: "));
+    CommandManager::StaticClass ().LogMessage ((uint8_t) id);
+    CommandManager::StaticClass ().LogMessage (FSTR(" Interval: "));
+    CommandManager::StaticClass ().LogMessageln ((uint8_t) TimingInterval);
+
+    // create CAN Tx settings
+    CANRaw::CAN_FRAME_HEADER tmpHeader
+        { id,         // can id
+                0,          // rtr flag
+                0,          // ide flag
+                (static_cast<uint8_t> (activeSensors * CANBYTESPERDATACHANNEL)) // dlc
+        };
+    if (!can.ConfigTx (tmpHeader, mobHandle))      // attempt to config mob as Tx
+    {
+        //TODO: error
+        CommandManager::StaticClass ().LogMessageln (
+                FSTR("Unable to ConfigTx"));
+    }
 }
 
 //registers a sensor on this CANChannel at dataChannel position
@@ -53,7 +66,6 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 
     //register the sensor
     sensors[index] = sensor;
-    bHaveInitialized = false;
     return true;
 }
 
@@ -66,113 +78,86 @@ void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameCon
 //then send data over CAN
 void CANSensorTimer::Update()
 {
-    if(!bHaveInitialized)// has the CAN Mob been configured?
+    //read data on all sensors
+
+    for (uint8_t i = 0; i < activeSensors;)
     {
-        CANRaw& can = CANRaw::StaticClass();
-        // create CAN Tx settings
-        CANRaw::CAN_FRAME_HEADER tmpHeader{
-            id,         // can id
-            0,          // rtr flag
-            0,          // ide flag
-            (static_cast<uint8_t>(activeSensors * CANBYTESPERDATACHANNEL))      // dlc
-        };
-        if(can.ConfigTx(tmpHeader, mobHandle))// attempt to config mob as Tx
+        //only go to next sensor after the request is successful
+        //this should only take multiple requests if ADC clock speed is
+        //very slow
+        if (sensors[i] != nullptr)
         {
-            bHaveInitialized = true;
-        }else
+            if (sensors[i]->requestADCRead ())
+            {
+                // Sensor has completed last read
+                ++i;
+            }
+        }
+        else
         {
-            //TODO: error
-            CommandManager::StaticClass().LogMessageln(FSTR("Unable to ConfigTx"));
+            ++i;
         }
     }
-    else
+
+    //check that all sensors got value from ADC
+    // unnecessary to check all
+    for (uint8_t i = 0; i < activeSensors; )
     {
-        ++txCANMessageSucCnt; // increment success counter
-        /////////////////
-        /////////////////
-        ////////////////
-
-        if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)
+        if (sensors[i] != nullptr)
         {
-            //decrement error count
-            --txCANMessageErrCnt;
-        }
-
-        //read data on all sensors
-
-        for (uint8_t i = 0; i < activeSensors;)
-        {
-            //only go to next sensor after the request is successful
-            //this should only take multiple requests if ADC clock speed is
-            //very slow
-            if (sensors[i] != nullptr)
-            {
-                if (sensors[i]->requestADCRead ())
-                {
-                    // Sensor has completed last read
-                    ++i;
-                }
-            }
-            else
+            if (sensors[i]->getIsReady ())
             {
                 ++i;
             }
         }
-
-        //check that all sensors got value from ADC
-        // unnecessary to check all
-        for (uint8_t i = 0; i < activeSensors;)
+        else
         {
-            if (sensors[i] != nullptr)
-            {
-                if (sensors[i]->getIsReady ())
-                {
-                    ++i;
-                }
-            }
-            else
-            {
-                ++i;
-            }
+            ++i;
         }
+    }
 
-        //package CAN message using sensor values
-        CANRaw::CAN_DATA canTmp = {};
-        for (uint8_t i = 0; i < activeSensors; ++i)
+    //package CAN message using sensor values
+    CANRaw::CAN_DATA canTmp = {};
+    for (uint8_t i = 0; i < activeSensors; ++i)
+    {
+        if (sensors[i] == nullptr)
         {
-            if (sensors[i] == nullptr)
-            {
-                continue;
-            }
-            //TODO: Need to add variable data sizes for CAN data channels
-            //CANData.data16[i] = sensors[i]->getValue();
-            int16_t data = sensors[i]->getValue ();
-
-            // hton (byte swap)
-            uint8_t* p_n = (uint8_t *) &data;
-            uint8_t lower = p_n[0];
-            p_n[0] = p_n[1];
-            p_n[1] = lower;
-
-            // use mcpy for variable data channel sizes
-            ((uint16_t*) canTmp.byte)[i] = data;
+            continue;
         }
+        //TODO: Need to add variable data sizes for CAN data channels
+        //CANData.data16[i] = sensors[i]->getValue();
+        int16_t data = sensors[i]->getValue ();
 
-        // atomic while writing candata value as it is read in an interrupt
-        ATOMIC_BLOCK(ATOMIC_FORCEON)
-        {
-            // use mcpy for variable data channel sizes?
-            // copy data
-            canData = canTmp;
-        }
+        // hton (byte swap)
+        uint8_t* p_n = (uint8_t *) &data;
+        uint8_t lower = p_n[0];
+        p_n[0] = p_n[1];
+        p_n[1] = lower;
+
+        // use mcpy for variable data channel sizes
+        ((uint16_t*) canTmp.byte)[i] = data;
+    }
+
+    bool txErrorReport = false;
+    // atomic while writing candata value as it is read in an interrupt
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        // use mcpy for variable data channel sizes?
+        // copy data
+        canData = canTmp;
 
         // check for max
         if (txCANMessageErrCnt == 0xFF)
         {
-            CommandManager::StaticClass ().LogMessageln (
-                    FSTR("txCANMessageErrCnt exceeded 0xAF Cannot Send"));
+            txErrorReport = true;
             bHaveSentLastCAN = true;                // retry sending
+            txCANMessageErrCnt = 0x00;              // reset error counter
         }
+    }
+    if(txErrorReport)
+    {
+        CommandManager::StaticClass ().LogMessageln (
+                            FSTR("txCANMessageErrCnt exceeded 0xAF Cannot Send"));
     }
 }
 

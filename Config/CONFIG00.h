@@ -26,7 +26,7 @@ namespace SENSORCONFIG
 
     inline int16_t conversion01( float const& voltage )
     {
-        return (int16_t)(voltage * 65.536 * 100.0);;
+        return (int16_t)(voltage * 65.536 * 100.0);
     }
 
     // Sensor 0 Name
