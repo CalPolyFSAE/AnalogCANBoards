@@ -18,7 +18,7 @@ namespace SENSORCONFIG
     {
         // normalize across domain of 16 bit signed int
         //(2^15-1)/500 = 65.536
-        return (int16_t)(voltage * 65.536 * 100.0);
+        return (int16_t)(voltage * 65.536);
     }
 
     inline int16_t conversionAccelFX( float const& voltage )
@@ -26,7 +26,7 @@ namespace SENSORCONFIG
         //Accel F X' .326x+1.6317
         float output = voltage * 0.326 - 1.6317;
         //output = (output < 0) ? 0 : output; // clamp at 0
-        return (int16_t)(output * 65.536 * 100.0);
+        return (int16_t)(output * 65.536);
     }
 
     inline int16_t conversionAccelFY( float const& voltage )
@@ -34,7 +34,7 @@ namespace SENSORCONFIG
         //.3126x+1.638
         float output = voltage * 0.3126 + 1.638;
         //output = (output < 0) ? 0 : output; // clamp at 0
-        return (int16_t)(output * 65.536 * 100.0);
+        return (int16_t)(output * 65.536);
     }
 
     inline int16_t conversionBP( float const& voltage )
@@ -43,7 +43,7 @@ namespace SENSORCONFIG
         //
         float output = voltage * 499.9 + 0.5;
         //output = (output < 0) ? 0 : output; // clamp at 0
-        return (int16_t) (output * 65.536 * 100.0);
+        return (int16_t) (output * 65.536);
     }
 
     // Sensor 0 Name
