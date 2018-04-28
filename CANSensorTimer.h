@@ -12,6 +12,8 @@
 #include <util/atomic.h>
 #include "CANLib.h"
 
+#include "Commands/CommandManager.h"
+
 //timing objects for tracking when a message needs to be sent and what
 //is sent with it and fetching the data to be sent
 class CANSensorTimer: public CANListener
@@ -48,8 +50,8 @@ public:
 
     const uint16_t TimingInterval;              // milliseconds between messages
 
-    const uint32_t id;		                //CAN ID for this info
-    const uint8_t ide;				//request return message flag and identifier extension
+    const uint32_t id;                          //CAN ID for this info
+    const uint8_t ide;                          //request return message flag and identifier extension
     
 
     CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_t can_ide);
@@ -59,40 +61,14 @@ public:
     bool registerSensor(class Sensor* sensor, CANDATAChannel dataChannel);
 
     //1000Hz interrupt to keep track of timing
-    inline void INT_Call_Tick()
-    {
-        --ticksToSend;
-        //TODO: add var that keeps track of how overdue the msg is
-        if(ticksToSend == 0)
-        {
-            ticksToSend = TimingInterval;   // reset timer
-            //send CAN message
-            if(bHaveSentLastCAN)
-            {
-                ++txCANMessageSucCnt; // increment success counter
-
-                if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)
-                {
-                    //decrement error count
-                    --txCANMessageErrCnt;
-                }
-
-                bHaveSentLastCAN = false;
-                if (!CANRaw::StaticClass ().INTS_TxData (canData, mobHandle))
-                {
-                    //TODO: error
-                }
-            }else
-            {
-                // missed a CAN message
-                // increment error counter
-                ++txCANMessageErrCnt;
-            }
-        }
-    }
+    void INT_Call_Tick();
 
     // CANListener interface
     virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) override;
+
+
+    // sets up CANRaw to accept tx data and callback on send
+    void Init();
 
     //make sensors request data if a CAN message needs to be sent
     //then send data over CAN
@@ -111,6 +87,9 @@ private:
 
     /* CAN Tx monitoring */
     volatile bool bHaveSentLastCAN;                     // has the last CAN message been sent
+
+    volatile bool bNeedToSend;
+
     /*  number of CAN Tx message misses. This increments
      * every time a CAN message fails to send within TimingInterval time frame.
      * Decrements every 256 successful messages, every TimingInterval*256 ms
@@ -120,7 +99,7 @@ private:
 
     /* CAN Lib Data */
     CANRaw::CAN_MOB mobHandle;                  //mob number that this class has been bound to
-    CANRaw::CAN_DATA canData;
+    volatile CANRaw::CAN_DATA canData;
 
     class Sensor* sensors[CANMAXDATACHANNELS] = {};          // Sensors sent on this CAN Message
     uint8_t activeSensors;                             // Number of sensors on this CAN Channel (used for dlc)

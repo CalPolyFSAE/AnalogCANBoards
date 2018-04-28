@@ -8,7 +8,6 @@
 
 #include "CANSensorTimer.h"
 #include "Sensor.h"
-#include "Commands/CommandManager.h"
 
 CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_t can_ide) :
     TimingInterval(interval), id(*can_id), ide(can_ide)
@@ -16,12 +15,68 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     ticksToSend = interval;
     activeSensors = 0;
 
-    CANRaw& can = CANRaw::StaticClass();
-    mobHandle = can.GetNextFreeHandle();
+    mobHandle = CANRaw::CAN_MOB::MOB_NONE;
 
     bHaveSentLastCAN = true;
+    bNeedToSend = false;
     txCANMessageErrCnt = 0;
     txCANMessageSucCnt = 0;
+}
+
+//registers a sensor on this CANChannel at dataChannel position
+bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
+{
+    uint8_t index = (uint8_t) dataChannel;
+    if (index > CANMAXDATACHANNELS)          // check array bounds
+        return false;
+    if (sensors[index] != nullptr) // make sure another sensor is not here
+        return false; // if there is TODO: ADD critical error functionality
+
+    //sort out CAN message size (for dlc)
+    if (index >= activeSensors)
+        activeSensors = index + 1;
+
+    //register the sensor
+    sensors[index] = sensor;
+    return true;
+}
+
+void CANSensorTimer::INT_Call_Tick()
+{
+    --ticksToSend;
+    //TODO: add var that keeps track of how overdue the msg is
+    if(ticksToSend == 0)
+    {
+        ticksToSend = TimingInterval;   // reset timer
+        bNeedToSend = true;
+        //send CAN message
+        if(bHaveSentLastCAN)
+        {
+            ++txCANMessageSucCnt; // increment success counter
+            if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)
+            {
+                //decrement error count
+                --txCANMessageErrCnt;
+            }
+        }else
+        {
+            // missed a CAN message
+            // increment error counter
+            ++txCANMessageErrCnt;
+        }
+    }
+}
+
+void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
+{
+    bHaveSentLastCAN = true;
+}
+
+
+void CANSensorTimer::Init()
+{
+    CANRaw& can = CANRaw::StaticClass();
+    mobHandle = can.GetNextFreeHandle();
 
     //bind this class to the next open mob handle
     if (!can.BindListener (this, mobHandle))
@@ -51,35 +106,11 @@ CANSensorTimer::CANSensorTimer(uint16_t interval, const uint32_t* can_id, uint8_
     }
 }
 
-//registers a sensor on this CANChannel at dataChannel position
-bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
-{
-    uint8_t index = (uint8_t) dataChannel;
-    if (index > CANMAXDATACHANNELS)          // check array bounds
-        return false;
-    if (sensors[index] != nullptr) // make sure another sensor is not here
-        return false; // if there is TODO: ADD critical error functionality
-
-    //sort out CAN message size (for dlc)
-    if (index >= activeSensors)
-        activeSensors = index + 1;
-
-    //register the sensor
-    sensors[index] = sensor;
-    return true;
-}
-
-void CANSensorTimer::INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig)
-{
-    bHaveSentLastCAN = true;
-}
-
 //make sensors request data if a CAN message needs to be sent
 //then send data over CAN
 void CANSensorTimer::Update()
 {
     //read data on all sensors
-
     for (uint8_t i = 0; i < activeSensors;)
     {
         //only go to next sensor after the request is successful
@@ -139,13 +170,10 @@ void CANSensorTimer::Update()
     }
 
     bool txErrorReport = false;
+
     // atomic while writing candata value as it is read in an interrupt
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        // use mcpy for variable data channel sizes?
-        // copy data
-        canData = canTmp;
-
         // check for max
         if (txCANMessageErrCnt == 0xFF)
         {
@@ -154,10 +182,22 @@ void CANSensorTimer::Update()
             txCANMessageErrCnt = 0x00;              // reset error counter
         }
     }
+
+    //send CAN message
+    if(bHaveSentLastCAN && bNeedToSend)
+    {
+        bNeedToSend = false;
+        bHaveSentLastCAN = false;
+        if (!CANRaw::StaticClass ().INTS_TxData (canTmp, mobHandle))
+        {
+            //TODO: error
+        }
+    }
+
     if(txErrorReport)
     {
         CommandManager::StaticClass ().LogMessageln (
-                            FSTR("txCANMessageErrCnt exceeded 0xAF Cannot Send"));
+                            FSTR("txCANMessageErrCnt exceeded maximum"));
     }
 }
 
@@ -178,5 +218,3 @@ uint8_t CANSensorTimer::getNumActiveSensors()
 {
     return activeSensors;
 }
-
-

@@ -56,6 +56,14 @@ SensorManager::SensorManager() :
             }
         }
     }
+
+    //update the CANSensorTimers
+    for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
+    {
+        if (CANMessageTimers[i] != nullptr)
+            CANMessageTimers[i]->Init();
+    }
+
 }
 
 //1000Hz interrupt timing call

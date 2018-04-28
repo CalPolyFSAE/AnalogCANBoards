@@ -7,6 +7,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "util/atomic.h"
 
 #include "CANLib.h"
 
@@ -115,7 +116,7 @@ bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
     return true;
 }
 
-bool CANRaw::INTS_TxData( const CAN_DATA& data, CAN_MOB mobn ) {
+bool CANRaw::INTS_TxData( const volatile CAN_DATA& data, CAN_MOB mobn ) {
     if(!bHaveInit)
         return false;
 
@@ -130,9 +131,15 @@ bool CANRaw::INTS_TxData( const CAN_DATA& data, CAN_MOB mobn ) {
 
     Can_set_mob(mob);
 
-    // copy data to send
-    for (uint8_t cpt = 0; cpt < MobHeaders[mob].dataLength; cpt++)
-        CANMSG = data.byte[cpt];
+    // atomic to prevent change of volatile data
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        // copy data to send
+        for (uint8_t cpt = 0; cpt < MobHeaders[mob].dataLength; cpt++)
+        {
+            CANMSG = data.byte[cpt];
+        }
+    }
 
     Can_config_tx();
 

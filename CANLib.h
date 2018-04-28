@@ -209,6 +209,7 @@ public:
         // frame buffer not supported
     };
 
+    //TODO: make this work with volatile CAN_DATA
     union CAN_DATA
     {
         uint64_t value;
@@ -287,7 +288,7 @@ public:
 
     // tx data using specified mob, false on error
     // this function is interrupt safe
-    bool INTS_TxData(const CAN_DATA& data, CAN_MOB mobn);
+    bool INTS_TxData(const volatile CAN_DATA& data, CAN_MOB mobn);
 
     // configure Mob as Rx or Tx
     bool ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mask, CAN_MOB mobn );
