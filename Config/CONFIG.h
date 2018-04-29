@@ -10,7 +10,7 @@
 
 #define MAXSENSORS 8
 
-#define SERIAL_BAUD 9600
+#define SERIAL_BAUD 115200
 #define CAN_BAUD 1000
 
 #include "CONFIG_Commands.h"

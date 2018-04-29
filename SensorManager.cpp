@@ -72,7 +72,8 @@ void SensorManager::INT_UpdateTiming()
     //update the CANSensorTimers
     for (uint8_t i = 0; i < CANCONFIG::NUMCANCHANNELS; ++i)
     {
-        CANMessageTimers[i]->INT_Call_Tick ();
+        if(CANMessageTimers[i] != nullptr)
+            CANMessageTimers[i]->INT_Call_Tick ();
     }
 }
 

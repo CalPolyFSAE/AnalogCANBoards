@@ -43,26 +43,42 @@ bool CANSensorTimer::registerSensor(Sensor* sensor, CANDATAChannel dataChannel)
 
 void CANSensorTimer::INT_Call_Tick()
 {
+    // check for errors
+    if(!bHaveSentLastCAN)// message has not been sent within 1ms deadline
+    {
+        // missed a CAN message
+        // increment error counter
+        ++txCANMessageErrCnt;
+        // check for max
+        if (txCANMessageErrCnt == 0xFF)
+        {
+            bHaveSentLastCAN = true;                // retry sending
+            txCANMessageErrCnt = 0x00;              // reset error counter
+        }
+    }else
+    {
+        ++txCANMessageSucCnt; // increment success counter
+        if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)// check for max
+        {
+            //decrement error count
+            --txCANMessageErrCnt;
+        }
+    }
+
     --ticksToSend;
     //TODO: add var that keeps track of how overdue the msg is
     if(ticksToSend == 0)
     {
         ticksToSend = TimingInterval;   // reset timer
-        bNeedToSend = true;
+
         //send CAN message
         if(bHaveSentLastCAN)
         {
-            ++txCANMessageSucCnt; // increment success counter
-            if (txCANMessageErrCnt > 0 && txCANMessageSucCnt == 255)
+            bHaveSentLastCAN = false;
+            if (!CANRaw::StaticClass ().INTS_TxData (canData, mobHandle))
             {
-                //decrement error count
-                --txCANMessageErrCnt;
+                //TODO: error
             }
-        }else
-        {
-            // missed a CAN message
-            // increment error counter
-            ++txCANMessageErrCnt;
         }
     }
 }
@@ -111,37 +127,18 @@ void CANSensorTimer::Init()
 void CANSensorTimer::Update()
 {
     //read data on all sensors
-    for (uint8_t i = 0; i < activeSensors;)
+    for (uint8_t i = 0; i < activeSensors; )
     {
         //only go to next sensor after the request is successful
         //this should only take multiple requests if ADC clock speed is
         //very slow
         if (sensors[i] != nullptr)
         {
-            if (sensors[i]->requestADCRead ())
-            {
-                // Sensor has completed last read
-                ++i;
-            }
-        }
-        else
-        {
-            ++i;
-        }
-    }
-
-    //check that all sensors got value from ADC
-    // unnecessary to check all
-    for (uint8_t i = 0; i < activeSensors; )
-    {
-        if (sensors[i] != nullptr)
-        {
-            if (sensors[i]->getIsReady ())
+            if(sensors[i]->requestADCRead ())
             {
                 ++i;
             }
-        }
-        else
+        }else
         {
             ++i;
         }
@@ -158,6 +155,7 @@ void CANSensorTimer::Update()
         //TODO: Need to add variable data sizes for CAN data channels
         //CANData.data16[i] = sensors[i]->getValue();
         int16_t data = sensors[i]->getValue ();
+        //int16_t data = 0;
 
         // hton (byte swap)
         uint8_t* p_n = (uint8_t *) &data;
@@ -169,20 +167,7 @@ void CANSensorTimer::Update()
         ((uint16_t*) canTmp.byte)[i] = data;
     }
 
-    bool txErrorReport = false;
-
-    // atomic while writing candata value as it is read in an interrupt
-    ATOMIC_BLOCK(ATOMIC_FORCEON)
-    {
-        // check for max
-        if (txCANMessageErrCnt == 0xFF)
-        {
-            txErrorReport = true;
-            bHaveSentLastCAN = true;                // retry sending
-            txCANMessageErrCnt = 0x00;              // reset error counter
-        }
-    }
-
+    /*
     //send CAN message
     if(bHaveSentLastCAN && bNeedToSend)
     {
@@ -193,11 +178,23 @@ void CANSensorTimer::Update()
             //TODO: error
         }
     }
-
-    if(txErrorReport)
+    */
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
+        canData = canTmp;
+    }
+
+    static uint8_t notifyCounter = 0;
+    if(notifyCounter > 0)
+    {
+        notifyCounter--;
+    }
+
+    if(txCANMessageErrCnt > 0 && notifyCounter == 0)
+    {
+        notifyCounter = 0xFF;
         CommandManager::StaticClass ().LogMessageln (
-                            FSTR("txCANMessageErrCnt exceeded maximum"));
+                            FSTR("[ERROR]: CANSensorTimer::Update, Missing Tx Window!!!"));
     }
 }
 

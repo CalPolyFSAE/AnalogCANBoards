@@ -57,7 +57,9 @@ float getMicros()
 
 //interrupt function for timing
 ISR(TIMER1_COMPA_vect) {
+    PINC = _BV(0);
     SensorManager::GetInstance().INT_UpdateTiming();
+    PINC = _BV(0);
 }
 
 ISR(TIMER2_COMP_vect)
@@ -101,13 +103,13 @@ int main()
     //get the SensorManager(also initializes it)
     SensorManager* ASensorManager = &SensorManager::GetInstance();
 
-    sei();
-
     // print reset flag status
     CommandManager::StaticClass().LogMessage(FSTR("START "));
     CommandManager::StaticClass().LogMessageln(MCUSR);
     CommandManager::StaticClass().LogMessage(FSTR("DEVID "));
     CommandManager::StaticClass().LogMessageln(CANCONFIG::CANCMD_DEVID);
+
+    sei();
 
     // test command (for testing)
     //CommandManager::StaticClass().ExecuteCommand(0, 0);
@@ -131,12 +133,27 @@ int main()
     while(true)
     {
         //TODO: testing
+        /*static uint8_t c = 0;
+        c++;
+        if(c >= 20)
+        {
+            CommandManager::StaticClass ().LogMessageln (
+                                        FSTR("Update"));
+            c = 0;
+        }*/
+        /*for(volatile uint8_t i = 0; i < 0xFF; ++i)
+        {
+            i--;
+            i++;
+            i--;
+            i++;
+        }*/
+        PINC = _BV(1);
 
         //timing the update length
         //loopTiming = getMicros();
 
         ASensorManager->Update();
-
         //loopTiming = getMicros() - loopTiming;
 
         //TODO: TESTING:

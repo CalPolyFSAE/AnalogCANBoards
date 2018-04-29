@@ -20,13 +20,8 @@ namespace SENSORCONFIG
     inline int16_t conversion00( float const& voltage )
     {
         // normalize across domain of 16 bit signed int
-        //(2^15-1)/500 = 65.536
-        return (int16_t)(voltage * 65.536 * 100.0);
-    }
-
-    inline int16_t conversion01( float const& voltage )
-    {
-        return (int16_t)(voltage * 65.536 * 100.0);
+        //(2^15-1)/5 = 6553.6
+        return (int16_t)(voltage * 6553.6);
     }
 
     // Sensor 0 Name
@@ -121,6 +116,12 @@ namespace CANCONFIG
 		0               //rtr
     };
 
+    constexpr CAN_SETTINGS CAN2 = {
+                0xD3,           //message id
+                0,              //identifier extension
+                0               //rtr
+    };
+
     constexpr CANSensorChannel CANChannel0 = {
                 CAN0,           // CAN Message ID for this channel
                 1,             // milliseconds between updates
@@ -138,18 +139,26 @@ namespace CANCONFIG
                 3,            // milliseconds between updates
                 {
                     SENSORCONFIG::Sensor04,
-                    SENSORCONFIG::Sensor05,
+                    SENSORCONFIG::Sensor05
+                },
+                2
+	};
+
+    constexpr CANSensorChannel CANChannel2 = {
+                CAN2,           // CAN Message ID for this channel
+                2,            // milliseconds between updates
+                {
                     SENSORCONFIG::Sensor06,
                     SENSORCONFIG::Sensor07
                 },
-                4
-	};
+                2
+        };
 
     // all can channels
     constexpr CANSensorChannel CANChannels[] =
-        { CANChannel0 };
+        { CANChannel0 , CANChannel1, CANChannel2};
     //number of CAN Channels
-    constexpr uint8_t NUMCANCHANNELS = 1;
+    constexpr uint8_t NUMCANCHANNELS = 3;
 
     //Device id for commands over CAN
     constexpr uint8_t CANCMD_DEVID = 0x00;
