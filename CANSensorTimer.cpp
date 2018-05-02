@@ -184,7 +184,7 @@ void CANSensorTimer::Update()
         canData = canTmp;
     }
 
-    static uint8_t notifyCounter = 0;
+    static uint16_t notifyCounter = 0;
     if(notifyCounter > 0)
     {
         notifyCounter--;
@@ -192,7 +192,7 @@ void CANSensorTimer::Update()
 
     if(txCANMessageErrCnt > 0 && notifyCounter == 0)
     {
-        notifyCounter = 0xFF;
+        notifyCounter = 0x0FFF;
         CommandManager::StaticClass ().LogMessageln (
                             FSTR("[ERROR]: CANSensorTimer::Update, Missing Tx Window!!!"));
     }
